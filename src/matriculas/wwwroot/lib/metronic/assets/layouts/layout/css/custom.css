@@ -1,0 +1,73 @@
+/* here you can put your own css to customize and override the theme */
+.selected {
+    margin-top: 2.5px;
+}
+
+.page-content {
+    height: calc(100vh - 85px);
+}
+
+.page-footer {
+    height: 35px;
+    display: block;
+    background-color: red;
+}
+
+.form-buttons {
+    text-align: right;
+    margin-top: 30px;
+}
+.form-buttons button, 
+.form-buttons input[type="submit"] {
+    margin-right: 15px;
+}
+
+.form-buttons input[type="submit"] {
+    margin-right: 0;
+}
+
+.pagination > .active > a, 
+.pagination > .active > span, 
+.pagination > .active > a:hover, 
+.pagination > .active > span:hover, 
+.pagination > .active > a:focus, 
+.pagination > .active > span:focus {
+  background-color: #32C5D2;
+  border-color: #32C5D2;
+  color: white;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+div.checkbox {
+    line-height: 18px;
+}
+
+.modal-body {
+    box-sizing: border-box;
+    padding: 30px 50px 20px;
+}
+
+.cursos-area:first-child {
+    border-right: 1px solid RGB(194,202,216);
+    border-left: 1px solid RGB(194,202,216);
+}
+.cursos-area:last-child {
+    border-right: 1px solid RGB(194,202,216);
+}
+
+.checkbox:hover, input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
+.row.equalheights {
+  overflow: hidden; 
+}
+
+.row.equalheights > [class*="col-"],
+.row.equalheights > .equalheights > [class*="col-"]{
+  margin-bottom: -99999px;
+  padding-bottom: 99999px;
+}

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E42D03A7-550A-48EB-AD66-89FEE8EADEAB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52172E77-2507-4E8D-972C-E45DF1D5E87F}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		WebEssentials2015-Settings.json = WebEssentials2015-Settings.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Matriculas", "src\matriculas\Matriculas.xproj", "{B701D79E-5448-4E33-B674-09ED276ED539}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B701D79E-5448-4E33-B674-09ED276ED539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B701D79E-5448-4E33-B674-09ED276ED539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B701D79E-5448-4E33-B674-09ED276ED539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B701D79E-5448-4E33-B674-09ED276ED539}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B701D79E-5448-4E33-B674-09ED276ED539} = {E42D03A7-550A-48EB-AD66-89FEE8EADEAB}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://ecanaza.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = src\\matriculas\\Matriculas.xproj
+		SccProjectTopLevelParentUniqueName1 = matriculas.sln
+		SccProjectName1 = src/matriculas
+		SccLocalPath1 = src\\matriculas
+	EndGlobalSection
+EndGlobal

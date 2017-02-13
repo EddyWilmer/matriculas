@@ -1,0 +1,18 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/site.css",
+    "inputFile": "wwwroot/css/site.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/jquery-validation/dist/jquery.validate.es5.js",
+    "inputFile": "wwwroot/lib/jquery-validation/dist/jquery.validate.js"
+  },
+  {
+    "outputFile": "wwwroot/icons/font/_flaticon.css",
+    "inputFile": "wwwroot/icons/font/_flaticon.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css",
+    "inputFile": "wwwroot/lib/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss"
+  }
+]

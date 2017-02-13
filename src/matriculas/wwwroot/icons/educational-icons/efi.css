@@ -1,0 +1,89 @@
+	/*
+  	Efi icon font: Efi
+  	Creation date: 22/06/2016 15:43
+  	*/
+
+@font-face {
+    font-family: "Efi";
+    src: url("./Efi.eot");
+    src: url("./Efi.eot?#iefix") format("embedded-opentype"),
+        url("./Efi.woff") format("woff"),
+        url("./Efi.ttf") format("truetype"),
+        url("./Efi.svg#Efi") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: "Efi";
+        src: url("./Efi.svg#Efi") format("svg");
+    }
+}
+
+[class^="efi-"]:before, [class*=" efi-"]:before,
+[class^="efi-"]:after, [class*=" efi-"]:after {   
+    font-family: Efi;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: lighter;
+}
+
+table [class^="efi-"]:before, table [class*=" efi-"]:before,
+table [class^="efi-"]:after, table [class*=" efi-"]:after {   
+    font-family: Efi;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: lighter;
+}
+
+.efi-abc:before { content: "\f100"; }
+.efi-apple:before { content: "\f101"; }
+.efi-archive:before { content: "\f102"; }
+.efi-bell:before { content: "\f103"; }
+.efi-board:before { content: "\f104"; }
+.efi-book:before { content: "\f105"; }
+.efi-book-1:before { content: "\f106"; }
+.efi-book-2:before { content: "\f107"; }
+.efi-book-3:before { content: "\f108"; }
+.efi-books:before { content: "\f109"; }
+.efi-calendar:before { content: "\f10a"; }
+.efi-chat:before { content: "\f10b"; }
+.efi-flask:before { content: "\f10c"; }
+.efi-glasses:before { content: "\f10d"; }
+.efi-home:before { content: "\f10e"; }
+.efi-homework:before { content: "\f10f"; }
+.efi-homework-1:before { content: "\f110"; }
+.efi-homework-2:before { content: "\f111"; }
+.efi-hourglass:before { content: "\f112"; }
+.efi-id-card:before { content: "\f113"; }
+.efi-laptop:before { content: "\f114"; }
+.efi-laptop-1:before { content: "\f115"; }
+.efi-laptop-2:before { content: "\f116"; }
+.efi-learning:before { content: "\f117"; }
+.efi-light-bulb:before { content: "\f118"; }
+.efi-line-chart:before { content: "\f119"; }
+.efi-medal:before { content: "\f11a"; }
+.efi-monitor:before { content: "\f11b"; }
+.efi-mortarboard:before { content: "\f11c"; }
+.efi-musical-note:before { content: "\f11d"; }
+.efi-open-book:before { content: "\f11e"; }
+.efi-open-book-1:before { content: "\f11f"; }
+.efi-paint-brush:before { content: "\f120"; }
+.efi-pencil:before { content: "\f121"; }
+.efi-percentage:before { content: "\f122"; }
+.efi-physics:before { content: "\f123"; }
+.efi-picture:before { content: "\f124"; }
+.efi-presentation:before { content: "\f125"; }
+.efi-presentation-1:before { content: "\f126"; }
+.efi-push-pin:before { content: "\f127"; }
+.efi-school:before { content: "\f128"; }
+.efi-science:before { content: "\f129"; }
+.efi-speech-bubble:before { content: "\f12a"; }
+.efi-television:before { content: "\f12b"; }
+.efi-television-1:before { content: "\f12c"; }
+.efi-trophy:before { content: "\f12d"; }
+.efi-trophy-1:before { content: "\f12e"; }
+.efi-trophy-2:before { content: "\f12f"; }
+.efi-user:before { content: "\f130"; }
+.efi-world-wide-web:before { content: "\f131"; }

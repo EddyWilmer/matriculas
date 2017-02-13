@@ -1,0 +1,218 @@
+﻿@model Matriculas.ViewModels.ColaboradorViewModel
+@{
+    ViewBag.Title = "Colaboradores";
+}
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/simpleControls.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/colaboradoresController.js"></script>
+    <script src="~/lib/angular-utils-pagination/dirPagination.js"></script> 
+}
+
+<script>
+    window.onload = function () {
+        var item = $("#colaboradores");
+        item.addClass("active");
+        $("#colaboradores a").append("<span class='selected'></span>");
+    };
+</script>
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a asp-contoller="App" asp-action="Index">Home</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <span>Colaboradores</span>
+        </li>
+    </ul>
+</div>
+<h1 class="page-title"></h1>
+<div class="row" ng-app="app" ng-controller="colaboradoresController as vm">
+    <wait-cursor display-when="vm.isBusy"></wait-cursor>
+    <!-- Tabla de visualización -->
+    <div class="col-md-11 col-centered" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-table"></i>Lista de colaboradores
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-icon search-bar">
+                            <i class="fa fa-search font-green"></i>
+                            <input type="text" class="form-control" placeholder="Buscar" ng-model="search">
+                        </div>
+                        <div class="input-icon num-pages-bar">
+                            <i class="fa fa-reorder font-green"></i>
+                            <input type="number" min="1" max="10" class="form-control" ng-model="vm.pageSize">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-advance table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><i class="fa fa-user"></i> Apellidos y nombres </th>
+                                <th class="text-center"><i class="fa fa-credit-card"></i> Dni </th>
+                                <th class="text-center"><i class="fa fa-briefcase"></i> Rol </th>
+                                <th class="text-center"><i class="fa fa-envelope"></i> Email </th>
+                                <th class="text-center"><i class="fa fa-phone"></i> Celular </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="colaborador in vm.colaboradores|filter:search|itemsPerPage:vm.pageSize">
+                                <td>{{ colaborador.apellidoPaterno }} {{colaborador.apellidoMaterno}}, {{colaborador.nombres}}</td>
+                                <td class="text-center">{{ colaborador.dni }}</td>
+                                <td>{{ colaborador.rol.nombre }}</td>
+                                <td>{{ colaborador.email }}&#64;trilce.edu.pe</td>
+                                <td class="text-center">{{ colaborador.celular }}</td>
+                                <td class="text-center">
+                                    <a ng-click="vm.getColaborador(colaborador.id)" class="btn btn-small yellow-crusta" data-toggle="modal" href="#datos-colaborador">
+                                        <i class="fa fa-edit"></i> Editar
+                                    </a>
+                                    <a ng-click="vm.deleteColaborador(colaborador.id)" class="btn btn-small red-mint">
+                                        <i class="fa fa-trash-o"></i> Eliminar
+                                    </a>
+                                    <a ng-click="vm.changeEstadoColaborador(colaborador.id)" class="btn btn-small blue">
+                                        <span ng-show="colaborador.estado == '3'">Habilitar</span>
+                                        <span ng-show="colaborador.estado == '1'">Suspender</span>
+                                    </a>
+                                    <a ng-click="vm.restaurarPasswordColaborador(colaborador.id)" class="btn btn-small blue">
+                                        Restablecer
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="asd" class="row">
+                    <div class="col-md-2" style="margin-top: 10px;">
+                        <a class="btn btn-small green" data-toggle="modal" href="#nuevo-colaborador"> Nuevo colaborador </a>
+                    </div>                   
+                    <div class="col-md-10 text-right">
+                        <dir-pagination-controls max-size="10" auto-hide="false">                           
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de inserción -->
+    <div id="nuevo-colaborador" data-backdrop="static" class="modal fade" tabindex="-1" data-width="600">
+        <div class="modal-header">
+            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Nuevo colaborador</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.addColaborador()">
+                <div asp-validation-summary="ModelOnly"></div>                
+                <div class="form-group">
+                    <label asp-for="ApellidoPaterno">Apellido Paterno (*)</label>
+                    <span asp-validation-for="ApellidoPaterno" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.newColaborador.apellidoPaterno" />                   
+                </div>
+                <div class="form-group">
+                    <label asp-for="ApellidoMaterno">Apellido Materno (*)</label>
+                    <span asp-validation-for="ApellidoMaterno" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="ApellidoMaterno" class="form-control" maxlength="25" ng-model="vm.newColaborador.apellidoMaterno" />                  
+                </div>
+                <div class="form-group">
+                    <label asp-for="Nombres">Nombres (*)</label>
+                    <span asp-validation-for="Nombres" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Nombres" class="form-control" maxlength="50" ng-model="vm.newColaborador.nombres" />                  
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dni">DNI (*)</label>
+                    <span asp-validation-for="Dni" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.newColaborador.dni" />                  
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rol">Rol (*)</label>
+                    <span asp-validation-for="Rol" class="text-muted text-validation"></span>
+                    <select asp-for="Rol" class="form-control" ng-model="vm.newColaborador.rol" ng-options="option.nombre for option in vm.roles track by option.id">
+                        <option ng-selected="true" value="">Seleccione</option>
+                    </select>                   
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email">Correo Electrónico (*)</label>
+                    <span asp-validation-for="Email" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Email" class="form-control" maxlength="15" style="width: 400px; display: inline-block;" placeholder="Ej. ecanaza@trilce.edu.pe" ng-model="vm.newColaborador.email" /> &#64;trilce.edu.pe                   
+                </div>
+                <div class="form-group">
+                    <label asp-for="Celular">Celular</label>
+                    <span asp-validation-for="Celular" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Celular" class="form-control" maxlength="9" placeholder="Ej. 992559629" ng-model="vm.newColaborador.celular" />                  
+                </div>               
+                <div class="form-group form-buttons">
+                    <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <input type="submit" value="Crear colaborador" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulario de edición -->
+    <div id="datos-colaborador" data-backdrop="static" class="modal fade" tabindex="-1" data-width="600">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Datos colaborador</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.updateColaborador()">
+                <div asp-validation-summary="ModelOnly"></div>
+
+                <div class="form-group">
+                    <label asp-for="ApellidoPaterno">Apellido Paterno (*)</label>
+                    <span asp-validation-for="ApellidoPaterno" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.currentColaborador.apellidoPaterno" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ApellidoMaterno">Apellido Materno (*)</label>
+                    <span asp-validation-for="ApellidoMaterno" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="ApellidoMaterno" class="form-control" maxlength="25" ng-model="vm.currentColaborador.apellidoMaterno" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Nombres">Nombres (*)</label>
+                    <span asp-validation-for="Nombres" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Nombres" class="form-control" maxlength="50" ng-model="vm.currentColaborador.nombres" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dni">DNI (*)</label>
+                    <span asp-validation-for="Dni" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.currentColaborador.dni" />
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rol">Rol (*)</label>
+                    <span asp-validation-for="Rol" class="text-muted text-validation"></span>
+                    <select asp-for="Rol" class="form-control" ng-model="vm.currentColaborador.rol" ng-options="option.nombre for option in vm.roles track by option.id">
+                        <option value="">Seleccione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email">Correo Electrónico (*)</label>
+                    <span asp-validation-for="Email" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Email" class="form-control" maxlength="30" style="width: 400px; display: inline-block;" placeholder="Ej. ecanaza@trilce.edu.pe" ng-model="vm.currentColaborador.email" /> &#64;trilce.edu.pe
+                </div>
+                <div class="form-group">
+                    <label asp-for="Celular">Celular</label>
+                    <span asp-validation-for="Celular" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Celular" class="form-control" maxlength="9" placeholder="Ej. 992559629" ng-model="vm.currentColaborador.celular" />
+                </div>
+                <div class="form-group form-buttons">
+                    <button type="reset" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <input type="submit" value="Actualizar colaborador" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

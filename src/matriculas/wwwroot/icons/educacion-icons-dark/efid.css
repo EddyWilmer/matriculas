@@ -1,0 +1,151 @@
+	/*
+  	Efid icon font: Efid
+  	Creation date: 22/06/2016 15:14
+  	*/
+
+@font-face {
+  font-family: "Efid";
+  src: url("./Efid.eot");
+  src: url("./Efid.eot?#iefix") format("embedded-opentype"),
+       url("./Efid.woff") format("woff"),
+       url("./Efid.ttf") format("truetype"),
+       url("./Efid.svg#Efid") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Efid";
+    src: url("./Efid.svg#Efid") format("svg");
+  }
+}
+
+[class^="efid-"]:before, [class*=" efid-"]:before,
+[class^="efid-"]:after, [class*=" efid-"]:after {   
+    font-family: Efid;
+    font-size: 20px;
+    font-style: normal;
+}
+
+table [class^="efid-"]:before, table [class*=" efid-"]:before,
+table [class^="efid-"]:after, table [class*=" efid-"]:after {   
+    font-family: Efid;
+    font-size: 12px;
+    font-style: normal;
+}
+
+table [class^="efid-lightbulb"]:before, table [class*=" efid-lightbulb"]:before,
+table [class^="efid-lightbulb"]:after, table [class*=" efid-lightbulb"]:after {   
+    font-family: Efid;
+    font-size: 13px;
+    font-style: normal;
+}
+
+table [class^="efid-mortarboard"]:before, table [class*=" efid-mortarboard"]:before,
+table [class^="efid-mortarboard"]:after, table [class*=" efid-mortarboard"]:after {   
+    font-family: Efid;
+    font-size: 14px;
+    font-style: normal;
+}
+
+.efid-abacus:before { content: "\f100"; }
+.efid-apple:before { content: "\f101"; }
+.efid-apple-and-book:before { content: "\f102"; }
+.efid-atomic-structure:before { content: "\f103"; }
+.efid-audiobook:before { content: "\f104"; }
+.efid-backpack:before { content: "\f105"; }
+.efid-bank-building-with-columns:before { content: "\f106"; }
+.efid-basketball:before { content: "\f107"; }
+.efid-basketball-1:before { content: "\f108"; }
+.efid-binoculars:before { content: "\f109"; }
+.efid-book:before { content: "\f10a"; }
+.efid-book-and-glasses:before { content: "\f10b"; }
+.efid-book-and-mouse:before { content: "\f10c"; }
+.efid-book-with-bookmark:before { content: "\f10d"; }
+.efid-bottle-of-ink:before { content: "\f10e"; }
+.efid-boy-with-tie-reading-a-speech:before { content: "\f10f"; }
+.efid-boy-with-tie-talking:before { content: "\f110"; }
+.efid-calculator:before { content: "\f111"; }
+.efid-cd-case:before { content: "\f112"; }
+.efid-certificate:before { content: "\f113"; }
+.efid-computer-monitor-and-mouse:before { content: "\f114"; }
+.efid-computer-mouse:before { content: "\f115"; }
+.efid-conference-hall:before { content: "\f116"; }
+.efid-cup-of-hot-coffee:before { content: "\f117"; }
+.efid-cursor-on-laptop-computer-screen:before { content: "\f118"; }
+.efid-dna-strand:before { content: "\f119"; }
+.efid-drawing-compass:before { content: "\f11a"; }
+.efid-earth-globe-grid:before { content: "\f11b"; }
+.efid-earth-globe-with-mortarboard:before { content: "\f11c"; }
+.efid-eraser:before { content: "\f11d"; }
+.efid-erlenmeyer-flask:before { content: "\f11e"; }
+.efid-erlenmeyer-flask-1:before { content: "\f11f"; }
+.efid-feather:before { content: "\f120"; }
+.efid-female-graduate-student:before { content: "\f121"; }
+.efid-globe:before { content: "\f122"; }
+.efid-globe-and-book:before { content: "\f123"; }
+.efid-graduate-certificate:before { content: "\f124"; }
+.efid-graduate-student-avatar:before { content: "\f125"; }
+.efid-graduation-certificate:before { content: "\f126"; }
+.efid-greek-column:before { content: "\f127"; }
+.efid-hand-and-touchscreen:before { content: "\f128"; }
+.efid-id-card:before { content: "\f129"; }
+.efid-internet-explorer-logo-on-laptop-computer:before { content: "\f12a"; }
+.efid-library:before { content: "\f12b"; }
+.efid-lightbulb:before { content: "\f12c"; }
+.efid-magnet-with-bolt:before { content: "\f12d"; }
+.efid-magnifier:before { content: "\f12e"; }
+.efid-marker-pen:before { content: "\f12f"; }
+.efid-math-class:before { content: "\f130"; }
+.efid-microscope:before { content: "\f131"; }
+.efid-molecular-structure:before { content: "\f132"; }
+.efid-molecule:before { content: "\f133"; }
+.efid-monitor-with-mouse-cursor:before { content: "\f134"; }
+.efid-monthly-calendar:before { content: "\f135"; }
+.efid-mortarboard:before { content: "\f136"; }
+.efid-mp3-player-with-headphones:before { content: "\f137"; }
+.efid-music-notes:before { content: "\f138"; }
+.efid-musical-note:before { content: "\f139"; }
+.efid-mustard-bottle:before { content: "\f13a"; }
+.efid-new-mail:before { content: "\f13b"; }
+.efid-notebook-with-bookmark:before { content: "\f13c"; }
+.efid-office-briefcase:before { content: "\f13d"; }
+.efid-office-clip:before { content: "\f13e"; }
+.efid-open-book:before { content: "\f13f"; }
+.efid-open-book-with-blank-pages:before { content: "\f140"; }
+.efid-paint-brush:before { content: "\f141"; }
+.efid-palette-with-brush:before { content: "\f142"; }
+.efid-pencil:before { content: "\f143"; }
+.efid-pencil-writing-on-notebook:before { content: "\f144"; }
+.efid-phonebook:before { content: "\f145"; }
+.efid-planet-and-satellites:before { content: "\f146"; }
+.efid-protractor:before { content: "\f147"; }
+.efid-puzzle-piece:before { content: "\f148"; }
+.efid-quill-head:before { content: "\f149"; }
+.efid-school-bell:before { content: "\f14a"; }
+.efid-school-bus:before { content: "\f14b"; }
+.efid-school-campus:before { content: "\f14c"; }
+.efid-school-ruler:before { content: "\f14d"; }
+.efid-science-lecture:before { content: "\f14e"; }
+.efid-scissors:before { content: "\f14f"; }
+.efid-search-book:before { content: "\f150"; }
+.efid-set-square:before { content: "\f151"; }
+.efid-simple-alarm-clock:before { content: "\f152"; }
+.efid-snack-time:before { content: "\f153"; }
+.efid-soccer-ball:before { content: "\f154"; }
+.efid-sports-cup:before { content: "\f155"; }
+.efid-stack-of-books:before { content: "\f156"; }
+.efid-stack-of-books-and-a-magnifier:before { content: "\f157"; }
+.efid-study-lamp:before { content: "\f158"; }
+.efid-telescope:before { content: "\f159"; }
+.efid-test-tube:before { content: "\f15a"; }
+.efid-test-tubes:before { content: "\f15b"; }
+.efid-upper-and-lower-case-a-letter:before { content: "\f15c"; }
+.efid-video-lecture:before { content: "\f15d"; }
+.efid-volley-ball:before { content: "\f15e"; }
+.efid-volumetric-flask:before { content: "\f15f"; }
+.efid-wall-clock:before { content: "\f160"; }
+.efid-winner-medal:before { content: "\f161"; }
+.efid-woman-with-speech-balloon:before { content: "\f162"; }
+.efid-writing-board:before { content: "\f163"; }

@@ -1,0 +1,160 @@
+﻿@model Matriculas.ViewModels.CronogramaMatriculaViewModel
+@{
+    ViewBag.Title = "Cronograma Matrículas";
+}
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/simpleControls.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/cronogramasMatriculasController.js"></script>
+    <script src="~/lib/angular-utils-pagination/dirPagination.js"></script>
+}   
+
+<script>
+    window.onload = function () {
+        var item = $("#anios-academicos");
+        item.addClass("active");
+        $("#anios-academicos a").append("<span class='selected'></span>");
+    };
+</script>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a asp-contoller="App" asp-action="Index">Home</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <a asp-contoller="App" asp-action="AniosAcademicos">Años Académicos</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <span>Cronograma Matrículas</span>
+        </li>
+    </ul>
+    
+</div>
+<h1 class="page-title"></h1>
+<div class="row" ng-app="app" ng-controller="cronogramasMatriculasController as vm">
+    <input type="hidden" id="anioAcademicoId" value="@ViewBag.Id" />
+    <wait-cursor display-when="vm.isBusy"></wait-cursor>
+    <!-- Tabla de visualización -->
+    <div class="col-md-5 col-centered" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-table"></i>Lista de Cronogramas de Matrícula
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-icon search-bar">
+                            <i class="fa fa-search font-green"></i>
+                            <input type="text" class="form-control" placeholder="Buscar" ng-model="search">
+                        </div>
+                        <div class="input-icon num-pages-bar">
+                            <i class="fa fa-reorder font-green"></i>
+                            <input type="number" min="1" max="10" class="form-control" ng-model="vm.pageSize">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-advance table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><i class="fa fa-calendar"></i> Nombre </th>
+                                <th class="text-center"><i class="fa fa-calendar-o"></i> Inicio </th>
+                                <th class="text-center"><i class="fa fa-calendar-o"></i> Fin </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="cronogramaMatricula in vm.cronogramasMatriculas|filter:search|itemsPerPage:vm.pageSize">
+                                <td>{{ cronogramaMatricula.nombre }}</td>
+                                <td class="text-center">{{ cronogramaMatricula.fechaInicio === null ? "No definido" : cronogramaMatricula.fechaInicio | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{ cronogramaMatricula.fechaFin === null ? "No definido" : cronogramaMatricula.fechaFin | date:'dd/MM/yyyy' }}</td>
+                                <td class="text-center">
+                                    <a ng-click="vm.getCronogramaMatricula(cronogramaMatricula.anioAcademicoId, cronogramaMatricula.nombre)" class="btn btn-small yellow-crusta" data-toggle="modal" href="#datos-cronogramaMatricula">
+                                        <i class="fa fa-edit"></i> Editar
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="asd" class="row">
+                    <div class="col-md-12 text-right">
+                        <dir-pagination-controls max-size="10" auto-hide="false">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de inserción -->
+    <div id="nuevo-cronogramaMatricula" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
+        <div class="modal-header">
+            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Nuevo Cronograma de Matrícula</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.addCronogramaMatricula()">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre (*)</label>
+                    <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Nombre" class="form-control" maxlength="25" placeholder="Ej. Alumnos regulares" ng-model="vm.newCronogramaMatricula.nombre" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaInicio">Inicio (*)</label>
+                    <span asp-validation-for="FechaInicio" class="text-muted text-validation"></span>
+                    <input type="date" asp-for="FechaInicio" class="form-control" ng-model="vm.newCronogramaMatricula.fechaInicio" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaFin">Fin (*)</label>
+                    <span asp-validation-for="FechaFin" class="text-muted text-validation"></span>
+                    <input type="date" asp-for="FechaFin" class="form-control" ng-model="vm.newCronogramaMatricula.fechaFin" />
+                </div>
+                <div class="form-group form-buttons">
+                    <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <input type="submit" value="Crear Cronograma de Matrícula" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulario de edición -->
+    <div id="datos-cronogramaMatricula" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Datos Cronograma de Matrícula</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.updateCronogramaMatricula()">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre (*)</label>
+                    <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
+                    <input type="text" disabled asp-for="Nombre" class="form-control" maxlength="25" placeholder="Ej. Periodo 2016" ng-model="vm.currentCronogramaMatricula.nombre" my-model-formatter />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaInicio">Inicio (*)</label>
+                    <span asp-validation-for="FechaInicio" class="text-muted text-validation"></span>
+                    <input input="date" asp-for="FechaInicio" class="form-control" ng-model="vm.currentCronogramaMatricula.fechaInicio" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaFin">Fin (*)</label>
+                    <span asp-validation-for="FechaFin" class="text-muted text-validation"></span>
+                    <input input="date" asp-for="FechaFin" class="form-control" ng-model="vm.currentCronogramaMatricula.fechaFin" />
+                </div>
+                <div class="form-group form-buttons">
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <input type="submit" value="Actualizar Año Académico" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

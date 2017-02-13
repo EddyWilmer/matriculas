@@ -1,0 +1,163 @@
+﻿@model Matriculas.ViewModels.AnioAcademicoViewModel
+@{
+    ViewBag.Title = "Años Académicos";
+}
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/simpleControls.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/aniosAcademicosController.js"></script>
+    <script src="~/lib/angular-utils-pagination/dirPagination.js"></script>
+}
+
+<script>
+    window.onload = function () {
+        var item = $("#anios-academicos");
+        item.addClass("active");
+        $("#anios-academicos a").append("<span class='selected'></span>");
+    };
+</script>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a asp-contoller="App" asp-action="Index">Home</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <span>Años Académicos</span>
+        </li>
+    </ul>
+</div>
+<h1 class="page-title"></h1>
+<div class="row" ng-app="app" ng-controller="aniosAcademicosController as vm">
+    <wait-cursor display-when="vm.isBusy"></wait-cursor>
+    <!-- Tabla de visualización -->
+    <div class="col-md-6 col-centered" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-table"></i>Lista de Años Académicos
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-icon search-bar">
+                            <i class="fa fa-search font-green"></i>
+                            <input type="text" class="form-control" placeholder="Buscar" ng-model="search">
+                        </div>
+                        <div class="input-icon num-pages-bar">
+                            <i class="fa fa-reorder font-green"></i>
+                            <input type="number" min="1" max="10" class="form-control" ng-model="vm.pageSize">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-advance table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><i class="fa fa-calendar"></i> Nombre </th>
+                                <th class="text-center"><i class="fa fa-calendar-o"></i> Inicio </th>
+                                <th class="text-center"><i class="fa fa-calendar-o"></i> Fin </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="anioAcademico in vm.aniosAcademicos|filter:search|itemsPerPage:vm.pageSize">
+                                <td>{{ anioAcademico.nombre }}</td>
+                                <td class="text-center">{{ anioAcademico.fechaInicio | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{ anioAcademico.fechaFin | date:'dd/MM/yyyy' }}</td>
+                                <td class="text-center">
+                                    <a ng-click="vm.getAnioAcademico(anioAcademico.id)" class="btn btn-small yellow-crusta" data-toggle="modal" href="#datos-anioAcademico">
+                                        <i class="fa fa-edit"></i> Editar
+                                    </a>
+                                    <a ng-click="vm.deleteAnioAcademico(anioAcademico.id)" class="btn btn-small red-mint">
+                                        <i class="fa fa-trash-o"></i> Eliminar
+                                    </a>
+                                    <a ng-href="AniosAcademicos/CronogramaMatriculas/{{anioAcademico.id}}" class="btn btn-small blue">
+                                        Ver Cronograma
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="asd" class="row">
+                    <div class="col-md-3" style="margin-top: 10px;">
+                        <a class="btn btn-small green" data-toggle="modal" href="#nuevo-anioAcademico">Nuevo Año Académico</a>
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <dir-pagination-controls max-size="10" auto-hide="false">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de inserción -->
+    <div id="nuevo-anioAcademico" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
+        <div class="modal-header">
+            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Nuevo Año Académico</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.addAnioAcademico()">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre (*)</label>
+                    <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Nombre" class="form-control" maxlength="25" placeholder="Ej. Periodo 2016" ng-model="vm.newAnioAcademico.nombre" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaInicio">Inicio (*)</label>
+                    <span asp-validation-for="FechaInicio" class="text-muted text-validation"></span>
+                    <input type="date" asp-for="FechaInicio" class="form-control" ng-model="vm.newAnioAcademico.fechaInicio" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaFin">Fin (*)</label>
+                    <span asp-validation-for="FechaFin" class="text-muted text-validation"></span>
+                    <input type="date" asp-for="FechaFin" class="form-control" ng-model="vm.newAnioAcademico.fechaFin" />
+                </div>
+                <div class="form-group form-buttons">
+                    <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <input type="submit" value="Crear Año Académico" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Formulario de edición -->
+    <div id="datos-anioAcademico" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Datos Año Académico</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.updateAnioAcademico()">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre (*)</label>
+                    <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
+                    <input type="text" asp-for="Nombre" class="form-control" maxlength="25" placeholder="Ej. Periodo 2016" ng-model="vm.currentAnioAcademico.nombre" my-model-formatter />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaInicio">Inicio (*)</label>
+                    <span asp-validation-for="FechaInicio" class="text-muted text-validation"></span>
+                    <input input="date" asp-for="FechaInicio" class="form-control" ng-model="vm.currentAnioAcademico.fechaInicio" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaFin">Fin (*)</label>
+                    <span asp-validation-for="FechaFin" class="text-muted text-validation"></span>
+                    <input input="date" asp-for="FechaFin" class="form-control" ng-model="vm.currentAnioAcademico.fechaFin" />
+                </div>
+                <div class="form-group form-buttons">
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <input type="submit" value="Actualizar Año Académico" class="btn btn-success" />
+                </div>
+            </form>   
+        </div>
+    </div>
+</div>

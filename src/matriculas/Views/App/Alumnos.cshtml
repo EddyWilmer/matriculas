@@ -1,0 +1,308 @@
+﻿@model Matriculas.ViewModels.AlumnoApoderadoViewModel
+@{
+    ViewBag.Title = "Alumnos";
+}
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/simpleControls.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/alumnosController.js"></script>
+    <script src="~/lib/angular-utils-pagination/dirPagination.js"></script>
+}
+
+<script>
+    window.onload = function () {
+        var item = $("#alumnos");
+        item.addClass("active");
+        $("#alumnos a").append("<span class='selected'></span>");
+    };
+</script>
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a asp-contoller="App" asp-action="Index">Home</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <span>Alumnos</span>
+        </li>
+    </ul>
+</div>
+<h1 class="page-title"></h1>
+<div class="row" ng-app="app" ng-controller="alumnosController as vm">
+    <wait-cursor display-when="vm.isBusy"></wait-cursor>
+    <!-- Tabla de visualización -->
+    <div class="col-md-11 col-centered" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-table"></i>Lista de alumnos
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-icon search-bar">
+                            <i class="fa fa-search font-green"></i>
+                            <input type="text" class="form-control" placeholder="Buscar" ng-model="search">
+                        </div>
+                        <div class="input-icon num-pages-bar">
+                            <i class="fa fa-reorder font-green"></i>
+                            <input type="number" min="1" max="10" class="form-control" ng-model="vm.pageSize">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-advance table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><i class="fa fa-user"></i> Apellidos y nombres </th>
+                                <th class="text-center"><i class="fa fa-credit-card"></i> Dni </th>
+                                <th class="text-center"><i class="fa fa-venus-mars"></i> Sexo </th>
+                                <th class="text-center"><i class="fa fa-location-arrow"></i> Direccion </th>
+                                <th class="text-center"><i class="fa fa-user"></i> Apoderado </th>
+                                <th class="text-center"> Acciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="alumno in vm.alumnos|filter:search|itemsPerPage:vm.pageSize">
+                                <td>{{ alumno.apellidoPaterno }} {{alumno.apellidoMaterno}}, {{alumno.nombres}}</td>
+                                <td class="text-center">{{ alumno.dni }}</td>
+                                <td class="text-center">{{ alumno.sexo }}</td>
+                                <td>{{ alumno.direccion }}</td>
+                                <td><span ng-show="alumno.apoderado != null">{{ alumno.apoderado.apellidoPaterno }} {{alumno.apoderado.apellidoMaterno}}, {{alumno.apoderado.nombres}}</span></td>
+                                <td class="text-center">
+                                    <a ng-click="vm.getAlumno(alumno.id)" class="btn btn-small yellow-crusta" data-toggle="modal" href="#datos-alumno">
+                                        <i class="fa fa-edit"></i> Editar
+                                    </a>
+                                    <a ng-click="vm.deleteAlumno(alumno.id)" class="btn btn-small red-mint">
+                                        <i class="fa fa-trash-o"></i> Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="asd" class="row">
+                    <div class="col-md-2" style="margin-top: 10px;">
+                        <a class="btn btn-small green" data-toggle="modal" href="#nuevo-alumno"> Nuevo alumno </a>
+                    </div>
+                    <div class="col-md-10 text-right">
+                        <dir-pagination-controls max-size="10" auto-hide="false">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de inserción -->
+    <div id="nuevo-alumno" data-backdrop="static" class="modal fade" tabindex="-1" data-width="1000">
+        <div class="modal-header">
+            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Nuevo alumno</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.addAlumno()">
+                <div class="col-md-6">
+                    <div class="form-group"><h4 class="modal-title">Datos alumno</h4></div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.ApellidoPaterno">Apellido Paterno (*)</label>
+                        <span asp-validation-for="Alumno.ApellidoPaterno" class="text-muted text-validation text-validation"></span>
+                        <input type="text" asp-for="Alumno.ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.newAlumno.apellidoPaterno" />
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.ApellidoMaterno">Apellido Materno (*)</label>
+                        <span asp-validation-for="Alumno.ApellidoMaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.ApellidoMaterno" class="form-control" maxlength="25" ng-model="vm.newAlumno.apellidoMaterno" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Nombres">Nombres (*)</label>
+                        <span asp-validation-for="Alumno.Nombres" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.Nombres" class="form-control" maxlength="50" ng-model="vm.newAlumno.nombres" />                       
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Dni">DNI (*)</label>
+                        <span asp-validation-for="Alumno.Dni" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.newAlumno.dni" />                       
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Sexo">Sexo (*)</label>
+                        <span asp-validation-for="Alumno.Sexo" class="text-muted text-validation"></span>
+                        <select asp-for="Alumno.Sexo" class="form-control" ng-model="vm.newAlumno.sexo">
+                            <option ng-selected="true" value="">Seleccione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Direccion">Dirección (*)</label>
+                        <span asp-validation-for="Alumno.Direccion" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.Direccion" class="form-control" maxlength="70" ng-model="vm.newAlumno.direccion" />                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.FechaNacimiento">Fecha de Nacimiento (*)</label>
+                        <span asp-validation-for="Alumno.FechaNacimiento" class="text-muted text-validation"></span>
+                        <input type="date" asp-for="Alumno.FechaNacimiento" class="form-control" ng-model="vm.newAlumno.fechaNacimiento" />                     
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group"><h4 class="modal-title">Datos apoderado</h4></div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.ApellidoPaterno">Apellido Paterno (*)</label>
+                        <span asp-validation-for="Apoderado.ApellidoPaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.newAlumno.apoderado.apellidoPaterno" />                        
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.ApellidoMaterno">Apellido Materno (*)</label>
+                        <span asp-validation-for="Apoderado.ApellidoMaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.ApellidoMaterno" class="form-control" maxlength="25" ng-model="vm.newAlumno.apoderado.apellidoMaterno" />                       
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.Nombres">Nombres (*)</label>
+                        <span asp-validation-for="Apoderado.Nombres" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.Nombres" class="form-control" maxlength="50" ng-model="vm.newAlumno.apoderado.nombres" />                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.Dni">DNI (*)</label>
+                        <span asp-validation-for="Apoderado.Dni" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.newAlumno.apoderado.dni" />                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.Sexo">Sexo (*)</label>
+                        <span asp-validation-for="Apoderado.Sexo" class="text-muted text-validation"></span>
+                        <select asp-for="Apoderado.Sexo" class="form-control" ng-model="vm.newAlumno.apoderado.sexo">
+                            <option ng-selected="true" value="">Seleccione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>                     
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.EstadoCivil">Estado Civil (*)</label>
+                        <span asp-validation-for="Apoderado.EstadoCivil" class="text-muted text-validation"></span>
+                        <select asp-for="Apoderado.EstadoCivil" class="form-control" ng-model="vm.newAlumno.apoderado.estadoCivil">
+                            <option ng-selected="true" value="">Seleccione</option>
+                            <option value="S">Soltero</option>
+                            <option value="C">Casado</option>
+                            <option value="V">Viudo</option>
+                            <option value="D">Divorciado</option>
+                        </select>                    
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-buttons">
+                        <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                        <input type="submit" value="Crear alumno" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulario de edición -->
+    <div id="datos-alumno" data-backdrop="static" class="modal fade" tabindex="-1" data-width="1000">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Datos alumno</h4>
+        </div>
+        <div class="modal-body col-md-12">
+            <form ng-submit="vm.updateAlumno()">
+                <div class="col-md-6">
+                    <div class="form-group"><h4 class="modal-title">Datos alumno</h4></div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.ApellidoPaterno">Apellido Paterno (*)</label>
+                        <span asp-validation-for="Alumno.ApellidoPaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.currentAlumno.apellidoPaterno" />                        
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.ApellidoMaterno">Apellido Materno (*)</label>
+                        <span asp-validation-for="Alumno.ApellidoMaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.ApellidoMaterno" class="form-control" maxlength="25" ng-model="vm.currentAlumno.apellidoMaterno" />                     
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Nombres">Nombres (*)</label>
+                        <span asp-validation-for="Alumno.Nombres" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.Nombres" class="form-control" maxlength="50" ng-model="vm.currentAlumno.nombres" />                     
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Dni">DNI (*)</label>
+                        <span id="messageDni" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.currentAlumno.dni" />                    
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Sexo">Sexo (*)</label>
+                        <span asp-validation-for="Alumno.Sexo" class="text-muted text-validation"></span>
+                        <select asp-for="Alumno.Sexo" class="form-control" ng-model="vm.currentAlumno.sexo">
+                            <option ng-selected="true" value="">Seleccione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>                        
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Direccion">Dirección (*)</label>
+                        <span asp-validation-for="Alumno.Direccion" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Alumno.Direccion" class="form-control" maxlength="70" ng-model="vm.currentAlumno.direccion" />                       
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.FechaNacimiento">FechaNacimiento (*)</label>
+                        <span asp-validation-for="Alumno.FechaNacimiento" class="text-muted text-validation"></span>
+                        <input type="date" asp-for="Alumno.FechaNacimiento" class="form-control" ng-model="vm.currentAlumno.fechaNacimiento" />                      
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group"><h4 class="modal-title">Datos apoderado</h4></div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.ApellidoPaterno">Apellido Paterno (*)</label>
+                        <span asp-validation-for="Apoderado.ApellidoPaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.currentAlumno.apoderado.apellidoPaterno" />                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.ApellidoMaterno">Apellido Materno (*)</label>
+                        <span asp-validation-for="Apoderado.ApellidoMaterno" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.ApellidoMaterno" class="form-control" maxlength="25" ng-model="vm.currentAlumno.apoderado.apellidoMaterno" />                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.Nombres">Nombres (*)</label>
+                        <span asp-validation-for="Apoderado.Nombres" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.Nombres" class="form-control" maxlength="50" ng-model="vm.currentAlumno.apoderado.nombres" />                        
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.Dni">DNI (*)</label>
+                        <span asp-validation-for="Apoderado.Dni" class="text-muted text-validation"></span>
+                        <input type="text" asp-for="Apoderado.Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.currentAlumno.apoderado.dni" /> 
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.Sexo">Sexo (*)</label>
+                        <span asp-validation-for="Apoderado.Sexo" class="text-muted text-validation"></span>
+                        <select asp-for="Apoderado.Sexo" class="form-control" ng-model="vm.currentAlumno.apoderado.sexo">
+                            <option ng-selected="true" value="">Seleccione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>                      
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apoderado.EstadoCivil">Estado Civil (*)</label>
+                        <span asp-validation-for="Apoderado.EstadoCivil" class="text-muted text-validation"></span>
+                        <select asp-for="Apoderado.EstadoCivil" class="form-control" ng-model="vm.currentAlumno.apoderado.estadoCivil">
+                            <option ng-selected="true" value="">Seleccione</option>
+                            <option value="S">Soltero</option>
+                            <option value="C">Casado</option>
+                            <option value="V">Viudo</option>
+                            <option value="D">Divorciado</option>
+                        </select>                      
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-buttons">
+                        <button type="reset" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                        <input type="submit" value="Actualizar alumno" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

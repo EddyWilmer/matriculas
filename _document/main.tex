@@ -1,0 +1,154 @@
+\documentclass[12pt, spanish]{report}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[document]{ragged2e}
+
+\usepackage{graphicx}
+\graphicspath{images/} % Directorio de las imágenes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%Bibliografía
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{cite} % Paquete para citas bibliográficas
+\usepackage{hyperref} % Paquete para crear hipervínculo 
+\usepackage{url} % Paquete para url de bibliografía online
+
+\makeatletter
+\def\bstctlcite{\@ifnextchar[{\@bstctlcite}{\@bstctlcite[@auxout]}}
+\def\@bstctlcite[#1]#2{\@bsphack
+	\@for\@citeb:=#2\do{%
+		\edef\@citeb{\expandafter\@firstofone\@citeb}%
+		\if@filesw\immediate\write\csname #1\endcsname{\string\citation{\@citeb}}\fi}%
+	\@esphack}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%Configuración de la página
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{vmargin}
+\setpapersize{A4} % Tamaño de la hoja
+\setmarginsrb % Márgenes de la hoja
+{3cm}       % Margen izquierdo
+{2,5cm}     % Margen superior
+{3cm}       % Margen derecho
+{2,5cm}     % Margen inferior
+{1cm}       % Encabezado
+{0cm}       % Separación  
+{1cm}       % Pie de página
+{1cm}       % Separación  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%Configuración de las párrafos y fuentes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Niveles que acepta
+\setcounter{secnumdepth}{3} % Niveles
+
+% Interlineado
+\usepackage{indentfirst}
+\renewcommand{\baselinestretch}{1.5} % Interlineado
+
+% Formato personalizado de los capítulos
+\usepackage{titlesec}
+\titleformat{\chapter}[hang] % Formato de capítulos Ej. 1. Lipsum  
+{\normalfont\huge\bfseries}{\thechapter.}{16pt}{\Huge} \titlespacing*{\chapter}{0pt}{-50pt}{0pt} % Args[MarginLeft, MarginTop, MarginBottom]
+
+% Tamaño de los títulos de los capítulos y secciones
+\usepackage{titlesec}
+\newcommand{\chapfnt}{\fontsize{16}{19}} % Tamaño de capítulos
+\newcommand{\secfnt}{\fontsize{14}{17}} % Tamaño de secciones
+\newcommand{\ssecfnt}{\fontsize{12}{14}} % Tamaño de subsecciones
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%Bibliografía
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addto\captionsspanish{\renewcommand{\bibname}{Referencias bibliográficas}} % Renombrar el título de la bibliografía
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%Otros auxiliares
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagenumbering{gobble} % Quitar la paginación
+\usepackage{enumitem}
+\usepackage[toc,page]{appendix}
+\addto\captionsspanish{%
+	\renewcommand\appendixname{Anexo}
+	\renewcommand\appendixpagename{Anexos}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%Documento principal
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+	\bstctlcite{BSTcontrol}
+	\begin{titlepage}
+		\begin{center}
+			\includegraphics[width=6cm]{images/logo_utp.png}\\
+			\vspace{20pt} 			
+			
+			\begin{Large}
+				Facultad de Ingeniería de Sistemas y Electrónica
+			\end{Large}		
+			
+			\begin{large}
+				Carrera profesional de Ingeniería de Sistemas
+			\end{large}\vspace{100pt}	
+			
+			\begin{large}
+				\textbf{Informe del proyecto final:}
+			\end{large}
+		
+			\begin{Large}
+				Detección de Bad Smells y Refactoring\\
+				Aplicación Web de Matrículas
+			\end{Large}\vspace{50pt} 	
+			
+			
+			\begin{large}
+				\textbf{Autor:}\break
+				Canaza Tito, Eddy Wilmer
+			\end{large}\vspace{20pt}
+			
+			\begin{large}
+				\textbf{Asesor(a):}\break
+				Ing. Paola Ana Zevallos Oporto
+			\end{large}\vspace{10pt} 
+			\vspace{50pt}	
+			
+			\vfill
+			
+			\large{Arequipa, febrero de 2017}
+		\end{center}
+	\end{titlepage}
+	
+	\tableofcontents
+	
+	\setlength{\parskip}{0.6em}
+	\begin{justify}
+	\chapter{Introducción}
+	\input{chapters/chapter01}
+	
+	\chapter{Revisión de la literatura}
+	\input{chapters/chapter02}
+	
+	\chapter{Marco teórico}
+	\input{chapters/chapter03}
+	
+	\chapter{Metodología}
+	\input{chapters/chapter04}
+	
+	\titlespacing*{\chapter}{0pt}{-50pt}{20pt}
+
+	\bibliographystyle{IEEEtran}
+	\bibliography{biblio}
+	\end{justify}
+	
+	\appendix
+	\appendixpage
+	\chapter{Requisitos funcionales}
+
+	
+\end{document}

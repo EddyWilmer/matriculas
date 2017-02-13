@@ -1,0 +1,81 @@
+﻿@{ 
+    ViewBag.Title = "Home";
+}
+
+<script>
+    window.onload = function () {
+        var item = $("#index");
+        item.addClass("active");
+        $("#index a").append("<span class='selected'></span>");
+    };
+</script>
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a asp-contoller="App" asp-action="Index">Home</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <span>Dashboard</span>
+        </li>
+    </ul>
+</div>
+<h1 class="page-title">
+    Admin Dashboard
+    <small>estadísticas y reportes</small>
+</h1>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <a class="dashboard-stat dashboard-stat-v2 blue" href="#">
+            <div class="visual">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="1500">0</span>
+                </div>
+                <div class="desc"> Total matriculados </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <a class="dashboard-stat dashboard-stat-v2 red" href="#">
+            <div class="visual">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="1250">0</span>
+                </div>
+                <div class="desc"> Total alumnos regulares </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <a class="dashboard-stat dashboard-stat-v2 green" href="#">
+            <div class="visual">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="250">0</span>
+                </div>
+                <div class="desc"> Total alumnos nuevos </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
+            <div class="visual">
+                <i class="fa fa-money"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    S/. <span data-counter="counterup" data-value="12,000.00">0</span>
+                </div>
+                <div class="desc"> Total recaudado </div>
+            </div>
+        </a>
+    </div>
+</div>

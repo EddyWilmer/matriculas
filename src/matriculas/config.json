@@ -1,0 +1,8 @@
+{
+  "MailSettings": {
+    "ToAddress": "e.canaza@hotmail.com"
+  },
+  "ConnectionStrings": {
+    "MatriculasContextConnection": "Server=(localdb)\\MSSQLLocalDb;Database=MatriculasDb;Trusted_Connection=true;MultipleActiveResultSets=true;"
+  }
+}
