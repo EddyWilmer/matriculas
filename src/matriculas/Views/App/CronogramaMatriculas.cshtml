@@ -33,14 +33,13 @@
             <span>Cronograma Matrículas</span>
         </li>
     </ul>
-    
 </div>
 <h1 class="page-title"></h1>
 <div class="row" ng-app="app" ng-controller="cronogramasMatriculasController as vm">
     <input type="hidden" id="anioAcademicoId" value="@ViewBag.Id" />
     <wait-cursor display-when="vm.isBusy"></wait-cursor>
     <!-- Tabla de visualización -->
-    <div class="col-md-5 col-centered" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false">
+    <div class="col-md-5 col-centered" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false" ng-cloak>
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">

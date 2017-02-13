@@ -34,7 +34,7 @@
 <div class="row" ng-app="app" ng-controller="gradosController as vm">
     <wait-cursor display-when="vm.isBusy"></wait-cursor>
     <!-- Tabla de visualización -->
-    <div class="col-md-6 col-md-offset-3" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false">
+    <div class="col-md-6 col-md-offset-3" ng-show="(!vm.errorMessage && !vm.isBusy) ? true : false" ng-cloak>
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
