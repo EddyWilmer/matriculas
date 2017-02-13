@@ -27,3 +27,9 @@ function collapseAccordion() {
     $myGroup.find('.collapse.in').collapse('hide');
 }
 
+jQuery(document).ready(function ($) {
+				$('.counter').counterUp({
+								delay: 10,
+								time: 1000
+				});
+});

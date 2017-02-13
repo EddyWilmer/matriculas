@@ -1,16 +1,8 @@
-﻿@model Matriculas.ViewModels.LoginViewModel
+﻿
+@model Matriculas.ViewModels.LoginViewModel
 @{
-    ViewBag.Title = "Login";
-}
-@{
-    Layout = "../Shared/_LayoutAuth.cshtml";
-}
-@section scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/angular/angular.min.js"></script>
-    <script src="~/js/simpleControls.js"></script>
-    <link href="~/lib/metronic/assets/css/login.min.css" rel="stylesheet" />
+				Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+				ViewBag.Title = "Login";
 }
 
 @Html.ValidationSummary(true)
@@ -25,12 +17,10 @@
     }
     <h3 class="form-title font-green">Sign In</h3>
     <div class="form-group">
-        <label asp-for="UserName" class="control-label visible-ie8 visible-ie9">Username</label>
         <input asp-for="UserName" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" />
         <span class="text-muted text-validation" asp-validation-for="UserName"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Password" class="control-label visible-ie8 visible-ie9">Password</label>
         <input asp-for="Password" class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" onkeypress="if(event.keyCode==13) {javascript:form.submit();}" />
         <span class="text-muted text-validation" asp-validation-for="Password"></span>
     </div>
