@@ -20,7 +20,7 @@
         vm.newAlumno = { apoderado: {} }; // Nuevo alumno para crear
         
         // Solicita la lista de alumnos disponibles (Los que están con estado 1)
-        $http.get("/api/alumnos")
+        $http.get("/api/v2/alumnos")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.alumnos);
@@ -32,12 +32,28 @@
                 vm.isBusy = false;
             });
 
+    				//Recupera los datos del alumno
+        vm.getAlumno = function (id) {
+        				$http.get("/api/v2/alumnos/" + id)
+                .then(function (response) {
+                				// Success   
+                				angular.copy(response.data, vm.currentAlumno);
+                				vm.currentAlumno.fechaNacimiento = new Date(vm.currentAlumno.fechaNacimiento);
+                }, function (error) {
+                				// Failure
+                				vm.errorMessage = "No se pudo cargar la información del alumno.";
+                })
+                .finally(function () {
+                				vm.isBusy = false;
+                });
+        }
+
         // Agrega el alumno
         vm.addAlumno = function () {
             vm.isBusy = true;
             vm.errors = [];
             
-            $http.post("/api/alumnos/crear", vm.newAlumno)
+            $http.post("/api/v2/alumnos", vm.newAlumno)
                 .then(function (response) {
                     // Success                                
                     vm.alumnos.push(response.data);                  
@@ -56,6 +72,34 @@
                 })
                 .finally(function (error) {
                     vm.isBusy = false;
+                });
+        }
+
+    				// Actualiza del alumno
+        vm.updateAlumno = function () {
+        				vm.isBusy = true;
+        				vm.errors = [];
+
+        				$http.put("/api/v2/alumnos/", vm.currentAlumno)
+                .then(function (response) {
+                				// Success  
+                				var index = vm.alumnos.findIndex(obj => obj.id === vm.currentAlumno.id);
+                				vm.alumnos[index] = response.data;
+                				$('#datos-alumno').modal('hide');
+
+                				toastr.success("Se actualizó el alumno correctamente.");
+                },
+                function (error) {
+                				// Failure                      
+                				angular.copy(error.data, vm.errors);
+
+                				if (typeof vm.errors.dniMessageValidation !== "undefined")
+                								toastr.warning(vm.errors.dniMessageValidation);
+
+                				toastr.error("No se pudo actualizar el alumno.");
+                })
+                .finally(function (error) {
+                				vm.isBusy = false;
                 });
         }
 
@@ -79,49 +123,8 @@
                     vm.isBusy = false;
                 });
         }
+    
 
-        //Recupera los datos del alumno
-        vm.getAlumno = function (id) {
-            $http.get("/api/alumnos/" + id)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data, vm.currentAlumno);
-                    vm.currentAlumno.fechaNacimiento = new Date(vm.currentAlumno.fechaNacimiento);
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información del alumno.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
-        // Actualiza del alumno
-        vm.updateAlumno = function () {
-            vm.isBusy = true;
-            vm.errors = [];
-            
-            $http.post("/api/alumnos/editar", vm.currentAlumno)
-                .then(function (response) {
-                    // Success  
-                    var index = vm.alumnos.findIndex(obj => obj.id === vm.currentAlumno.id);
-                    vm.alumnos[index] = response.data;
-                    $('#datos-alumno').modal('hide');
-
-                    toastr.success("Se actualizó el alumno correctamente.");
-                },
-                function (error) {
-                    // Failure                      
-                    angular.copy(error.data, vm.errors);
-
-                    if (typeof vm.errors.dniMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.dniMessageValidation);
-
-                    toastr.error("No se pudo actualizar el alumno.");
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
+        
     }
 })();

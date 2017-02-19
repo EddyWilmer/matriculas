@@ -1,4 +1,5 @@
 ﻿using Matriculas.Models;
+using Matriculas.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -43,8 +44,9 @@ namespace Matriculas.ViewModels
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public DateTime FechaNacimiento { get; set; }
 
-        public virtual Apoderado Apoderado { get; set; }
+								[Required, ValidateObject]
+        public virtual ApoderadoViewModel Apoderado { get; set; }
 
         public string Estado { get; set; }
-    }
+				}
 }
