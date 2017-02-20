@@ -8,7 +8,7 @@ namespace Matriculas.Models
     /// Clase que describe la interfaz de la Clase MatriculasRepository.
     /// Esta clase es usada para proporcionarle acceso a clases externas mediante inyecciones.
     /// </summary>
-    public interface IMatriculasRepository
+    public interface IMatriculasRepositorys
     {
         // Métodos de la entidad Colaborador
         IEnumerable<Colaborador> GetAllColaboradores();
@@ -79,14 +79,14 @@ namespace Matriculas.Models
         IEnumerable<Deuda> GetDeudasLastMatricula(int idAlumno);
         bool IsDniValido(Alumno thisAlumno);
         void AddAlumno(Alumno thisAlumno);
-        Alumno UpdateAlumno(Alumno alumnoToUpdate);     
+        void UpdateAlumno(Alumno alumnoToUpdate);     
         void DeleteAlumno(Alumno alumnoToDelete);
 
         // Métodos de la entidad Apoderado
         IEnumerable<Apoderado> GetAllApoderados();
         Apoderado GetApoderadoById(int idApoderado);
         bool IsDniValido(Apoderado thisApoderado);
-        Apoderado UpdateApoderado(Apoderado apoderadoToUpdate);
+        void UpdateApoderado(Apoderado apoderadoToUpdate);
 
         // Métodos de la entidad AniosAcademicos
         IEnumerable<AnioAcademico> GetAllAniosAcademicos();

@@ -27,7 +27,7 @@ namespace Matriculas.Controllers
     {
         private IConfigurationRoot _config;
         private IMailService _mailService;
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
         private ILogger<AppController> _logger;
         private IHostingEnvironment _env;
 
@@ -42,7 +42,7 @@ namespace Matriculas.Controllers
         /// <param name="env">Hosting.</param>
         public AppController(IMailService mailService,
             IConfigurationRoot config,
-            IMatriculasRepository repository,
+            IMatriculasRepositorys repository,
             ILogger<AppController> logger,
             IHostingEnvironment env )
         {

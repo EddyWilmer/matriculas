@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Matriculas.Models;
+using Matriculas.Queries.Core.Repositories;
 using Matriculas.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,43 +16,27 @@ using System.Web.Http;
 
 namespace Matriculas.Controllers.Api
 {
-				/// <author>Julissa Zaida Huaman Hilari</author>
-				/// <summary>
-				/// Clase que permite la interacción de las vistas con la entidad Alumno.
-				/// </summary>
 				[Route("api/v2/[controller]")]
 				public class AlumnosController : Controller
 				{
 								private ILogger<AlumnosController> _logger;
-								private IMatriculasRepository _repository;
+								private IAppRepository _repository;
 								private UserManager<ApplicationUser> _userManager;
 
-								/// <author>Julissa Zaida Huaman Hilari</author>
-								/// <summary>
-								/// Constructor de la clase AlumnosController.
-								/// </summary>
-								/// <param name="repository">Instancia del repositorio.</param>
-								/// <param name="logger">Administrador de logging.</param>
-								/// <param name="userManager">Administrador de usuarios.</param>
-								public AlumnosController(IMatriculasRepository repository, ILogger<AlumnosController> logger, UserManager<ApplicationUser> userManager)
+								public AlumnosController(IAppRepository repository, ILogger<AlumnosController> logger, UserManager<ApplicationUser> userManager)
 								{
 												_repository = repository;
 												_logger = logger;
 												_userManager = userManager;
 								}
 
-								/// <author>Julissa Zaida Huaman Hilari</author>
-								/// <summary>
-								/// Método para recuperar la lista de Alumnos activos.
-								/// </summary>
-								/// <returns>Acción con la respuesta.</returns>
 								[HttpGet()]
 								public IActionResult GetAllAlumnos()
 								{
 												try
 												{
 																_logger.LogInformation("Recuperando la lista de alumnos");
-																var result = _repository.GetAllAlumnos();
+																var result = _repository.Alumnos.GetAll();
 																return Ok(Mapper.Map<IEnumerable<AlumnoViewModel>>(result));
 												}
 												catch (Exception ex)
@@ -61,19 +46,13 @@ namespace Matriculas.Controllers.Api
 												}
 								}
 
-								/// <author>Julissa Zaida Huaman Hilari</author>
-								/// <summary>
-								/// Método para recuperar un Alumno específico a través del Id.
-								/// </summary>
-								/// <param name="idAlumno">Id del Alumno.</param>
-								/// <returns>Acción con la respuesta.</returns>
 								[HttpGet("{id}")]
 								public IActionResult GetAlumno(int id)
 								{
 												try
 												{
 																_logger.LogInformation("Recuperando la información del alumno");
-																var result = _repository.GetAlumnoById(id);
+																var result = _repository.Alumnos.Get(id);
 																return Ok(Mapper.Map<AlumnoViewModel>(result));
 												}
 												catch (Exception ex)
@@ -83,28 +62,22 @@ namespace Matriculas.Controllers.Api
 												}
 								}
 
-								/// <author>Julissa Zaida Huaman Hilari</author>
-								/// <summary>
-								/// Método para agregar un Alumno en la base de datos.
-								/// </summary>
-								/// <param name="alumno">Alumno</param>
-								/// <returns>Acción con la respuesta.</returns>
 								[HttpPost()]
-								public async Task<IActionResult> PostAlumno([FromBody] AlumnoViewModel alumno)
+								public async Task<IActionResult> PostAlumno([FromBody] AlumnoViewModel alumnoDetails)
 								{
 												_logger.LogInformation("Agregando al alumno");
 
-												if (!_repository.IsDniValido(Mapper.Map<Alumno>(alumno)))
-																ModelState.AddModelError("otros", "Este DNI ya fue registrado.");
+												var alumno = Mapper.Map<Alumno>(alumnoDetails);
+
+												//if (!_repository.IsDniValido(alumno))
+												//				ModelState.AddModelError("otros", "El Dni del alumno ya está registrado, verifique duplicidad.");
 
 												if (ModelState.IsValid)
 												{
-																var _newAlumno = Mapper.Map<Alumno>(alumno);
-
-																_repository.AddAlumno(_newAlumno);
-																if (await _repository.SaveChangesAsync())
+																_repository.Alumnos.Add(alumno);
+																if(await _repository.Complete())
 																{
-																				return Created($"api/alumno/{_newAlumno.Id}", Mapper.Map<AlumnoViewModel>(_newAlumno));
+																				return Created($"api/alumno/{alumno.Id}", Mapper.Map<AlumnoViewModel>(alumno));
 																}
 												}
 
@@ -112,212 +85,212 @@ namespace Matriculas.Controllers.Api
 												return BadRequest(ModelState);
 								}
 
-								/// <author>Julissa Zaida Huaman Hilari</author>
-								/// <summary>
-								/// Método para actualizar un Alumno en la base de datos.
-								/// </summary>
-								/// <param name="thisAlumno">Alumno con datos actualizados.</param>
-								/// <returns>Acción con la respuesta.</returns>
-								[HttpPut()]
-								public async Task<IActionResult> PutAlumno([FromBody] AlumnoViewModel thisAlumno)
-								{
-												_logger.LogInformation("Actualizando al alumno");
-												if (!_repository.IsDniValido(Mapper.Map<Alumno>(thisAlumno)))
-																ModelState.AddModelError("dniMessageValidation", "Este DNI ya fue registrado.");
+								///// <author>Julissa Zaida Huaman Hilari</author>
+								///// <summary>
+								///// Método para actualizar un Alumno en la base de datos.
+								///// </summary>
+								///// <param name="alumnoDetails">Alumno con datos actualizados.</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpPut()]
+								//public async Task<IActionResult> PutAlumno([FromBody] AlumnoViewModel alumnoDetails)
+								//{
+								//				_logger.LogInformation("Actualizando al alumno");
 
-												if (ModelState.IsValid)
-												{
-																var alumnoToUpdate = Mapper.Map<Alumno>(thisAlumno);
+								//				var alumno = Mapper.Map<Alumno>(alumnoDetails);
 
-																var updatedAlumno = _repository.UpdateAlumno(alumnoToUpdate);
-																var updatedApoderado = _repository.UpdateApoderado(alumnoToUpdate.Apoderado);
-																if (await _repository.SaveChangesAsync())
-																{
-																				return Created($"api/alumnos/{updatedAlumno.Id}", Mapper.Map<AlumnoViewModel>(updatedAlumno));
-																}
-												}
+								//				if (!_repository.IsDniValido(alumno))
+								//								ModelState.AddModelError("otros", "El Dni del alumno ya está registrado, verifique duplicidad.");
 
-												_logger.LogError("No se pudo actualizar los datos del alumno.");
-												return BadRequest(ModelState);
-								}
+								//				if (ModelState.IsValid)
+								//				{
+								//								_repository.UpdateAlumno(alumno);
+								//								_repository.UpdateApoderado(alumno.Apoderado);
+								//								if (await _repository.SaveChangesAsync())
+								//								{
+								//												return Created($"api/alumnos/{alumno.Id}", Mapper.Map<AlumnoViewModel>(alumno));
+								//								}
+								//				}
 
-								/// <author>Julissa Zaida Huaman Hilari</author>
-								/// <summary>
-								/// Método para eliminar lógicamente un Alumno en la base de datos.
-								/// </summary>
-								/// <param name="thisAlumno">Alumno.</param>
-								/// <returns>Acción con la respuesta</returns>
-								[HttpPost("api/alumnos/eliminar")]
-								public async Task<IActionResult> PostEliminarAlumno([FromBody] AlumnoViewModel thisAlumno)
-								{
-												_logger.LogInformation("Eliminando al alumno.");
-												var result = _repository.GetAlumnoById(thisAlumno.Id);
+								//				_logger.LogError("No se pudo actualizar los datos del alumno.");
+								//				return BadRequest(ModelState);
+								//}
 
-												var alumnoToDelete = Mapper.Map<Alumno>(result);
+								///// <author>Julissa Zaida Huaman Hilari</author>
+								///// <summary>
+								///// Método para eliminar lógicamente un Alumno en la base de datos.
+								///// </summary>
+								///// <param name="id">Alumno.</param>
+								///// <returns>Acción con la respuesta</returns>
+								//[HttpPost("{id}")]
+								//public async Task<IActionResult> PostEliminarAlumno(int id)
+								//{
+								//				_logger.LogInformation("Eliminando al alumno.");
+								//				var result = _repository.GetAlumnoById(id);
 
-												_repository.DeleteAlumno(alumnoToDelete);
-												if (await _repository.SaveChangesAsync())
-												{
-																return Ok("Se eliminó el colaborador correctamente.");
-												}
+								//				var alumno = Mapper.Map<Alumno>(result);
 
-												_logger.LogError("No se pudo eliminar al alumno.");
-												return BadRequest("No se pudo eliminar este colaborador.");
-								}
+								//				_repository.DeleteAlumno(alumno);
+								//				if (await _repository.SaveChangesAsync())
+								//				{
+								//								return Created($"api/alumnos/{alumno.Id}", Mapper.Map<AlumnoViewModel>(alumno));
+								//				}
 
-							
+								//				_logger.LogError("No se pudo eliminar al alumno.");
+								//				return BadRequest("No se pudo eliminar este colaborador.");
+								//}
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para recuperar un Alumno específico a través del Dni.
-        /// </summary>
-        /// <param name="thisAlumno">Alumno.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/alumnos/dni/{dni}")]
-        public IActionResult GetAlumnoEspecificoByDni(AlumnoViewModel thisAlumno)
-        {
-                try
-                {
-                _logger.LogInformation("Recuperando la información del alumno");
-                var result = _repository.GetAlumnoByDni(thisAlumno.Dni);
-                    return Ok(Mapper.Map<AlumnoViewModel>(result));
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
-                    return BadRequest(ModelState);
-                }    
-        }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para recuperar la última matrícula de un Alumno específico.
-        /// </summary>
-        /// <param name="idAlumno">Id del Alumno.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/alumnos/matricula/{idAlumno}")]
-        public IActionResult GetMatriculaAlumnoEspecifico(int idAlumno)
-        {
-            try
-            {
-                _logger.LogInformation("Recuperando la información del alumno");
-                var result = _repository.GetLastMatricula(idAlumno);
-                return Ok(Mapper.Map<MatriculaViewModel>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
-                return BadRequest(ModelState);
-            }
-        }
+								///// <author>Eddy Wilmer Canaza Tito</author>
+								///// <summary>
+								///// Método para recuperar un Alumno específico a través del Dni.
+								///// </summary>
+								///// <param name="thisAlumno">Alumno.</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpGet("api/alumnos/dni/{dni}")]
+								//public IActionResult GetAlumnoEspecificoByDni(AlumnoViewModel thisAlumno)
+								//{
+								//        try
+								//        {
+								//        _logger.LogInformation("Recuperando la información del alumno");
+								//        var result = _repository.GetAlumnoByDni(thisAlumno.Dni);
+								//            return Ok(Mapper.Map<AlumnoViewModel>(result));
+								//        }
+								//        catch (Exception ex)
+								//        {
+								//            _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
+								//            return BadRequest(ModelState);
+								//        }    
+								//}
 
-        /// <summary>
-        /// Método para recuperar el siguiente Grado que debe cursar un Alumno.
-        /// </summary>
-        /// <param name="idAlumno">Id del Alumno.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/alumnos/nextGrado/{idAlumno}")]
-        public IActionResult GetNextGradoAlumnoEspecifico(int idAlumno)
-        {
-            try
-            {
-                _logger.LogInformation("Recuperando el grado siguiente del alumno");
-                var result = _repository.GetNextGrado(idAlumno);
-                return Ok(Mapper.Map<GradoViewModel>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
-                return BadRequest(ModelState);
-            }
-        }
+								///// <author>Eddy Wilmer Canaza Tito</author>
+								///// <summary>
+								///// Método para recuperar la última matrícula de un Alumno específico.
+								///// </summary>
+								///// <param name="idAlumno">Id del Alumno.</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpGet("api/alumnos/matricula/{idAlumno}")]
+								//public IActionResult GetMatriculaAlumnoEspecifico(int idAlumno)
+								//{
+								//    try
+								//    {
+								//        _logger.LogInformation("Recuperando la información del alumno");
+								//        var result = _repository.GetLastMatricula(idAlumno);
+								//        return Ok(Mapper.Map<MatriculaViewModel>(result));
+								//    }
+								//    catch (Exception ex)
+								//    {
+								//        _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
+								//        return BadRequest(ModelState);
+								//    }
+								//}
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para recuperar las notas de la última matrícula del Alumno.
-        /// </summary>
-        /// <param name="idAlumno">Id del Alumno</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/alumnos/notas/{idAlumno}")]
-        public IActionResult GetNotasAlumnoEspecifico(int idAlumno)
-        {
-            try
-            {
-                _logger.LogInformation("Recuperando las notas del alumno");
-                var result = _repository.GetNotasLastMatricula(idAlumno);
-                return Ok(Mapper.Map<IEnumerable<NotaViewModel>>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
-                return BadRequest(ModelState);
-            }
-        }
+								///// <summary>
+								///// Método para recuperar el siguiente Grado que debe cursar un Alumno.
+								///// </summary>
+								///// <param name="idAlumno">Id del Alumno.</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpGet("api/alumnos/nextGrado/{idAlumno}")]
+								//public IActionResult GetNextGradoAlumnoEspecifico(int idAlumno)
+								//{
+								//    try
+								//    {
+								//        _logger.LogInformation("Recuperando el grado siguiente del alumno");
+								//        var result = _repository.GetNextGrado(idAlumno);
+								//        return Ok(Mapper.Map<GradoViewModel>(result));
+								//    }
+								//    catch (Exception ex)
+								//    {
+								//        _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
+								//        return BadRequest(ModelState);
+								//    }
+								//}
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para recuperar las deudas de la última matrícula del Alumno.
-        /// </summary>
-        /// <param name="idAlumno">Id del Alumno</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/alumnos/deudas/{idAlumno}")]
-        public IActionResult GetDeudasAlumnoEspecifico(int idAlumno)
-        {
-            try
-            {
-                _logger.LogInformation("Recuperando las deudas del alumno");
-                var result = _repository.GetDeudasLastMatricula(idAlumno);
-                return Ok(Mapper.Map<IEnumerable<DeudaViewModel>>(result));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
-                return BadRequest(ModelState);
-            }
-        }
+								///// <author>Eddy Wilmer Canaza Tito</author>
+								///// <summary>
+								///// Método para recuperar las notas de la última matrícula del Alumno.
+								///// </summary>
+								///// <param name="idAlumno">Id del Alumno</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpGet("api/alumnos/notas/{idAlumno}")]
+								//public IActionResult GetNotasAlumnoEspecifico(int idAlumno)
+								//{
+								//    try
+								//    {
+								//        _logger.LogInformation("Recuperando las notas del alumno");
+								//        var result = _repository.GetNotasLastMatricula(idAlumno);
+								//        return Ok(Mapper.Map<IEnumerable<NotaViewModel>>(result));
+								//    }
+								//    catch (Exception ex)
+								//    {
+								//        _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
+								//        return BadRequest(ModelState);
+								//    }
+								//}
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para procesar la matrícula de un Alumno.
-        /// </summary>
-        /// <param name="idAlumno">Id del Alumno</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/alumnos/matriculas/{idAlumno}")]
-        public IActionResult MatricularAlumno(int idAlumno)
-        {
-            try
-            {
-                _logger.LogInformation("Matriculando al alumno");
-                var colaboradorId = _userManager.FindByNameAsync(User.Identity.Name).Result.ColaboradorId;
-                var result = _repository.RegistrarMatricula(idAlumno, colaboradorId);
-                switch (result)
-                {
-                    case 0:
-                        ModelState.AddModelError("CronogramaMessage", "No hay un cronograma de matrículas establecido.");
-                        return BadRequest(ModelState);
-                    case 1:
-                        return Ok("Se registro la matrícula correctamente.");
-                    case 2:
-                        ModelState.AddModelError("SeccionesDisponiblesMessage", "No hay secciones disponibles.");
-                        return BadRequest(ModelState);
-                    case 3:
-                        ModelState.AddModelError("AlumnoMatriculadoMessage", "Este alumno ya fue matriculado.");
-                        return BadRequest(ModelState);
-                }
-                ModelState.AddModelError("ErrorMessage", "No se pudo registrar la matrícula.");
-                return BadRequest(ModelState);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
-                return BadRequest(ModelState);
-            }
-        }
+								///// <author>Eddy Wilmer Canaza Tito</author>
+								///// <summary>
+								///// Método para recuperar las deudas de la última matrícula del Alumno.
+								///// </summary>
+								///// <param name="idAlumno">Id del Alumno</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpGet("api/alumnos/deudas/{idAlumno}")]
+								//public IActionResult GetDeudasAlumnoEspecifico(int idAlumno)
+								//{
+								//    try
+								//    {
+								//        _logger.LogInformation("Recuperando las deudas del alumno");
+								//        var result = _repository.GetDeudasLastMatricula(idAlumno);
+								//        return Ok(Mapper.Map<IEnumerable<DeudaViewModel>>(result));
+								//    }
+								//    catch (Exception ex)
+								//    {
+								//        _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
+								//        return BadRequest(ModelState);
+								//    }
+								//}
 
-       
+								///// <author>Eddy Wilmer Canaza Tito</author>
+								///// <summary>
+								///// Método para procesar la matrícula de un Alumno.
+								///// </summary>
+								///// <param name="idAlumno">Id del Alumno</param>
+								///// <returns>Acción con la respuesta.</returns>
+								//[HttpGet("api/alumnos/matriculas/{idAlumno}")]
+								//public IActionResult MatricularAlumno(int idAlumno)
+								//{
+								//    try
+								//    {
+								//        _logger.LogInformation("Matriculando al alumno");
+								//        var colaboradorId = _userManager.FindByNameAsync(User.Identity.Name).Result.ColaboradorId;
+								//        var result = _repository.RegistrarMatricula(idAlumno, colaboradorId);
+								//        switch (result)
+								//        {
+								//            case 0:
+								//                ModelState.AddModelError("CronogramaMessage", "No hay un cronograma de matrículas establecido.");
+								//                return BadRequest(ModelState);
+								//            case 1:
+								//                return Ok("Se registro la matrícula correctamente.");
+								//            case 2:
+								//                ModelState.AddModelError("SeccionesDisponiblesMessage", "No hay secciones disponibles.");
+								//                return BadRequest(ModelState);
+								//            case 3:
+								//                ModelState.AddModelError("AlumnoMatriculadoMessage", "Este alumno ya fue matriculado.");
+								//                return BadRequest(ModelState);
+								//        }
+								//        ModelState.AddModelError("ErrorMessage", "No se pudo registrar la matrícula.");
+								//        return BadRequest(ModelState);
+								//    }
+								//    catch (Exception ex)
+								//    {
+								//        _logger.LogError($"No se pudo recuperar la información del alumno: {ex}");
+								//        return BadRequest(ModelState);
+								//    }
+								//}
 
-        
 
-        
-    }
+
+
+
+
+				}
 }

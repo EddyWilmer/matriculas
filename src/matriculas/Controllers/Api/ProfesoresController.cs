@@ -20,7 +20,7 @@ namespace Matriculas.Controllers.Api
     public class ProfesoresController : Controller
     {
         private ILogger<ProfesoresController> _logger;
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
 
         /// <author>Eddy Wilmer Canaza Tito</author>
         /// <summary>
@@ -28,7 +28,7 @@ namespace Matriculas.Controllers.Api
         /// </summary>
         /// <param name="repository">Instancia del repositorio.</param>
         /// <param name="logger">Administrador de logging.</param>
-        public ProfesoresController(IMatriculasRepository repository, ILogger<ProfesoresController> logger)
+        public ProfesoresController(IMatriculasRepositorys repository, ILogger<ProfesoresController> logger)
         {
             _repository = repository;
             _logger = logger;

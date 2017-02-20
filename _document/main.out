@@ -12,5 +12,7 @@
 \BOOKMARK [2][-]{subsection.4.1.2}{Error en la carga de las vistas}{section.4.1}% 12
 \BOOKMARK [2][-]{subsection.4.1.3}{Error en la carga de las vistas}{section.4.1}% 13
 \BOOKMARK [2][-]{subsection.4.1.4}{Validaci\363n de los nested objects}{section.4.1}% 14
-\BOOKMARK [0][-]{section*.3}{Appendices}{}% 15
-\BOOKMARK [0][-]{appendix.Alph1}{Requisitos funcionales}{}% 16
+\BOOKMARK [2][-]{subsection.4.1.5}{Duplicidad en el mapeo}{section.4.1}% 15
+\BOOKMARK [2][-]{subsection.4.1.6}{Ruta de los controlador API}{section.4.1}% 16
+\BOOKMARK [0][-]{section*.3}{Appendices}{}% 17
+\BOOKMARK [0][-]{appendix.Alph1}{Requisitos funcionales}{}% 18

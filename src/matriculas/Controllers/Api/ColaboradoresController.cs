@@ -21,7 +21,7 @@ namespace Matriculas.Controllers.Api
     public class ColaboradoresController : Controller
     {
         private ILogger<ColaboradoresController> _logger;
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
         private UserManager<ApplicationUser> _userManager;
 
         /// <author>Eddy Wilmer Canaza Tito</author>
@@ -31,7 +31,7 @@ namespace Matriculas.Controllers.Api
         /// <param name="repository">Instancia del respositorio.</param>
         /// <param name="logger">Administrador de logging.</param>
         /// <param name="userManager">Administrador de usuarios.</param>
-        public ColaboradoresController(IMatriculasRepository repository, ILogger<ColaboradoresController> logger, UserManager<ApplicationUser> userManager)
+        public ColaboradoresController(IMatriculasRepositorys repository, ILogger<ColaboradoresController> logger, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
             _logger = logger;

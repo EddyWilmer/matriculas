@@ -57,6 +57,10 @@ div.checkbox {
     border-right: 1px solid RGB(194,202,216);
 }
 
+.checkbox {
+				margin-left: 15px;
+}
+
 .checkbox:hover, input[type="checkbox"]:hover {
     cursor: pointer;
 }

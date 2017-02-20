@@ -65,8 +65,8 @@
                     // Failure         
                     angular.copy(error.data, vm.errors);
 
-                    if (typeof vm.errors.dniMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.dniMessageValidation);
+                    if (typeof vm.errors.otros !== "undefined")
+                        toastr.warning(vm.errors.otros);
 
                     toastr.error("No se pudo registrar el alumno");
                 })

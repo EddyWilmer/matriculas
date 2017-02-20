@@ -72,7 +72,8 @@ Para esta etapa del proyecto se detectarán los bad smells del código existente
 
 \subsection{Validación de los nested objects}
 \begin{itemize}
-	\item \textbf{Síntoma:} El controlador no valida los nested objects.
+	\item \textbf{Síntoma:} El controlador no valida los nested objects y se valida los objetos manualmente.
+	\item \textbf{Bad Smell:} Duplicated code.
 	\item \textbf{Solución:} Crear una clase que realice este proceso iterativamente.
 	\item \textbf{Procedimiento:} Se creó dos clases, una llamada ``CompositeValidationResult" y la otra ``ValidateObjectAttribute" que agregan un atributo a los decoradores de validación del modelo para que puedan usarse en todos los DTO.
 \end{itemize}
@@ -88,6 +89,99 @@ public class AlumnoViewModel
 	...
 	[Required, ValidateObject]
 	public virtual ApoderadoViewModel Apoderado { get; set; }
+	...
+}
+\end{lstlisting}
+
+\subsection{Duplicidad en el mapeo}
+\begin{itemize}
+	\item \textbf{Síntoma:} Se está mapeando el objeto dos veces, una para validar algún atributo y otro para transaccionar.
+	\item \textbf{Bad Smell:} Duplicated code.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class AlumnoViewModel
+[HttpPost()]
+public async Task<IActionResult> PostAlumno([FromBody] AlumnoViewModel alumnoDetails)
+{
+	...
+	if (!_repository.IsDniValido(Mapper.Map<Alumno>(alumnoDetails)))
+		ModelState.AddModelError("otros", "Este DNI ya fue registrado.");
+
+	if (ModelState.IsValid)
+	{
+		var _newAlumno = Mapper.Map<Alumno>(alumnoDetails);
+		...
+	}
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}	
+	\item \textbf{Solución:} Extraer las sentencias duplicadas y colocarlo en una variable.
+	\item \textbf{Técnica:} Extract variable.
+\end{itemize}
+	
+\begin{lstlisting}[language={[Sharp]C}]
+[HttpPost()]
+public async Task<IActionResult> PostAlumno([FromBody] AlumnoViewModel alumnoDetails)
+{
+	...
+	var alumno = Mapper.Map<Alumno>(alumnoDetails);
+
+	if (!_repository.IsDniValido(alumno))
+		ModelState.AddModelError("otros", "Este DNI ya fue registrado.");
+
+	if (ModelState.IsValid)
+	{
+		_repository.AddAlumno(alumno);
+		...
+	}
+	...
+}
+\end{lstlisting}
+	
+\subsection{Ruta de los controlador API}
+\begin{itemize}
+	\item \textbf{Síntoma:} Se está repitiendo en cada acción la ruta del controlador.
+	\item \textbf{Bad Smell:} Duplicated code.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class AlumnosController : Controller
+{
+	...	
+	
+	[HttpGet("api/alumnos"))]
+	public IActionResult GetAllAlumnos()
+	{ ... }
+	
+	[HttpGet("api/alumnos/{id}")]
+	public IActionResult GetAlumno(int id)
+	{ ... }
+	
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}	
+	\item \textbf{Solución:} Utilizar el decorador Route para indicar la ruta del controlador. También indicar la versión del API y cambiar el nombre de las acciones según convenciones.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+[Route("api/v2/[controller]")]
+public class AlumnosController : Controller
+{
+	...	
+	
+	[HttpGet()]
+	public IActionResult GetAllAlumnos()
+	{ ... }
+	
+	[HttpGet("{id}")]
+	public IActionResult GetAlumno(int id)
+	{ ... }
+	
 	...
 }
 \end{lstlisting}

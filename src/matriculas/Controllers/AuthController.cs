@@ -16,7 +16,7 @@ namespace Matriculas.Controllers
     /// </summary>
     public class AuthController : Controller
     {
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
         private SignInManager<ApplicationUser> _signInManager;
         private MatriculasContext _context;
         private UserManager<ApplicationUser> _userManager;
@@ -31,7 +31,7 @@ namespace Matriculas.Controllers
         /// <param name="context">Contexto de la aplicación.</param>
         public AuthController(SignInManager<ApplicationUser> signInManager, 
             UserManager<ApplicationUser> userManager,
-            IMatriculasRepository repository, 
+            IMatriculasRepositorys repository, 
             MatriculasContext context)
         {
             _signInManager = signInManager;

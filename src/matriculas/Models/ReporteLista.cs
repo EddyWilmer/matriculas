@@ -21,7 +21,7 @@ namespace Matriculas.Models
     public class ReporteLista
     {
         private IHostingEnvironment _env;
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
 
         /// <author>Eddy Wilmer Canaza Tito</author>
         /// <summary>
@@ -29,7 +29,7 @@ namespace Matriculas.Models
         /// </summary>
         /// <param name="repository">Intancia del repositorio.</param>
         /// <param name="env">Hosting.</param>
-        public ReporteLista(IMatriculasRepository repository, IHostingEnvironment env)
+        public ReporteLista(IMatriculasRepositorys repository, IHostingEnvironment env)
         {
             _repository = repository;
             _env = env;

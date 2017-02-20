@@ -16,10 +16,10 @@ namespace Matriculas.Models
     /// <summary>
     /// Clase que interactua con la base de datos.
     /// </summary>
-    public class MatriculasRepository : IMatriculasRepository
+    public class MatriculasRepositorys : IMatriculasRepositorys
     {
         private MatriculasContext _context;
-        private ILogger<MatriculasRepository> _logger;
+        private ILogger<MatriculasRepositorys> _logger;
         private UserManager<ApplicationUser> _userManager;
 
         /// <author>Eddy Wilmer Canaza Tito</author>
@@ -29,7 +29,7 @@ namespace Matriculas.Models
         /// <param name="context">Contexto de la aplicación.</param>
         /// <param name="logger">Administrador de logging.</param>
         /// <param name="userManager">Administrador de usuarios.</param>
-        public MatriculasRepository(MatriculasContext context, ILogger<MatriculasRepository> logger, UserManager<ApplicationUser> userManager)
+        public MatriculasRepositorys(MatriculasContext context, ILogger<MatriculasRepositorys> logger, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _logger = logger;
@@ -971,40 +971,40 @@ namespace Matriculas.Models
             _context.Update(thisProfesor);
         }
 
-        /// <author>Julissa Zaida Huaman Hilari</author>
-        /// <summary>
-        /// Método para obtener los Alumnos activos.
-        /// </summary>
-        /// <returns>Lista de Alumnos.</returns>
-        public IEnumerable<Alumno> GetAllAlumnos()
-        {
-            return _context.Alumnos
-                .Include(t => t.Apoderado)
-                .Where(t => t.Estado == "1")
-                .ToList();
-        }
+								/// <author>Julissa Zaida Huaman Hilari</author>
+								/// <summary>
+								/// Método para obtener los Alumnos activos.
+								/// </summary>
+								/// <returns>Lista de Alumnos.</returns>
+								//public IEnumerable<Alumno> GetAllAlumnos()
+								//{
+								//    return _context.Alumnos
+								//        .Include(t => t.Apoderado)
+								//        .Where(t => t.Estado == "1")
+								//        .ToList();
+								//}
 
-        /// <author>Julissa Zaida Huaman Hilari</author>
-        /// <summary>
-        /// Método para obtener un Alumno específico a través de un Id.
-        /// </summary>
-        /// <param name="idAlumno">Id del Alumno.</param>
-        /// <returns>Alumno específico.</returns>
-        public Alumno GetAlumnoById(int idAlumno)
-        {
-            return _context.Alumnos
-                .Include(t => t.Apoderado)
-                .Where(t => t.Id == idAlumno)
-                .FirstOrDefault();
-        }
+								/// <author>Julissa Zaida Huaman Hilari</author>
+								/// <summary>
+								/// Método para obtener un Alumno específico a través de un Id.
+								/// </summary>
+								/// <param name="idAlumno">Id del Alumno.</param>
+								/// <returns>Alumno específico.</returns>
+								//public Alumno GetAlumnoById(int idAlumno)
+								//{
+								//    return _context.Alumnos
+								//        .Include(t => t.Apoderado)
+								//        .Where(t => t.Id == idAlumno)
+								//        .FirstOrDefault();
+								//}
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para obtener un Alumno específico a través de un Dni.
-        /// </summary>
-        /// <param name="dni">Dni del Alumno.</param>
-        /// <returns>Alumno específico.</returns>
-        public Alumno GetAlumnoByDni(string dni)
+								/// <author>Eddy Wilmer Canaza Tito</author>
+								/// <summary>
+								/// Método para obtener un Alumno específico a través de un Dni.
+								/// </summary>
+								/// <param name="dni">Dni del Alumno.</param>
+								/// <returns>Alumno específico.</returns>
+								public Alumno GetAlumnoByDni(string dni)
         {
             return _context.Alumnos
                 .Include(t => t.Apoderado)
@@ -1158,7 +1158,7 @@ namespace Matriculas.Models
         /// </summary>
         /// <param name="alumnoToUpdate">Alumno con datos actualizados.</param>
         /// <returns>Alumno actualizado.</returns>
-        public Alumno UpdateAlumno(Alumno alumnoToUpdate)
+        public void UpdateAlumno(Alumno alumnoToUpdate)
         {
             var thisAlumno = GetAlumnoById(alumnoToUpdate.Id);
             thisAlumno.ApellidoPaterno = alumnoToUpdate.ApellidoPaterno;
@@ -1170,8 +1170,6 @@ namespace Matriculas.Models
             thisAlumno.FechaNacimiento = alumnoToUpdate.FechaNacimiento;
 
             _context.Update(thisAlumno);
-
-            return (thisAlumno);
         }
 
         /// <author>Julissa Zaida Huaman Hilari</author>
@@ -1205,7 +1203,7 @@ namespace Matriculas.Models
         /// </summary>
         /// <param name="apoderadoToUpdate">Apoderado con datos actualizados.</param>
         /// <returns>Apoderado actualizado.</returns>
-        public Apoderado UpdateApoderado(Apoderado apoderadoToUpdate)
+        public void UpdateApoderado(Apoderado apoderadoToUpdate)
         {
             var thisApoderado = GetApoderadoById(apoderadoToUpdate.Id);
             thisApoderado.ApellidoPaterno = apoderadoToUpdate.ApellidoPaterno;
@@ -1216,8 +1214,6 @@ namespace Matriculas.Models
             thisApoderado.EstadoCivil = apoderadoToUpdate.EstadoCivil;
 
             _context.Update(thisApoderado);
-
-            return (thisApoderado);
         }
 
         /// <author>Julissa Zaida Huaman Hilari</author>
@@ -1619,5 +1615,15 @@ namespace Matriculas.Models
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
-    }
+
+								public IEnumerable<Alumno> GetAllAlumnos()
+								{
+												throw new NotImplementedException();
+								}
+
+								public Alumno GetAlumnoById(int idAlumno)
+								{
+												throw new NotImplementedException();
+								}
+				}
 }

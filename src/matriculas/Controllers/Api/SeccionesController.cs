@@ -20,14 +20,14 @@ namespace Matriculas.Controllers.Api
     public class SeccionesController : Controller
     {
         private ILogger<SeccionesController> _logger;
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
   
         /// <summary>
         /// Constructor de la clase SeccionesController.
         /// </summary>
         /// <param name="repository">Instancia del repositorio.</param>
         /// <param name="logger">Administrador de logging.</param>
-        public SeccionesController(IMatriculasRepository repository, ILogger<SeccionesController> logger)
+        public SeccionesController(IMatriculasRepositorys repository, ILogger<SeccionesController> logger)
         {
             _repository = repository;
             _logger = logger;

@@ -30,14 +30,4 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B701D79E-5448-4E33-B674-09ED276ED539} = {E42D03A7-550A-48EB-AD66-89FEE8EADEAB}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://ecanaza.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = src\\matriculas\\Matriculas.xproj
-		SccProjectTopLevelParentUniqueName1 = matriculas.sln
-		SccProjectName1 = src/matriculas
-		SccLocalPath1 = src\\matriculas
-	EndGlobalSection
 EndGlobal

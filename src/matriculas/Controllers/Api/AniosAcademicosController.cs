@@ -21,7 +21,7 @@ namespace Matriculas.Controllers.Api
     public class AniosAcademicosController : Controller
     {
         private ILogger<AniosAcademicosController> _logger;
-        private IMatriculasRepository _repository;
+        private IMatriculasRepositorys _repository;
 
         /// <author>Eddy Wilmer Canaza Tito</author>
         /// <summary>
@@ -29,7 +29,7 @@ namespace Matriculas.Controllers.Api
         /// </summary>
         /// <param name="repository">Instancia del respositorio.</param>
         /// <param name="logger">Administrador de logging.</param>
-        public AniosAcademicosController(IMatriculasRepository repository, ILogger<AniosAcademicosController> logger)
+        public AniosAcademicosController(IMatriculasRepositorys repository, ILogger<AniosAcademicosController> logger)
         {
             _repository = repository;
             _logger = logger;
