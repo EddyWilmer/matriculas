@@ -30,7 +30,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
             if (anioAcademico != null)
             {
-                var cursoAnioAcademico = _context.CursosAnioAcademico
+                var cursoAnioAcademico = _context.CursosAniosAcademicos
                     .Where(t => t.AnioAcademicoId == anioAcademico.Id)
                     .Where(t => t.CursoId == id)
                     .FirstOrDefault();
@@ -78,7 +78,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
             if (anioAcademico != null)
             {
-                return _context.CursosAnioAcademico
+                return _context.CursosAniosAcademicos
                     .Include(t => t.Profesor)
                     .Where(t => t.AnioAcademicoId == anioAcademico.Id)
                     .Where(t => t.CursoId == curso.Id)
@@ -90,7 +90,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public IEnumerable<Profesor> SearchProfesores(int id)
         {
-            return _context.ProfesorCursos
+            return _context.ProfesoresCursos
                .Include(t => t.Profesor)
                .Where(t => t.CursoId == id)
                .Select(t => t.Profesor)

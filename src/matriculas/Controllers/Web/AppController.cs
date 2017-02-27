@@ -148,10 +148,10 @@ namespace Matriculas.Controllers
         /// </summary>
         /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
-        [Route("App/AniosAcademicos/CronogramaMatriculas/{id?}")]
-        public IActionResult CronogramaMatriculas(int id)
+        [Route("App/AniosAcademicos/{id?}/Cronogramas")]
+        public IActionResult Cronogramas(int id)
         {
-            ViewBag.Id = id;
+            ViewBag.IdAnioAcademico = id;
             return View();
         }
 

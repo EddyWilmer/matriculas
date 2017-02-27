@@ -399,3 +399,109 @@ public void EliminarCursos(int id)
 	_context.SaveChanges();
 }
 \end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\break
+\subsection{Lógica de negocio en el controlador}
+\begin{itemize}
+	\item \textbf{Síntoma:} El controlador tiene código de la lógica del negocio; las tareas que deberían ejecutarse en el repositorio.
+	\item \textbf{Bad Smell:} Intimidad inadecuada.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public async Task<IActionResult> PostUpdateProfesorCurso([FromBody] CursoProfesorViewModel profesorDetails)
+{
+	...
+	if (ModelState.IsValid)
+	{
+		var profesor = Mapper.Map<Profesor>(profesorDetails.Profesor);
+		var curso = Mapper.Map<Curso>(profesorDetails.Curso);
+		...
+	}
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Técnica:} Move Method y Extract Method.
+	\item \textbf{Solución:} Trasladar el código al repositorio creando un método que realice las tareas de mapeo.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void AssignProfesor(int id, int idProfesor)
+{
+	var anioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
+
+	if (anioAcademico != null)
+	{
+		var cursoAnioAcademico = _context.CursosAnioAcademico
+		.Where(t => t.AnioAcademicoId == anioAcademico.Id)
+		.Where(t => t.CursoId == id)
+		.FirstOrDefault();	
+		...
+	}
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Atributos que no se usan}
+\begin{itemize}
+	\item \textbf{Síntoma:} La clase Cursos tiene atributos que no usa.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class Curso
+{      
+	...
+	public virtual IEnumerable<Profesor> Profesores { get; set; }	
+	public virtual ICollection<ProfesorCurso> ProfesorCurso { get; set; }
+	...
+}
+
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Solución:} Eliminar los atributos que no usa en el modelo.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Cambiar la definición de la clase CronogramaMatricula}
+\begin{itemize}
+	\item \textbf{Síntoma:} La clase CronogramaMatricula que era el modelo de los cronogramas de matrículas; ahora, se utilizará para cualquier tipo de cronograma dentro de un año académico. Además se usando un atributo "Nombre" como Primary Key.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class CronogramaMatricula
+{
+	[Key]
+	[ForeignKey("AnioAcademico")]
+	public int AnioAcademicoId { get; set; }
+	
+	[Key]
+	[StringLength(30)]
+	public string Nombre { get; set; }
+	
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Solución:} Renombrar la clase CronogramaMatricula a Cronograma. Agregar un Atributo Id para establecerlo como Primary Key.
+\end{itemize}
+\begin{lstlisting}[language={[Sharp]C}]
+public class Cronograma
+{
+	[Key]
+	public int Id { get; set; }
+
+	[ForeignKey("AnioAcademico")]
+	public int AnioAcademicoId { get; set; }
+	
+	[StringLength(30)]
+	public string Nombre { get; set; }
+	
+	...
+}
+\end{lstlisting}

@@ -24,11 +24,6 @@ namespace Matriculas.Models
 
         public int HorasAcademicas { get; set; }
 
-        [NotMapped]
-        public virtual IEnumerable<Profesor> Profesores { get; set; }
-
-        public virtual ICollection<ProfesorCurso> ProfesorCurso { get; set; }
-
         [StringLength(1)]
         public string Estado { get; set; }
     }

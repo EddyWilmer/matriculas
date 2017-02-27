@@ -25,7 +25,7 @@ namespace Matriculas.Queries.Core.Repositories
 
         IAniosAcademicosRepository AniosAcademicos { get; }
 
-        ICronogramasMatriculasRepository CronogramasMatriculas { get; }
+        ICronogramasRepository Cronogramas { get; }
 
         Task<bool> Complete();
 	}

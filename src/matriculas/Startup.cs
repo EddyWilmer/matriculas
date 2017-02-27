@@ -115,7 +115,7 @@ namespace Matriculas
                 config.CreateMap<ProfesorViewModel, Profesor>().ReverseMap();
                 config.CreateMap<AlumnoViewModel, Alumno>().ReverseMap();
                 config.CreateMap<ApoderadoViewModel, Apoderado>().ReverseMap();
-                config.CreateMap<CronogramaMatriculaViewModel, CronogramaMatricula>().ReverseMap();
+                config.CreateMap<CronogramaViewModel, Cronograma>().ReverseMap();
                 config.CreateMap<AnioAcademicoViewModel, AnioAcademico>().ReverseMap();
                 config.CreateMap<MatriculaViewModel, Matricula>().ReverseMap(); 
                 config.CreateMap<NotaViewModel, Nota>().ReverseMap();

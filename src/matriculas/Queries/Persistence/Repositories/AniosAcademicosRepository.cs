@@ -52,6 +52,14 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .FirstOrDefault();
         }
 
+        public IEnumerable<Cronograma> GetCronogramas(int id)
+        {
+            return _context.Cronogramas
+                .Where(t => t.AnioAcademicoId == id)
+                .Where(t => t.Estado == "1")
+                .ToList();
+        }
+
         public void Update(AnioAcademico entity)
         {
             _context.Entry(entity).State = EntityState.Modified;

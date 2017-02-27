@@ -117,20 +117,22 @@ namespace matriculas.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CronogramasMatricula",
+                name: "Cronogramas",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AnioAcademicoId = table.Column<int>(nullable: false),
-                    Nombre = table.Column<string>(maxLength: 20, nullable: false),
                     Estado = table.Column<string>(maxLength: 1, nullable: true, defaultValue: "1"),
                     FechaFin = table.Column<DateTime>(type: "DATE", nullable: true),
-                    FechaInicio = table.Column<DateTime>(type: "DATE", nullable: true)
+                    FechaInicio = table.Column<DateTime>(type: "DATE", nullable: true),
+                    Nombre = table.Column<string>(maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CronogramasMatricula", x => new { x.AnioAcademicoId, x.Nombre });
+                    table.PrimaryKey("PK_Cronogramas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CronogramasMatricula_AniosAcademicos_AnioAcademicoId",
+                        name: "FK_Cronogramas_AniosAcademicos_AnioAcademicoId",
                         column: x => x.AnioAcademicoId,
                         principalTable: "AniosAcademicos",
                         principalColumn: "Id",
@@ -432,7 +434,7 @@ namespace matriculas.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CursosAnioAcademico",
+                name: "CursosAniosAcademicos",
                 columns: table => new
                 {
                     AnioAcademicoId = table.Column<int>(nullable: false),
@@ -442,27 +444,27 @@ namespace matriculas.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CursosAnioAcademico", x => new { x.AnioAcademicoId, x.CursoId, x.GradoId });
+                    table.PrimaryKey("PK_CursosAniosAcademicos", x => new { x.AnioAcademicoId, x.CursoId, x.GradoId });
                     table.ForeignKey(
-                        name: "FK_CursosAnioAcademico_AniosAcademicos_AnioAcademicoId",
+                        name: "FK_CursosAniosAcademicos_AniosAcademicos_AnioAcademicoId",
                         column: x => x.AnioAcademicoId,
                         principalTable: "AniosAcademicos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CursosAnioAcademico_Cursos_CursoId",
+                        name: "FK_CursosAniosAcademicos_Cursos_CursoId",
                         column: x => x.CursoId,
                         principalTable: "Cursos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CursosAnioAcademico_Grados_GradoId",
+                        name: "FK_CursosAniosAcademicos_Grados_GradoId",
                         column: x => x.GradoId,
                         principalTable: "Grados",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CursosAnioAcademico_Profesores_ProfesorId",
+                        name: "FK_CursosAniosAcademicos_Profesores_ProfesorId",
                         column: x => x.ProfesorId,
                         principalTable: "Profesores",
                         principalColumn: "Id",
@@ -470,7 +472,7 @@ namespace matriculas.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfesorCursos",
+                name: "ProfesoresCursos",
                 columns: table => new
                 {
                     ProfesorId = table.Column<int>(nullable: false),
@@ -478,15 +480,15 @@ namespace matriculas.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfesorCursos", x => new { x.ProfesorId, x.CursoId });
+                    table.PrimaryKey("PK_ProfesoresCursos", x => new { x.ProfesorId, x.CursoId });
                     table.ForeignKey(
-                        name: "FK_ProfesorCursos_Cursos_CursoId",
+                        name: "FK_ProfesoresCursos_Cursos_CursoId",
                         column: x => x.CursoId,
                         principalTable: "Cursos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProfesorCursos_Profesores_ProfesorId",
+                        name: "FK_ProfesoresCursos_Profesores_ProfesorId",
                         column: x => x.ProfesorId,
                         principalTable: "Profesores",
                         principalColumn: "Id",
@@ -605,8 +607,8 @@ namespace matriculas.Migrations
                 column: "RolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CronogramasMatricula_AnioAcademicoId",
-                table: "CronogramasMatricula",
+                name: "IX_Cronogramas_AnioAcademicoId",
+                table: "Cronogramas",
                 column: "AnioAcademicoId");
 
             migrationBuilder.CreateIndex(
@@ -615,23 +617,23 @@ namespace matriculas.Migrations
                 column: "GradoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CursosAnioAcademico_AnioAcademicoId",
-                table: "CursosAnioAcademico",
+                name: "IX_CursosAniosAcademicos_AnioAcademicoId",
+                table: "CursosAniosAcademicos",
                 column: "AnioAcademicoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CursosAnioAcademico_CursoId",
-                table: "CursosAnioAcademico",
+                name: "IX_CursosAniosAcademicos_CursoId",
+                table: "CursosAniosAcademicos",
                 column: "CursoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CursosAnioAcademico_GradoId",
-                table: "CursosAnioAcademico",
+                name: "IX_CursosAniosAcademicos_GradoId",
+                table: "CursosAniosAcademicos",
                 column: "GradoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CursosAnioAcademico_ProfesorId",
-                table: "CursosAnioAcademico",
+                name: "IX_CursosAniosAcademicos_ProfesorId",
+                table: "CursosAniosAcademicos",
                 column: "ProfesorId");
 
             migrationBuilder.CreateIndex(
@@ -695,13 +697,13 @@ namespace matriculas.Migrations
                 column: "MatriculaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProfesorCursos_CursoId",
-                table: "ProfesorCursos",
+                name: "IX_ProfesoresCursos_CursoId",
+                table: "ProfesoresCursos",
                 column: "CursoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProfesorCursos_ProfesorId",
-                table: "ProfesorCursos",
+                name: "IX_ProfesoresCursos_ProfesorId",
+                table: "ProfesoresCursos",
                 column: "ProfesorId");
 
             migrationBuilder.CreateIndex(
@@ -743,10 +745,10 @@ namespace matriculas.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CronogramasMatricula");
+                name: "Cronogramas");
 
             migrationBuilder.DropTable(
-                name: "CursosAnioAcademico");
+                name: "CursosAniosAcademicos");
 
             migrationBuilder.DropTable(
                 name: "Deudas");
@@ -761,7 +763,7 @@ namespace matriculas.Migrations
                 name: "Notas");
 
             migrationBuilder.DropTable(
-                name: "ProfesorCursos");
+                name: "ProfesoresCursos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Matriculas.Queries.Core.Repositories
 {
-    public interface ICronogramasMatriculasRepository : IRepository<CronogramaMatricula>
+    public interface ICronogramasRepository : IRepository<Cronograma>
     {
-        CronogramaMatricula GetCronograma(int idAnioAcademico, string nombre);
 	}
 }

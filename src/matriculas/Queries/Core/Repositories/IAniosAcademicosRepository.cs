@@ -9,5 +9,6 @@ namespace Matriculas.Queries.Core.Repositories
     public interface IAniosAcademicosRepository : IRepository<AnioAcademico>
     {
         AnioAcademico GetAnioAcademico(int anio);
+        IEnumerable<Cronograma> GetCronogramas(int id);
 	}
 }

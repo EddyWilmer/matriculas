@@ -12,7 +12,7 @@ DECLARE
 		@idAnioAcademico = Id
 	FROM inserted;
 BEGIN
-	INSERT INTO CursosAnioAcademico
+	INSERT INTO CursosAniosAcademicos
 	(
 		AnioAcademicoId,
 		GradoId,

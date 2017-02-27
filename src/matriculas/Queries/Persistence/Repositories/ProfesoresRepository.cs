@@ -33,7 +33,7 @@ namespace Matriculas.Queries.Persistence.Repositories
                 aux.ProfesorId = id;
                 aux.CursoId = item.Id;
 
-                _context.ProfesorCursos
+                _context.ProfesoresCursos
                     .Add(aux);
             }
         }
@@ -48,11 +48,11 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public void DeleteCursos(int id)
         {
-            var cursos = _context.ProfesorCursos
+            var cursos = _context.ProfesoresCursos
                 .Where(t => t.ProfesorId == id)
                 .ToList();
 
-            _context.ProfesorCursos.RemoveRange(cursos);
+            _context.ProfesoresCursos.RemoveRange(cursos);
             _context.SaveChanges();
         }
 
@@ -74,7 +74,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public IEnumerable<Curso> GetCursos(int id)
         {
-            var cursosProfesor = _context.ProfesorCursos
+            var cursosProfesor = _context.ProfesoresCursos
                 .Where(t => t.ProfesorId == id)
                 .Include(t => t.Curso)
                 .ToList();

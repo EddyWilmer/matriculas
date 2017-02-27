@@ -8,7 +8,7 @@ using Matriculas.Models;
 namespace matriculas.Migrations
 {
     [DbContext(typeof(MatriculasContext))]
-    [Migration("20170222052251_InitialDatabase")]
+    [Migration("20170227161150_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,12 +216,12 @@ namespace matriculas.Migrations
                     b.ToTable("Colaboradores");
                 });
 
-            modelBuilder.Entity("Matriculas.Models.CronogramaMatricula", b =>
+            modelBuilder.Entity("Matriculas.Models.Cronograma", b =>
                 {
-                    b.Property<int>("AnioAcademicoId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Nombre")
-                        .HasAnnotation("MaxLength", 20);
+                    b.Property<int>("AnioAcademicoId");
 
                     b.Property<string>("Estado")
                         .ValueGeneratedOnAdd()
@@ -234,11 +234,14 @@ namespace matriculas.Migrations
                     b.Property<DateTime?>("FechaInicio")
                         .HasColumnType("DATE");
 
-                    b.HasKey("AnioAcademicoId", "Nombre");
+                    b.Property<string>("Nombre")
+                        .HasAnnotation("MaxLength", 30);
+
+                    b.HasKey("Id");
 
                     b.HasIndex("AnioAcademicoId");
 
-                    b.ToTable("CronogramasMatricula");
+                    b.ToTable("Cronogramas");
                 });
 
             modelBuilder.Entity("Matriculas.Models.Curso", b =>
@@ -285,7 +288,7 @@ namespace matriculas.Migrations
 
                     b.HasIndex("ProfesorId");
 
-                    b.ToTable("CursosAnioAcademico");
+                    b.ToTable("CursosAniosAcademicos");
                 });
 
             modelBuilder.Entity("Matriculas.Models.Deuda", b =>
@@ -488,7 +491,7 @@ namespace matriculas.Migrations
 
                     b.HasIndex("ProfesorId");
 
-                    b.ToTable("ProfesorCursos");
+                    b.ToTable("ProfesoresCursos");
                 });
 
             modelBuilder.Entity("Matriculas.Models.Seccion", b =>
@@ -642,7 +645,7 @@ namespace matriculas.Migrations
                         .HasForeignKey("RolId");
                 });
 
-            modelBuilder.Entity("Matriculas.Models.CronogramaMatricula", b =>
+            modelBuilder.Entity("Matriculas.Models.Cronograma", b =>
                 {
                     b.HasOne("Matriculas.Models.AnioAcademico", "AnioAcademico")
                         .WithMany()
@@ -757,7 +760,7 @@ namespace matriculas.Migrations
             modelBuilder.Entity("Matriculas.Models.ProfesorCurso", b =>
                 {
                     b.HasOne("Matriculas.Models.Curso", "Curso")
-                        .WithMany("ProfesorCurso")
+                        .WithMany()
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade);
 

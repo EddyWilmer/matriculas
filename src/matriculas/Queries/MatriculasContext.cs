@@ -37,14 +37,14 @@ namespace Matriculas.Models
         public DbSet<Seccion> Secciones { get; set; }
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Profesor> Profesores { get; set; }
-        public DbSet<ProfesorCurso> ProfesorCursos { get; set; }
+        public DbSet<ProfesorCurso> ProfesoresCursos { get; set; }
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Apoderado> Apoderados { get; set; }
         public DbSet<HistorialAlumno> HistorialAlumnos{ get; set; }
         public DbSet<HistorialApoderado> HistorialApoderados { get; set; }
         public DbSet<AnioAcademico> AniosAcademicos { get; set; }
-        public DbSet<CronogramaMatricula> CronogramasMatricula { get; set; }
-        public DbSet<CursoAnioAcademico> CursosAnioAcademico { get; set; }
+        public DbSet<Cronograma> Cronogramas { get; set; }
+        public DbSet<CursoAnioAcademico> CursosAniosAcademicos { get; set; }
         public DbSet<Matricula> Matriculas { get; set; }
         public DbSet<Nota> Notas { get; set; }
         public DbSet<Deuda> Deudas { get; set; }
@@ -100,7 +100,7 @@ namespace Matriculas.Models
                 .Property(t => t.Estado)
                 .HasDefaultValue("1");
 
-            modelBuilder.Entity<CronogramaMatricula>()
+            modelBuilder.Entity<Cronograma>()
                 .Property(t => t.Estado)
                 .HasDefaultValue("1");
 
@@ -113,19 +113,11 @@ namespace Matriculas.Models
                 .WithMany(p => p.ProfesorCurso)
                 .HasForeignKey(pc => pc.ProfesorId);
 
-            modelBuilder.Entity<ProfesorCurso>()
-                .HasOne(pc => pc.Curso)
-                .WithMany(c => c.ProfesorCurso)
-                .HasForeignKey(pc => pc.CursoId);
-
             modelBuilder.Entity<HistorialAlumno>()
                 .HasKey(t => new { t.AlumnoId, t.FechaIngreso });
 
             modelBuilder.Entity<HistorialApoderado>()
                 .HasKey(t => new { t.Id, t.FechaInicio });
-
-            modelBuilder.Entity<CronogramaMatricula>()
-                .HasKey(t => new { t.AnioAcademicoId, t.Nombre });
 
             modelBuilder.Entity<CursoAnioAcademico>()
                 .HasKey(t => new { t.AnioAcademicoId, t.CursoId, t.GradoId });

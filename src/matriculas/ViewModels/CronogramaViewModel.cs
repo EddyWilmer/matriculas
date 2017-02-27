@@ -1,40 +1,35 @@
-﻿using System;
+﻿using Matriculas.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matriculas.Models
+namespace Matriculas.ViewModels
 {
     /// <author>Luis Fernando Yana Espinoza</author>
     /// <summary>
-    /// Clase que describe la entidad CronogramaMatricula (Cronograma de Matrícula).
+    /// Clase para definir la entidad Cronograma de Matrícula que se mostrará en la vista.
     /// </summary>
-    public class CronogramaMatricula
+    public class CronogramaViewModel
     {
-        [Key]
-        [Column(Order = 0)]
-        [ForeignKey("AnioAcademico")]
         public int AnioAcademicoId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [StringLength(20)]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]{2,30}", ErrorMessage = "Este campo debe contener entre 2 y 30 letras.")]
         public string Nombre { get; set; }
 
         [DataType(DataType.Date)]
-        [Column(TypeName = "DATE")]
         public DateTime? FechaInicio { get; set; }
 
         [DataType(DataType.Date)]
-        [Column(TypeName = "DATE")]
-        public DateTime? FechaFin { get; set; }   
-             
+        public DateTime? FechaFin { get; set; }    
+         
         public virtual AnioAcademico AnioAcademico { get; set; }
 
-        [StringLength(1)]
         public string Estado { get; set; }
     }
 }

@@ -477,76 +477,76 @@ VALUES ('Gallardo','Vara','915862342','42051536','rvara','1','Ricardo','M');
 
 -- INSERCION DE PROFESOR-CURSOS
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('1','1');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('1','9');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('1','17');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('2','2');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('2','10');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('2','18');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('3','3');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('3','11');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('3','19');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('4','4');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('4','12');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('4','20');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('5','5');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('5','13');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('5','21');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('6','6');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('6','14');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('6','22');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('7','7');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('7','15');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('7','23');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('8','8');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('8','16');
 
-INSERT INTO ProfesorCursos
+INSERT INTO ProfesoresCursos
 VALUES ('8','24');
 
 -- INSERCION DE APODERADOS

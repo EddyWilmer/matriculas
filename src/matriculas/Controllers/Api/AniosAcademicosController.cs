@@ -112,5 +112,24 @@ namespace Matriculas.Controllers.Api
             _logger.LogError("No se pudo eliminar el año académico.");
             return BadRequest("No se pudo eliminar este año académico.");
         }
+
+
+
+
+        [HttpGet("{id}/cronogramas")]
+        public IActionResult GetCronogramas(int id)
+        {
+            try
+            {
+                _logger.LogInformation("Recuperando la información del año académico.");
+                var results = _repository.AniosAcademicos.GetCronogramas(id);
+                return Ok(Mapper.Map<IEnumerable<CronogramaViewModel>>(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"No se pudo recuperar los cronogramas de matrícula: {ex}");
+                return BadRequest("No se pudo recuperar la información.");
+            }
+        }
     }
 }
