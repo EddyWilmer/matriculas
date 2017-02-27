@@ -1,195 +1,141 @@
-﻿//using AutoMapper;
-//using Matriculas.Models;
-//using Matriculas.ViewModels;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.Extensions.Logging;
-//using Newtonsoft.Json.Linq;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Web.Http;
+﻿using AutoMapper;
+using Matriculas.Models;
+using Matriculas.Queries.Core.Repositories;
+using Matriculas.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http;
 
-//namespace Matriculas.Controllers.Api
-//{
-//    /// <author>Luis Fernando Yana Espinoza</author>
-//    /// <summary>
-//    /// Clase que permite la interacción de las vistas con la entidad CronogramasMatriculas (Cronogramas de Matrícula).
-//    /// </summary>
-//    public class CronogramasMatriculasController : Controller
-//    {
-//        private ILogger<CronogramasMatriculasController> _logger;
-//        private IMatriculasRepositorys _repository;
+namespace Matriculas.Controllers.Api
+{
+    [Route("api/v2/[Controller]")]
+    public class CronogramasMatriculasController : Controller
+    {
+        private ILogger<CronogramasMatriculasController> _logger;
+        private IAppRepository _repository;
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Constructor de la clase CronogramasMatriculasController.
-//        /// </summary>
-//        /// <param name="repository">Instancia del repositorio.</param>
-//        /// <param name="logger">Administrador de logging.</param>
-//        public CronogramasMatriculasController(IMatriculasRepositorys repository, ILogger<CronogramasMatriculasController> logger)
-//        {
-//            _repository = repository;
-//            _logger = logger;
-//        }
+        public CronogramasMatriculasController(IAppRepository repository, ILogger<CronogramasMatriculasController> logger)
+        {
+            _repository = repository;
+            _logger = logger;
+        }
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Método para recuperar la lista de Cronogramas de Matrícula.
-//        /// </summary>
-//        /// <returns>Acción con la respuesta.</returns>
-//        [HttpGet("api/cronogramasMatriculas")]
-//        public IActionResult GetCronogramasMatriculas()
-//        {
-//            try
-//            {
-//                _logger.LogInformation("Recuperando la lista de cronogramas de matrícula.");
-//                var results = _repository.GetAllCronogramasMatriculas();
-//                return Ok(Mapper.Map<IEnumerable<CronogramaMatriculaViewModel>>(results));
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError($"No se pudo recuperar los cronogramas de matrícula: {ex}");
-//                return BadRequest("No se pudo recuperar la información.");
-//            }
-//        }
+        [HttpGet()]
+        public IActionResult GetCronogramas()
+        {
+            try
+            {
+                _logger.LogInformation("Recuperando la lista de cronogramas de matrícula.");
+                var results = _repository.CronogramasMatriculas.GetAll();
+                return Ok(Mapper.Map<IEnumerable<CronogramaMatriculaViewModel>>(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"No se pudo recuperar los cronogramas de matrícula: {ex}");
+                return BadRequest("No se pudo recuperar la información.");
+            }
+        }
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Método para recuperar los Cronogramas de Matrícula de un Año Académico específico.
-//        /// </summary>
-//        /// <param name="idAnioAcademico">Id del Año Académico.</param>
-//        /// <returns>Acción con la respuesta.</returns>
-//        [HttpGet("api/cronogramasMatriculas/anioAcademico/{idAnioAcademico}")]
-//        public IActionResult GetCronogramasMatriculasByAnioAcademico(int idAnioAcademico)
-//        {
-//            try
-//            {
-//                _logger.LogInformation("Recuperando la información del año académico.");
-//                var results = _repository.GetAllCronogramasMatriculasByAnioAcademicoId(idAnioAcademico).Where(t => t.Estado == "1");
-//                return Ok(Mapper.Map<IEnumerable<CronogramaMatriculaViewModel>>(results));
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError($"No se pudo recuperar los cronogramas de matrícula: {ex}");
-//                return BadRequest("No se pudo recuperar la información.");
-//            }
-//        }
+        //[HttpGet("{idAnioAcademico}")]
+        //public IActionResult GetCronogramas(int idAnioAcademico)
+        //{
+        //    try
+        //    {
+        //        _logger.LogInformation("Recuperando la información del año académico.");
+        //        var results = _repository.CronogramasMatriculas.Get(idAnioAcademico);
+        //        return Ok(Mapper.Map<IEnumerable<CronogramaMatriculaViewModel>>(results));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"No se pudo recuperar los cronogramas de matrícula: {ex}");
+        //        return BadRequest("No se pudo recuperar la información.");
+        //    }
+        //}
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Método para recuperar un Cronograma Matrícula específico.
-//        /// </summary>
-//        /// <param name="idAnioAcademico">Id del Año Académico.</param>
-//        /// <param name="nombre">Nombre del Cronograma de Matrícula.</param>
-//        /// <returns>Acción con la respuesta.</returns>
-//        [HttpGet("api/cronogramasMatriculas/{idAnioAcademico}/{nombre}")]
-//        public IActionResult GetCronogramaMatriculaEspecifico(int idAnioAcademico, string nombre)
-//        {
-//            try
-//            {
-//                _logger.LogInformation("Recuperando la información del cronograma de matrícula.");
-//                var result = _repository.GetCronogramaMatriculaById(idAnioAcademico, nombre);
-//                return Ok(Mapper.Map<CronogramaMatriculaViewModel>(result));
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError($"No se pudo recuperar la información del cronograma de matrícula: {ex}");
-//                return BadRequest("No se pudo recuperar la información.");
-//            }
-//        }
+        [HttpGet("{idAnioAcademico}/{nombre}")]
+        public IActionResult GetCronogramaMatricula(int idAnioAcademico, string nombre)
+        {
+            try
+            {
+                _logger.LogInformation("Recuperando la información del cronograma de matrícula.");
+                var result = _repository.CronogramasMatriculas.GetCronograma(idAnioAcademico, nombre);
+                return Ok(Mapper.Map<CronogramaMatriculaViewModel>(result));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"No se pudo recuperar la información del cronograma de matrícula: {ex}");
+                return BadRequest("No se pudo recuperar la información.");
+            }
+        }
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Método para agregar un Cronograma de Matrícula en la base de datos.
-//        /// </summary>
-//        /// <param name="thisCronogramaMatricula">Cronograma de Matrícula.</param>
-//        /// <returns>Acción con la respuesta.</returns>
-//        [HttpPost("api/cronogramasMatriculas/crear")]
-//        public async Task<IActionResult> PostCrearCronogramaMatricula([FromBody] CronogramaMatriculaViewModel thisCronogramaMatricula)
-//        {
-//            _logger.LogInformation("Agregando el cronograma de matrícula.");
+        [HttpPost()]
+        public async Task<IActionResult> PostCronogramaMatricula([FromBody] CronogramaMatriculaViewModel cronogramaDetails)
+        {
+            _logger.LogInformation("Agregando el cronograma de matrícula.");
 
-//            if (!_repository.IsNombreValido(Mapper.Map<CronogramaMatricula>(thisCronogramaMatricula)))
-//                ModelState.AddModelError("nombreMessageValidation", "Este Nombre ya fue registrado.");
+            var cronogramaMatricula = Mapper.Map<CronogramaMatricula>(cronogramaDetails);
 
-//            if (!_repository.IsFechasValidas(Mapper.Map<CronogramaMatricula>(thisCronogramaMatricula)))
-//                ModelState.AddModelError("fechasMessageValidation", "Las fechas no son válidas.");
+            if (ModelState.IsValid)
+            {
+                _repository.CronogramasMatriculas.Add(cronogramaMatricula);
+                if (await _repository.Complete())
+                {
+                    return Created($"api/cronogramasMatriculas/{cronogramaDetails.AnioAcademicoId}", Mapper.Map<CronogramaMatriculaViewModel>(cronogramaMatricula));
+                }
+            }
 
-//            if (ModelState.IsValid)
-//            {
-//                var newCronogramaMatricula = Mapper.Map<CronogramaMatricula>(thisCronogramaMatricula);
+            _logger.LogError("No se pudo agregar el cronograma de matrícula.");
+            return BadRequest(ModelState);
+        }
 
-//                _repository.AddCronogramaMatricula(newCronogramaMatricula);
-//                if (await _repository.SaveChangesAsync())
-//                {
-//                    return Created($"api/cronogramasMatriculas/{thisCronogramaMatricula.AnioAcademicoId}", Mapper.Map<CronogramaMatriculaViewModel>(newCronogramaMatricula));
-//                }
-//            }
+        [HttpPut()]
+        public async Task<IActionResult> PutCronogramaMatricula([FromBody] CronogramaMatriculaViewModel cronogramaDetails)
+        {
+            _logger.LogInformation("Actualizando la información del cronograma de matrícula.");
 
-//            _logger.LogError("No se pudo agregar el cronograma de matrícula.");
-//            return BadRequest(ModelState);
-//        }
+            var cronogramaMatricula = Mapper.Map<CronogramaMatricula>(cronogramaDetails);
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Método para actualizar un Cronograma de Matrícula en la base de datos.
-//        /// </summary>
-//        /// <param name="thisCronogramaMatricula">Cronograma de Matrícula con los datos actualizados.</param>
-//        /// <returns>Acción con la respuesta.</returns>
-//        [HttpPost("api/cronogramasMatriculas/editar")]
-//        public async Task<IActionResult> PostEditarCronogramaMatricula([FromBody] CronogramaMatriculaViewModel thisCronogramaMatricula)
-//        {
-//            _logger.LogInformation("Actualizando la información del cronograma de matrícula.");
+            if (ModelState.IsValid)
+            {
+                var cronogramaMatriculaToUpdate = Mapper.Map<CronogramaMatricula>(cronogramaDetails);
 
-//            if (!_repository.IsNombreValido(Mapper.Map<CronogramaMatricula>(thisCronogramaMatricula)))
-//                ModelState.AddModelError("nombreMessageValidation", "Este Nombre ya fue registrado.");
+                _repository.CronogramasMatriculas.Update(cronogramaMatriculaToUpdate);
+                if (await _repository.Complete())
+                {
+                    return Created($"api/cronogramasMatriculas/{cronogramaMatricula.AnioAcademicoId}", Mapper.Map<CronogramaMatriculaViewModel>(cronogramaMatricula));
+                }
+            }
 
-//            if (!_repository.IsFechasValidas(Mapper.Map<CronogramaMatricula>(thisCronogramaMatricula)))
-//                ModelState.AddModelError("fechasMessageValidation", "Las fechas no son válidas.");
+            _logger.LogError("No se pudo actualizar los datos del cronograma de matrícula.");
+            return BadRequest(ModelState);
+        }
 
-//            if (ModelState.IsValid)
-//            {
-//                var cronogramaMatriculaToUpdate = Mapper.Map<CronogramaMatricula>(thisCronogramaMatricula);
+        //[HttpDelete("{idAnioAcademico}/{nombre}")]
+        //public async Task<IActionResult> PostEliminarCronogramaMatricula(int idAnioAcademico, string nombre)
+        //{
+        //    _logger.LogInformation("Eliminando el cronograma de matrícula.");
 
-//                var updatedCronogramaMatricula = _repository.UpdateCronogramaMatricula(cronogramaMatriculaToUpdate);
-//                if (await _repository.SaveChangesAsync())
-//                {
-//                    return Created($"api/cronogramasMatriculas/{updatedCronogramaMatricula.AnioAcademicoId}", Mapper.Map<CronogramaMatriculaViewModel>(updatedCronogramaMatricula));
-//                }
-//            }
+        //    ModelState.Clear();
 
-//            _logger.LogError("No se pudo actualizar los datos del cronograma de matrícula.");
-//            return BadRequest(ModelState);
-//        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        var anioAcademicoToDelete = Mapper.Map<CronogramaMatricula>(_repository.GetCronogramaMatriculaById(thisCronogramaMatricula.AnioAcademicoId, thisCronogramaMatricula.Nombre));
 
-//        /// <author>Luis Fernando Yana Espinoza</author>
-//        /// <summary>
-//        /// Método para eliminar lógicamente un Cronograma de Matrícula en la base de datos.
-//        /// </summary>
-//        /// <param name="thisCronogramaMatricula">Cronograma de Matrícula.</param>
-//        /// <returns>Acción con la respuesta.</returns>
-//        [HttpPost("api/cronogramasMatriculas/eliminar")]
-//        public async Task<IActionResult> PostEliminarCronogramaMatricula([FromBody] CronogramaMatriculaViewModel thisCronogramaMatricula)
-//        {
-//            _logger.LogInformation("Eliminando el cronograma de matrícula.");
-            
-//            ModelState.Clear();
+        //        _repository.DeleteCronogramaMatricula(anioAcademicoToDelete);
+        //        if (await _repository.SaveChangesAsync())
+        //        {
+        //            return Ok("Se eliminó el colaborador correctamente.");
+        //        }
+        //    }
 
-//            if (ModelState.IsValid)
-//            {
-//                var anioAcademicoToDelete = Mapper.Map<CronogramaMatricula>(_repository.GetCronogramaMatriculaById(thisCronogramaMatricula.AnioAcademicoId, thisCronogramaMatricula.Nombre));
-
-//                _repository.DeleteCronogramaMatricula(anioAcademicoToDelete);
-//                if (await _repository.SaveChangesAsync())
-//                {
-//                    return Ok("Se eliminó el colaborador correctamente.");
-//                }
-//            }
-
-//            _logger.LogError("No se pudo eliminar el cronograma de matrícula.");
-//            return BadRequest(ModelState);
-//        }
-//    }
-//}
+        //    _logger.LogError("No se pudo eliminar el cronograma de matrícula.");
+        //    return BadRequest(ModelState);
+        //}
+    }
+}

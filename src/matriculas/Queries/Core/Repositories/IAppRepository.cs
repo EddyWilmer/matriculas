@@ -23,6 +23,10 @@ namespace Matriculas.Queries.Core.Repositories
 
         IProfesoresRepository Profesores { get; }
 
+        IAniosAcademicosRepository AniosAcademicos { get; }
+
+        ICronogramasMatriculasRepository CronogramasMatriculas { get; }
+
         Task<bool> Complete();
 	}
 }

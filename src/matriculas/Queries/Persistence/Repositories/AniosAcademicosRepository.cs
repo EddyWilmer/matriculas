@@ -21,17 +21,14 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public void Add(AnioAcademico entity)
         {
-            _context.AniosAcademicos.Add(entity);
+            _context.Entry(entity).State = EntityState.Added;
         }
 
         public void Delete(int id)
         {
-            //var thisAnioAcademico = GetAnioAcademicoById(anioAcademicoToDelete.Id);
-            //thisAnioAcademico.Estado = "0";
-
-            //_context.Update(thisAnioAcademico);
-
-            //return (thisAnioAcademico);
+            var anioAcademico = Get(id);
+            _context.Entry(anioAcademico).State = EntityState.Modified;
+            anioAcademico.Estado = "0";
         }
 
         public AnioAcademico Get(int id)
@@ -57,14 +54,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public void Update(AnioAcademico entity)
         {
-            //var thisAnioAcademico = GetAnioAcademicoById(anioAcademicoToUpdate.Id);
-            //thisAnioAcademico.Nombre = anioAcademicoToUpdate.Nombre;
-            //thisAnioAcademico.FechaInicio = anioAcademicoToUpdate.FechaInicio;
-            //thisAnioAcademico.FechaFin = anioAcademicoToUpdate.FechaFin;
-
-            //_context.Update(thisAnioAcademico);
-
-            //return (thisAnioAcademico);
+            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

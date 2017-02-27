@@ -21,7 +21,7 @@
         vm.newAnioAcademico = {}; // Nuevo Año Académico para crear
 
         // Solicita los Años Académicos disponibles (Los que están con estado 1) 
-        $http.get("/api/aniosAcademicos")
+        $http.get("/api/v2/aniosAcademicos")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.aniosAcademicos);
@@ -32,6 +32,23 @@
             .finally(function () {
                 vm.isBusy = false;
             });
+
+        //Recupera los datos del Año Académico
+        vm.getAnioAcademico = function (id) {
+            $http.get("/api/v2/aniosAcademicos/" + id)
+                .then(function (response) {
+                    // Success   
+                    angular.copy(response.data, vm.currentAnioAcademico);
+                    vm.currentAnioAcademico.fechaInicio = new Date(vm.currentAnioAcademico.fechaInicio.replace(/-/g, '\/').replace(/T.+/, ''));
+                    vm.currentAnioAcademico.fechaFin = new Date(vm.currentAnioAcademico.fechaFin.replace(/-/g, '\/').replace(/T.+/, ''));
+                }, function (error) {
+                    // Failure
+                    vm.errorMessage = "No se pudo cargar la información del año académico.";
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
 
         // Agrega el Año Académico
         vm.addAnioAcademico = function () {
@@ -44,7 +61,7 @@
             if (vm.newAnioAcademico.fechaFin == null)
                 vm.newAnioAcademico.fechaFin = undefined;
 
-            $http.post("/api/aniosAcademicos/crear", vm.newAnioAcademico)
+            $http.post("/api/v2/aniosAcademicos/", vm.newAnioAcademico)
                 .then(function (response) {
                     // Success                                
                     vm.aniosAcademicos.push(response.data);
@@ -69,51 +86,12 @@
                 });
         }
 
-        // Elimina el Año Académico
-        vm.deleteAnioAcademico = function (idAnioAcademico) {
-            vm.isBusy = true;
-            vm.currentAnioAcademico = { id: idAnioAcademico };
-
-            $http.post("/api/aniosAcademicos/eliminar", vm.currentAnioAcademico)
-                .then(function (response) {
-                    // Success    
-                    var index = vm.aniosAcademicos.findIndex(obj => obj.id === vm.currentAnioAcademico.id);
-                    vm.aniosAcademicos.splice(index, 1);
-
-                    toastr.success("Se eliminó el año académico correctamente.");
-                },
-                function (error) {
-                    // Failure
-                    toastr.error("No se pudo eliminar el año académico.");                  
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
-        //Recupera los datos del Año Académico
-        vm.getAnioAcademico = function (idAnioAcademico) {
-            $http.get("/api/aniosAcademicos/" + idAnioAcademico)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data, vm.currentAnioAcademico);
-                    vm.currentAnioAcademico.fechaInicio = new Date(vm.currentAnioAcademico.fechaInicio.replace(/-/g, '\/').replace(/T.+/, ''));
-                    vm.currentAnioAcademico.fechaFin = new Date(vm.currentAnioAcademico.fechaFin.replace(/-/g, '\/').replace(/T.+/, ''));
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información del año académico.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
         // Actualiza del Año Académico
         vm.updateAnioAcademico = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/aniosAcademicos/editar", vm.currentAnioAcademico)
+            $http.put("/api/v2/aniosAcademicos/", vm.currentAnioAcademico)
                 .then(function (response) {
                     // Success         
                     var index = vm.aniosAcademicos.findIndex(obj => obj.id === vm.currentAnioAcademico.id);
@@ -125,7 +103,7 @@
                 function (error) {
                     // Failure
                     angular.copy(error.data, vm.errors);
-                    
+
                     if (typeof vm.errors.fechasMessageValidation !== "undefined")
                         toastr.warning(vm.errors.fechasMessageValidation);
 
@@ -133,6 +111,27 @@
                         toastr.warning(vm.errors.nombreMessageValidation);
 
                     toastr.error("No se pudo actualizar el año académico.");
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        }
+
+        // Elimina el Año Académico
+        vm.deleteAnioAcademico = function (id) {
+            vm.isBusy = true;
+
+            $http.delete("/api/v2/aniosAcademicos/" + id)
+                .then(function (response) {
+                    // Success    
+                    var index = vm.aniosAcademicos.findIndex(obj => obj.id === vm.currentAnioAcademico.id);
+                    vm.aniosAcademicos.splice(index, 1);
+
+                    toastr.success("Se eliminó el año académico correctamente.");
+                },
+                function (error) {
+                    // Failure
+                    toastr.error("No se pudo eliminar el año académico.");                  
                 })
                 .finally(function (error) {
                     vm.isBusy = false;
