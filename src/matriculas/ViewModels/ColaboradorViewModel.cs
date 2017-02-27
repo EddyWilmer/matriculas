@@ -34,7 +34,7 @@ namespace Matriculas.ViewModels
         public string Dni { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
-        public virtual Rol Rol { get; set; }
+        public virtual Cargo Rol { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("([a-z_.]{5,15})", ErrorMessage = "Este campo debe contener entre 5 y 15 caracteres.")]

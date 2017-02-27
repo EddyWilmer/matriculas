@@ -14,32 +14,30 @@ using System.Threading.Tasks;
 namespace Matriculas.Controllers.Api
 {
     [Route("api/v2/[controller]")]
-    public class NivelesController : Controller
+    public class CargosController : Controller
     {
-        private ILogger<NivelesController> _logger;
+        private ILogger<ColaboradoresController> _logger;
         private IAppRepository _repository;
 
-        public NivelesController(IAppRepository repository, ILogger<NivelesController> logger)
+        public CargosController(IAppRepository repository, ILogger<ColaboradoresController> logger)
         {
             _repository = repository;
             _logger = logger;
         }
 
-        [HttpGet()]
         public IActionResult Get()
         {
             try
             {
-                _logger.LogInformation("Recuperando la lista de niveles.");
-                var results = _repository.Niveles.GetAll();
-                return Ok(Mapper.Map<IEnumerable<NivelViewModel>>(results));
+                _logger.LogInformation("Recuperando la lista de roles.");
+                var results = _repository.Cargos.GetAll();
+                return Ok(Mapper.Map<IEnumerable<CargoViewModel>>(results));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"No se pudo recuperar los niveles: {ex}");
+                _logger.LogError($"No se pudo recuperar los roles: {ex}");
                 return BadRequest("No se pudo recuperar la información.");
-            }
-            
+            }           
         }
     }
 }

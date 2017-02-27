@@ -22,7 +22,7 @@
         vm.newSeccion = {}; // Nuevo sección para crear
 
         // Solicita las secciones Disponibles (Las que estan con estado 1)
-        $http.get("/api/secciones")
+        $http.get("/api/v2/secciones")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.secciones);
@@ -35,7 +35,7 @@
             });
 
         // Solicita la lista de grados Disponibles (Los que están en estado 1)
-        $http.get("/api/grados")
+        $http.get("/api/v2/grados")
             .then(function (response) {
                 // Success
                 angular.copy(response.data, vm.grados);
@@ -44,12 +44,27 @@
                 vm.errorMessage = "No se pudo cargar la información de grados.";
             });
 
+        //Recupera los datos de la sección
+        vm.getSeccion = function (id) {
+            $http.get("/api/v2/secciones/" + id)
+                .then(function (response) {
+                    // Success   
+                    angular.copy(response.data, vm.currentSeccion);
+                }, function (error) {
+                    // Failure
+                    vm.errorMessage = "No se pudo cargar la información de la sección.";
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+
         // Agrega la sección
         vm.addSeccion = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/secciones/crear", vm.newSeccion)
+            $http.post("/api/v2/secciones/", vm.newSeccion)
                 .then(function (response) {
                     // Success                      
                     vm.secciones.push(response.data);
@@ -71,49 +86,12 @@
                 });
         }
 
-        // Elimina la sección
-        vm.deleteSeccion = function (idSeccion) {
-            vm.isBusy = true;
-            vm.currentSeccion = { id: idSeccion }
-
-            $http.post("/api/secciones/eliminar", vm.currentSeccion)
-                .then(function (response) {
-                    // Success                                
-                    var index = vm.secciones.findIndex(obj => obj.id === vm.currentSeccion.id);
-                    vm.secciones.splice(index, 1);
-
-                    toastr.success("Se eliminó la sección correctamente.");
-                },
-                function (error) {
-                    // Failure
-                    toastr.error("No se pudo eliminar la sección.");
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
-        //Recupera los datos de la sección
-        vm.getSeccion = function (id) {
-            $http.get("/api/secciones/" + id)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data, vm.currentSeccion);
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información de la sección.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
         // Realiza la actualización de la sección
         vm.updateSeccion = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/secciones/editar", vm.currentSeccion)
+            $http.put("/api/v2/secciones/", vm.currentSeccion)
                 .then(function (response) {
                     // Success              
                     var index = vm.secciones.findIndex(obj => obj.id === vm.currentSeccion.id);
@@ -135,5 +113,26 @@
                     vm.isBusy = false;
                 });
         }
+
+        // Elimina la sección
+        vm.deleteSeccion = function (id) {
+            vm.isBusy = true;
+
+            $http.delete("/api/v2/secciones/" + id)
+                .then(function (response) {
+                    // Success                                
+                    var index = vm.secciones.findIndex(obj => obj.id === vm.currentSeccion.id);
+                    vm.secciones.splice(index, 1);
+
+                    toastr.success("Se eliminó la sección correctamente.");
+                },
+                function (error) {
+                    // Failure
+                    toastr.error("No se pudo eliminar la sección.");
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        } 
     }
 })();

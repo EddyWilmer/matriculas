@@ -186,3 +186,216 @@ public class AlumnosController : Controller
 }
 \end{lstlisting}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Sobrecarga de Entity Framework}
+\begin{itemize}
+	\item \textbf{Síntoma:} Se está accediendo muchas veces a un atributo del objeto
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void ToggleEstado(int id)
+{
+	var colaborador = Get(id);
+	_context.Colaboradores.Attach(colaborador).State = EntityState.Modified;
+	
+	if (colaborador.Estado == "1")
+		colaborador.Estado = "3";
+	else if (colaborador.Estado == "3")
+		colaborador.Estado = "1";
+	
+	_context.Update(colaborador);
+}
+\end{lstlisting}
+
+\begin{itemize}	
+	\item \textbf{Técnica:} Extract variable.
+	\item \textbf{Solución:} Extraer la operación en una variable temporal.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void ToggleEstado(int id)
+{
+	var colaborador = Get(id);
+	_context.Colaboradores.Attach(colaborador).State = EntityState.Modified;
+	
+	var estado = colaborador.Estado;
+	
+	colaborador.Estado = estado == "1" ?  "3" : estado == "3" ? "1" : estado;
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Actualización de campos}
+\begin{itemize}
+	\item \textbf{Síntoma:} Se está pasando cada uno de los atributos para la actualización del objeto.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void UpdateAlumno(Alumno entity)
+{
+	var thisAlumno = GetAlumnoById(entity.Id);
+	thisAlumno.ApellidoPaterno = alumnoToUpdate.ApellidoPaterno;
+	thisAlumno.ApellidoMaterno = alumnoToUpdate.ApellidoMaterno;
+	thisAlumno.Nombres = alumnoToUpdate.Nombres;
+	thisAlumno.Dni = alumnoToUpdate.Dni;
+	thisAlumno.Sexo = alumnoToUpdate.Sexo;
+	thisAlumno.Direccion = alumnoToUpdate.Direccion;
+	thisAlumno.FechaNacimiento = alumnoToUpdate.FechaNacimiento;
+	
+	_context.Update(thisAlumno);
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Solución:} Utilizar Entries de Entity Framework para determinar los comportamientos de las entidades y no alterar los Nested Objects.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public Alumno UpdateAlumno(Alumno entity)
+{
+	_context.Entry(entity).State = EntityState.Modified;
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Método SearchCursos en controlador de cursos}
+\begin{itemize}
+	\item \textbf{Síntoma:} El método SearchCursos se encarga de listar los cursos que dicta un profesor está en un controlador que no le corresponde.
+	\item \textbf{Bad Smell:} Intimidad inadecuada.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class CursosController : Controller
+{
+	...	
+	[HttpGet("{id}")]
+	public IActionResult GetCursosDisponibles(int id)
+	{
+		try
+		{
+			_logger.LogInformation("Recuperando la lista de cursos que dicta el profesor.");
+			var results = _repository.GetCursosByIdProfesor(id);
+			return Ok(Mapper.Map<IEnumerable<CursoViewModel>>(results));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"No se pudo recuperar los cursos: {ex}");
+			return BadRequest("No se pudo recuperar la información.");
+		}
+	}	
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Técnica:} Move Method.
+	\item \textbf{Solución:} Trasladar este método al controlador de profesores para implementar el API Rest correctamente. 
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class ProfesoresController : Controller
+{
+	...
+	[HttpGet("{id}")]
+	public IActionResult GetCursosDisponibles(int id)
+	{
+		try
+		{
+			_logger.LogInformation("Recuperando la lista de cursos que dicta el profesor.");
+			var results = _repository.GetCursosByIdProfesor(id);
+			return Ok(Mapper.Map<IEnumerable<CursoViewModel>>(results));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"No se pudo recuperar los cursos: {ex}");
+			return BadRequest("No se pudo recuperar la información.");
+		}
+	}	
+	...
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Lógica de negocio en el controlador}
+\begin{itemize}
+	\item \textbf{Síntoma:} El controlador tiene código de la lógica del negocio; las tareas que deberían ejecutarse en el repositorio.
+	\item \textbf{Bad Smell:} Intimidad inadecuada.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public async Task<IActionResult> PostUpdateProfesorCurso([FromBody] CursoProfesorViewModel profesorDetails)
+{
+	...
+	if (ModelState.IsValid)
+	{
+		var profesor = Mapper.Map<Profesor>(profesorDetails.Profesor);
+		var curso = Mapper.Map<Curso>(profesorDetails.Curso);
+		...
+	}
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Técnica:} Move Method y Extract Method.
+	\item \textbf{Solución:} Trasladar el código al repositorio creando un método que realice las tareas de mapeo.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void AssignProfesor(int id, int idProfesor)
+{
+	var anioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
+
+	if (anioAcademico != null)
+	{
+		var cursoAnioAcademico = _context.CursosAnioAcademico
+			.Where(t => t.AnioAcademicoId == anioAcademico.Id)
+			.Where(t => t.CursoId == id)
+			.FirstOrDefault();	
+		...
+	}
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Uso inadecuado de procedimientos almacenados}
+\begin{itemize}
+	\item \textbf{Síntoma:} El método llama a un procedimiento en la base de datos.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void Update(Profesor entity)
+{
+	...
+	_context.Database.ExecuteSqlCommand(String.Format("EXEC SP_DeleteCursos @idProfesor='{0}'", profesor.Id));
+	foreach (Curso curso in cursos)
+	{
+    	_context.Database.ExecuteSqlCommand(
+    		String.Format("EXEC SP_AddProfesorCurso @idProfesor='{0}', @idCurso='{1}'", 
+    			profesor.Id, curso.Id));
+	}
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Técnica:} Extract Method.
+	\item \textbf{Solución:} Remplazar el procedimiento almacenado con sentencias LINQ, y extraer el segmento de código que elimina los cursos actuales del profesor en un nuevo método.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void EliminarCursos(int id)
+{
+	var cursos = _context.ProfesorCursos
+		.Where(t => t.ProfesorId == id)
+		.ToList();
+	
+	_context.ProfesorCursos.RemoveRange(cursos);
+	_context.SaveChanges();
+}
+\end{lstlisting}

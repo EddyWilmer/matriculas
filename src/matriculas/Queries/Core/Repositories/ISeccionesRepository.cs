@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Matriculas.Queries.Core.Repositories
 {
-    public interface IAlumnoRepository : IRepository<Alumno>
+    public interface ISeccionesRepository : IRepository<Seccion>
     {
-								bool HasDuplicatedDni(string dni);
-				}
+        IEnumerable<Alumno> GetLista(int id);
+	}
 }

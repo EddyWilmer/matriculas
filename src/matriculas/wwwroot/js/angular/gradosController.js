@@ -22,7 +22,7 @@
         vm.newGrado = {}; // Nuevo grado para crear
 
         // Solicita los grados disponibles (Los que están con estado 1) 
-        $http.get("/api/grados")
+        $http.get("/api/v2/grados")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.grados);
@@ -35,7 +35,7 @@
             });
 
         // Solicita la lista de niveles
-        $http.get("/api/niveles")
+        $http.get("/api/v2/niveles")
             .then(function (response) {
                 // Success
                 angular.copy(response.data, vm.niveles);
@@ -44,12 +44,27 @@
                 toastr.error("No se pudo cargar la información de niveles.");
             });
 
+        //Recupera los datos del colaborador
+        vm.getGrado = function (id) {
+            $http.get("/api/v2/grados/" + id)
+                .then(function (response) {
+                    // Success   
+                    angular.copy(response.data, vm.currentGrado);
+                }, function (error) {
+                    // Failure
+                    vm.errorMessage = "No se pudo cargar la información del grado.";
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+
         // Agrega el grado
         vm.addGrado = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/grados/crear", vm.newGrado)
+            $http.post("/api/v2/grados/", vm.newGrado)
                 .then(function (response) {
                     // Success                                
                     vm.grados.push(response.data);
@@ -71,55 +86,12 @@
                 });
         }
 
-        // Elimina el grado
-        vm.deleteGrado = function (idGrado) {
-            vm.isBusy = true;
-            vm.currentGrado = { id: idGrado }
-            vm.errors = [];
-
-            $http.post("/api/grados/eliminar", vm.currentGrado)
-                .then(function (response) {
-                    // Success    
-                    var index = vm.grados.findIndex(obj => obj.id === vm.currentGrado.id);
-                    vm.grados.splice(index, 1);
-
-                    toastr.success("Se eliminó el grado correctamente.");
-                },
-                function (error) {
-                    // Failure
-                    angular.copy(error.data, vm.errors);
-
-                    if (typeof vm.errors.eliminacionMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.eliminacionMessageValidation);
-
-                    toastr.error("No se pudo eliminar el grado.");
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
-        //Recupera los datos del colaborador
-        vm.getGrado = function (id) {
-            $http.get("/api/grados/" + id)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data, vm.currentGrado);
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información del grado.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
         // Actualiza del grado
         vm.updateGrado = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/grados/editar", vm.currentGrado)
+            $http.put("/api/v2/grados/", vm.currentGrado)
                 .then(function (response) {
                     // Success         
                     var index = vm.grados.findIndex(obj => obj.id === vm.currentGrado.id);
@@ -135,6 +107,33 @@
                         toastr.warning(vm.errors.nombreMessageValidation[0]);
 
                     toastr.error("No se pudo actualizar el grado.");
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        }
+
+        // Elimina el grado
+        vm.deleteGrado = function (id) {
+            vm.isBusy = true;
+            vm.errors = [];
+
+            $http.delete("/api/v2/grados/" + id)
+                .then(function (response) {
+                    // Success    
+                    var index = vm.grados.findIndex(obj => obj.id === vm.currentGrado.id);
+                    vm.grados.splice(index, 1);
+
+                    toastr.success("Se eliminó el grado correctamente.");
+                },
+                function (error) {
+                    // Failure
+                    angular.copy(error.data, vm.errors);
+
+                    if (typeof vm.errors.eliminacionMessageValidation !== "undefined")
+                        toastr.warning(vm.errors.eliminacionMessageValidation);
+
+                    toastr.error("No se pudo eliminar el grado.");
                 })
                 .finally(function (error) {
                     vm.isBusy = false;

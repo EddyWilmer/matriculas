@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matriculas.Models
+namespace Matriculas.ViewModels
 {
     /// <author>Eddy Wilmer Canaza Tito</author>
     /// <summary>
-    /// Clase que define la entidad Rol.
+    /// Clase para definir la entidad Rol que se mostrará en la vista.
     /// </summary>
-    public class Rol
+    public class CargoViewModel
     {
-        [DatabaseG‌​enerated(DatabaseGen‌​eratedOption.None)]
-        [Key]
         public int Id { get; set; }
 
-        [StringLength(25)]
+        [Required (ErrorMessage = "El campo Nombres es obligatorio.")]
+        [StringLength(25, ErrorMessage = "El campo Nombre debe contener como máximo 25 caracteres.")]
         public string Nombre { get; set; }
     }
 }

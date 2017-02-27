@@ -22,7 +22,7 @@
         vm.newProfesor = {}; // Nuevo colaborador para crear
 
         // Solicita los grados disponibles (Los que están con estado 1) 
-        $http.get("/api/grados")
+        $http.get("/api/v2/grados")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.grados);
@@ -36,7 +36,7 @@
             });
 
         // Solicita los cursos disponibles (Los que están con estado 1) 
-        $http.get("/api/cursos")
+        $http.get("/api/v2/cursos")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.cursos);
@@ -49,7 +49,7 @@
             });
 
         // Solicita la lista de profesores disponibles (Los que están con estado 1)
-        $http.get("/api/profesores")
+        $http.get("/api/v2/profesores")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.profesores);
@@ -61,62 +61,13 @@
                 vm.isBusy = false;
             });
 
-        // Agrega el colaborador
-        vm.addProfesor = function () {
-            vm.isBusy = true;
-            vm.errors = [];
-            
-            $http.post("/api/profesores/crear", vm.newProfesor)
-                .then(function (response) {                   
-                    // Success                                
-                    vm.profesores.push(response.data);                  
-                    vm.newProfesor = {}
-
-                    toastr.success("Se registró el profesor correctamente.");
-                },
-                function (error) {
-                    // Failure         
-                    angular.copy(error.data, vm.errors);
-
-                    if (typeof vm.errors.dniMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.dniMessageValidation);
-
-                    toastr.error("No se pudo registrar el profesor.");
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
-        // Elimina el colaborador
-        vm.deleteProfesor = function (idProfesor) {
-            vm.isBusy = true;
-            vm.currentProfesor = { id: idProfesor }
-
-            $http.post("/api/profesores/eliminar", vm.currentProfesor)
-                .then(function (response) {
-                    // Success            
-                    var index = vm.profesores.findIndex(obj => obj.id === vm.currentProfesor.id);
-                    vm.profesores.splice(index, 1);
-
-                    toastr.success("Se eliminó el profesor correctamente.");
-                },
-                function (error) {
-                    // Failure
-                    toastr.error("No se pudo eliminar el profesor.");
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
         //Recupera los datos del profesor
-        vm.getProfesor = function (id) {         
-            $http.get("/api/profesores/" + id)
+        vm.getProfesor = function (id) {
+            $http.get("/api/v2/profesores/" + id)
                 .then(function (response) {
                     // Success   
                     angular.copy(response.data, vm.currentProfesor);
-                    $http.get("/api/cursosProfesor/" + id)
+                    $http.get("/api/v2/profesores/" + id + "/cursos")
                         .then(function (response) {
                             // Success   
                             angular.copy(response.data, vm.currentProfesor.cursos);
@@ -136,11 +87,38 @@
                 });
         }
 
+        // Agrega el colaborador
+        vm.addProfesor = function () {
+            vm.isBusy = true;
+            vm.errors = [];
+
+            $http.post("/api/v2/profesores/", vm.newProfesor)
+                .then(function (response) {
+                    // Success                                
+                    vm.profesores.push(response.data);
+                    vm.newProfesor = {}
+
+                    toastr.success("Se registró el profesor correctamente.");
+                },
+                function (error) {
+                    // Failure         
+                    angular.copy(error.data, vm.errors);
+
+                    if (typeof vm.errors.dniMessageValidation !== "undefined")
+                        toastr.warning(vm.errors.dniMessageValidation);
+
+                    toastr.error("No se pudo registrar el profesor.");
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        }
+
         // Actualiza del colaborador
         vm.updateProfesor = function () {
             vm.isBusy = true;
             vm.errors = [];
-            $http.post("/api/profesores/editar", vm.currentProfesor)
+            $http.put("/api/v2/profesores/", vm.currentProfesor)
                 .then(function (response) {
                     // Success  
                     var index = vm.profesores.findIndex(obj => obj.id === vm.currentProfesor.id);
@@ -162,6 +140,27 @@
                 .finally(function (error) {
                     vm.isBusy = false;
                 });
-        } 
+        }
+
+        // Elimina el colaborador
+        vm.deleteProfesor = function (id) {
+            vm.isBusy = true;
+
+            $http.delete("/api/v2/profesores/" + id)
+                .then(function (response) {
+                    // Success            
+                    var index = vm.profesores.findIndex(obj => obj.id === vm.currentProfesor.id);
+                    vm.profesores.splice(index, 1);
+
+                    toastr.success("Se eliminó el profesor correctamente.");
+                },
+                function (error) {
+                    // Failure
+                    toastr.error("No se pudo eliminar el profesor.");
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        }
     } 
 })();

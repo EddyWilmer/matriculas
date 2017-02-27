@@ -24,7 +24,7 @@
         vm.currentProfesor = {};
 
         // Solicita los cursos disponibles (Los que están con estado 1) 
-        $http.get("/api/cursos")
+        $http.get("/api/v2/cursos")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.cursos);
@@ -37,7 +37,7 @@
             });
 
         // Solicita la lista de grados
-        $http.get("/api/grados")
+        $http.get("/api/v2/grados")
             .then(function (response) {
                 // Success
                 angular.copy(response.data, vm.grados);
@@ -46,12 +46,27 @@
                 toastr.error("No se pudo cargar la información de grados.");
             });
 
+        //Recupera los datos del colaborador
+        vm.getCurso = function (id) {
+            $http.get("/api/v2/cursos/" + id)
+                .then(function (response) {
+                    // Success   
+                    angular.copy(response.data, vm.currentCurso);
+                }, function (error) {
+                    // Failure
+                    vm.errorMessage = "No se pudo cargar la información del curso.";
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+
         // Agrega el curso
         vm.addCurso = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/cursos/crear", vm.newCurso)
+            $http.post("/api/v2/cursos/", vm.newCurso)
                 .then(function (response) {
                     // Success                                
                     vm.cursos.push(response.data);
@@ -76,80 +91,12 @@
                 });
         }
 
-        // Elimina el curso
-        vm.deleteCurso = function (idCurso) {
-            vm.isBusy = true;
-            vm.currentCurso = { id: idCurso }
-            vm.errors = [];
-
-            $http.post("/api/cursos/eliminar", vm.currentCurso)
-                .then(function (response) {
-                    // Success    
-                    var index = vm.cursos.findIndex(obj => obj.id === vm.currentCurso.id);
-                    vm.cursos.splice(index, 1);
-
-                    toastr.success("Se eliminó el curso correctamente.");
-                },
-                function (error) {
-                    // Failure
-                    angular.copy(error.data, vm.errors);
-                 
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
-        //Recupera los datos del colaborador
-        vm.getCurso = function (id) {          
-            $http.get("/api/cursos/" + id)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data, vm.currentCurso);
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información del curso.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
-        //Recupera los datos del colaborador
-        vm.getCursoProfesor = function (id) {
-            $http.get("/api/cursos/profesor/" + id)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data.curso, vm.currentCurso);
-                    angular.copy(response.data.profesor, vm.currentProfesor);
-
-                    // Solicita la lista de profesores disponibles para un curso específico
-                    $http.get("/api/cursos/profesores/" + id)
-                        .then(function (response) {
-                            // Success   
-                            angular.copy(response.data, vm.profesores);
-                        }, function (error) {
-                            // Failure
-                            toastr.error("No se pudo cargar la información de profesores.");
-                        })
-                        .finally(function () {
-                            vm.isBusy = false;
-                        });
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información del curso.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
         // Actualiza del curso
         vm.updateCurso = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/cursos/editar", vm.currentCurso)
+            $http.put("/api/v2/cursos/", vm.currentCurso)
                 .then(function (response) {
                     // Success         
                     var index = vm.cursos.findIndex(obj => obj.id === vm.currentCurso.id);
@@ -175,27 +122,74 @@
                 });
         }
 
-        // Actualiza el profesor del curso
-        vm.updateProfesor = function () {
+        // Elimina el curso
+        vm.deleteCurso = function (id) {
             vm.isBusy = true;
             vm.errors = [];
-           
-            vm.aux = { profesor: vm.currentProfesor, curso: vm.currentCurso };
 
-            $http.post("/api/cursos/profesor/editar", vm.aux)
+            $http.delete("/api/v2/cursos/" + id)
                 .then(function (response) {
-                    // Success         
-                    $('#datos-curso-profesor').modal('hide');
+                    // Success    
+                    var index = vm.cursos.findIndex(obj => obj.id === vm.currentCurso.id);
+                    vm.cursos.splice(index, 1);
 
-                    toastr.success("Se actualizó el profesor correctamente.");
+                    toastr.success("Se eliminó el curso correctamente.");
                 },
                 function (error) {
                     // Failure
                     angular.copy(error.data, vm.errors);
+                 
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        }
 
-                    if (typeof vm.errors.anioAcademicoMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.anioAcademicoMessageValidation);
+        //Recupera los datos del profesor
+        vm.getProfesor = function (id) {
+            vm.currentCurso = {};
+            $http.get("/api/v2/cursos/" + id + "/profesor")
+                .then(function (response) {
+                    // Success  
+                    angular.copy(response.data, vm.currentProfesor);            
+                }, function (error) {
+                    // Failure
+                    vm.errorMessage = "No se pudo cargar la información del curso.";
+                })
+                .finally(function () {
+                    vm.getCurso(id);
+                    vm.searchProfesores(id);
+                    vm.isBusy = false;
+                });
+        }
 
+        // Solicita la lista de profesores disponibles para un curso específico
+        vm.searchProfesores = function (id) {
+            $http.get("/api/v2/cursos/" + id + "/searchProfesores")
+                .then(function (response) {
+                    // Success   
+                    angular.copy(response.data, vm.profesores);
+                }, function (error) {
+                    // Failure
+                    toastr.error("No se pudo cargar la información de profesores.");
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+
+        // Asigna un profesor al curso
+        vm.assignProfesor = function () {
+            vm.isBusy = true;
+            vm.errors = [];
+            var result = vm.currentProfesor != null ? vm.currentProfesor.id : 0;
+            $http.post("/api/v2/cursos/" + vm.currentCurso.id + "/assignProfesor/" + result)
+                .then(function (response) {
+                    // Success         
+                    $('#datos-profesor').modal('hide');
+                    toastr.success("Se actualizó el profesor correctamente.");
+                },
+                function (error) {
                     toastr.error("No se pudo actualizar el profesor.");
                 })
                 .finally(function (error) {

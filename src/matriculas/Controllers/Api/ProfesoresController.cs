@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Matriculas.Models;
+using Matriculas.Queries.Core.Repositories;
+using Matriculas.Queries.Persistence.Repositories;
 using Matriculas.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,61 +15,41 @@ using System.Web.Http;
 
 namespace Matriculas.Controllers.Api
 {
-    /// <author>Eddy Wilmer Canaza Tito</author>
-    /// <summary>
-    /// Clase que permite la interacción de las vistas con la entidad Profesores.
-    /// </summary>
+    [Route("/api/v2/[controller]")]
     public class ProfesoresController : Controller
     {
         private ILogger<ProfesoresController> _logger;
-        private IMatriculasRepositorys _repository;
+        private IAppRepository _repository;
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Constructor de la clase ProfesoresController.
-        /// </summary>
-        /// <param name="repository">Instancia del repositorio.</param>
-        /// <param name="logger">Administrador de logging.</param>
-        public ProfesoresController(IMatriculasRepositorys repository, ILogger<ProfesoresController> logger)
+        public ProfesoresController(IAppRepository repository, ILogger<ProfesoresController> logger)
         {
             _repository = repository;
             _logger = logger;
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para recuperar la lista de Profesores.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/profesores")]
-        public IActionResult GetProfesores()
+        [HttpGet()]
+        public IActionResult GeAllProfesores()
         {
             try
             {
                 _logger.LogInformation("Recuperando la lista de profesores.");
-                var results = _repository.GetAllProfesores();
-                return Ok(Mapper.Map<IEnumerable<ProfesorViewModel>>(results));
+                var result = _repository.Profesores.GetAll();
+                return Ok(Mapper.Map<IEnumerable<ProfesorViewModel>>(result));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"No se pudo recuperar los profesores: {ex}");
+                _logger.LogError($"No se pudo recuperar la lista de profesores: {ex}");
                 return BadRequest("No se pudo recuperar la información.");
-            }          
+            }
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para recuperar un Profesor específico a través del Id.
-        /// </summary>
-        /// <param name="idProfesor">Id del Profesor.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/profesores/{idProfesor}")]
-        public IActionResult GetProfesorEspecifico(int idProfesor)
+        [HttpGet("{id}")]
+        public IActionResult GetProfesor(int id)
         {
             try
             {
                 _logger.LogInformation("Recuperando la información del profesor.");
-                var result = _repository.GetProfesorById(idProfesor);              
+                var result = _repository.Profesores.Get(id);
                 return Ok(Mapper.Map<ProfesorViewModel>(result));
             }
             catch (Exception ex)
@@ -77,29 +59,17 @@ namespace Matriculas.Controllers.Api
             }
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para agregar un Profesor en la base de datos.
-        /// </summary>
-        /// <param name="thisProfesor">Profesor.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpPost("api/profesores/crear")]
-        public async Task<IActionResult> PostCrearProfesor([FromBody] ProfesorViewModel thisProfesor)
+        [HttpPost()]
+        public async Task<IActionResult> PostProfesor([FromBody] ProfesorViewModel profesorDetails)
         {
             _logger.LogInformation("Agregando el profesor.");
 
-            if (!_repository.IsDniValido(Mapper.Map<Profesor>(thisProfesor)))
-                ModelState.AddModelError("dniMessageValidation", "Este DNI ya fue registrado.");
-
             if (ModelState.IsValid)
             {
-                var newProfesorCursos = thisProfesor.Cursos;
-                var newProfesor = Mapper.Map<Profesor>(thisProfesor);
-
-                _repository.AddProfesor(newProfesor, newProfesorCursos);
-                if (await _repository.SaveChangesAsync())
+                _repository.Profesores.Add(Mapper.Map<Profesor>(profesorDetails));
+                if (await _repository.Complete())
                 {
-                    return Created($"api/profesores/{thisProfesor.Id}", Mapper.Map<ProfesorViewModel>(newProfesor));
+                    return Created($"api/profesores/{profesorDetails.Id}", Mapper.Map<ProfesorViewModel>(profesorDetails));
                 }
             }
 
@@ -107,29 +77,19 @@ namespace Matriculas.Controllers.Api
             return BadRequest(ModelState);
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para actualizar un Profesor en la base de datos.
-        /// </summary>
-        /// <param name="thisProfesor">Profesor con los datos actualizados.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpPost("api/profesores/editar")]
-        public async Task<IActionResult> PostEditarProfesor([FromBody] ProfesorViewModel thisProfesor)
+        [HttpPut()]
+        public async Task<IActionResult> PutProfesor([FromBody] ProfesorViewModel profesorDetails)
         {
             _logger.LogInformation("Actualizando los datos del profesor.");
 
-            if (!_repository.IsDniValido(Mapper.Map<Profesor>(thisProfesor)))
-                ModelState.AddModelError("dniMessageValidation", "Este DNI ya fue registrado.");
+            var profesor = Mapper.Map<Profesor>(profesorDetails);
 
             if (ModelState.IsValid)
             {
-                var profesorToUpdateCursos = thisProfesor.Cursos;
-                var profesorToUpdate = Mapper.Map<Profesor>(thisProfesor);
-
-                var updatedProfesor = _repository.UpdateProfesor(profesorToUpdate, profesorToUpdateCursos);
-                if (await _repository.SaveChangesAsync())
+                _repository.Profesores.Update(profesor);
+                if (await _repository.Complete())
                 {
-                    return Created($"api/profesores/{updatedProfesor.Id}", Mapper.Map<ProfesorViewModel>(updatedProfesor));
+                    return Created($"api/profesores/{profesorDetails.Id}", Mapper.Map<ProfesorViewModel>(profesor));
                 }
             }
 
@@ -137,29 +97,40 @@ namespace Matriculas.Controllers.Api
             return BadRequest(ModelState);
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para eliminar lógicamente un Profesor en la base de datos.
-        /// </summary>
-        /// <param name="thisProfesor">Profesor.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpPost("api/profesores/eliminar")]
-        public async Task<IActionResult> PostEliminarProfesor([FromBody] ProfesorViewModel thisProfesor)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProfesor(int id)
         {
             _logger.LogInformation("Eliminando el profesor.");
 
-            var result = _repository.GetProfesorById(thisProfesor.Id);
+            _repository.Profesores.Delete(id);
 
-            var profesorToDelete = Mapper.Map<Profesor>(result);
-
-            _repository.DeleteProfesor(profesorToDelete);
-            if (await _repository.SaveChangesAsync())
+            if (await _repository.Complete())
             {
-                return Ok("Se eliminó el profesor correctamente.");
+                return Created($"api/profesores/{id}", Mapper.Map<ProfesorViewModel>(_repository.Profesores.Get(id)));
             }
 
             _logger.LogError("No se pudo eliminar el profesor.");
             return BadRequest("No se pudo eliminar este profesor.");
+        }
+
+
+
+
+
+        [HttpGet("{id}/cursos")]
+        public IActionResult GetCursosDisponibles(int id)
+        {
+            try
+            {
+                _logger.LogInformation("Recuperando la lista de cursos que dicta el profesor.");
+                var result = _repository.Profesores.GetCursos(id);
+                return Ok(Mapper.Map<IEnumerable<CursoViewModel>>(result));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"No se pudo recuperar los cursos: {ex}");
+                return BadRequest("No se pudo recuperar la información.");
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Matriculas.ViewModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
-        [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]{2,25}", ErrorMessage = "Este campo debe contener entre 2 y 25 letras.")]
+        [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9, ]{2,25}", ErrorMessage = "Este campo debe contener entre 2 y 25 letras.")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]

@@ -16,6 +16,7 @@ using iTextSharp.text.pdf;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNetCore.Hosting;
 using iTextSharp.text.html;
+using Matriculas.Queries.Core.Repositories;
 
 namespace Matriculas.Controllers
 {
@@ -27,7 +28,7 @@ namespace Matriculas.Controllers
     {
         private IConfigurationRoot _config;
         private IMailService _mailService;
-        private IMatriculasRepositorys _repository;
+        private IAppRepository _repository;
         private ILogger<AppController> _logger;
         private IHostingEnvironment _env;
 
@@ -42,7 +43,7 @@ namespace Matriculas.Controllers
         /// <param name="env">Hosting.</param>
         public AppController(IMailService mailService,
             IConfigurationRoot config,
-            IMatriculasRepositorys repository,
+			IAppRepository repository,
             ILogger<AppController> logger,
             IHostingEnvironment env )
         {
@@ -170,26 +171,26 @@ namespace Matriculas.Controllers
         /// Método para generar el reporte de Matrícula de la aplicación.
         /// </summary>
         /// <returns>Acción con la respuesta.</returns>
-        [Authorize(Roles = "Secretaria, Administrador")]
-        [Route("App/Matriculas/ReporteMatricula/{dni?}")]
-        public IActionResult ReporteMatricula(string dni)
-        {
-            ReporteConstanciaMatricula newReporte = new ReporteConstanciaMatricula(_repository, _env);
-            return newReporte.GenerarReporte(dni);          
-        }
+        //[Authorize(Roles = "Secretaria, Administrador")]
+        //[Route("App/Matriculas/ReporteMatricula/{dni?}")]
+        //public IActionResult ReporteMatricula(string dni)
+        //{
+        //    ReporteConstanciaMatricula newReporte = new ReporteConstanciaMatricula(_repository, _env);
+        //    return newReporte.GenerarReporte(dni);
+        //}
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para generar el reporte de Lista de alumnos de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
-        [Authorize(Roles = "Secretaria, Administrador")]
-        [Route("App/Secciones/ReporteLista/{idSeccion?}")]
-        public IActionResult ReporteLista(int idSeccion)
-        {         
-            ReporteLista newReporte = new ReporteLista(_repository, _env);
-            return newReporte.GenerarReporte(idSeccion);
-        }
+        ///// <author>Luis Fernando Yana Espinoza</author>
+        ///// <summary>
+        ///// Método para generar el reporte de Lista de alumnos de la aplicación.
+        ///// </summary>
+        ///// <returns>Acción con la respuesta.</returns>
+        //[Authorize(Roles = "Secretaria, Administrador")]
+        //[Route("App/Secciones/ReporteLista/{idSeccion?}")]
+        //public IActionResult ReporteLista(int idSeccion)
+        //{
+        //    ReporteLista newReporte = new ReporteLista(_repository, _env);
+        //    return newReporte.GenerarReporte(idSeccion);
+        //}
     }
 }
     

@@ -7,7 +7,22 @@ namespace Matriculas.Queries.Core.Repositories
 {
     public interface IAppRepository : IDisposable
     {
-								IAlumnoRepository Alumnos { get; }
-								Task<bool> Complete();
-				}
+        IAlumnosRepository Alumnos { get; }
+
+        IColaboradoresRepository Colaboradores { get; }
+
+        ICargosRepository Cargos { get; }
+
+        IGradosRepository Grados { get; }
+
+        ISeccionesRepository Secciones { get; }
+
+        INivelesRepository Niveles { get; }
+
+        ICursosRepository Cursos { get; }
+
+        IProfesoresRepository Profesores { get; }
+
+        Task<bool> Complete();
+	}
 }

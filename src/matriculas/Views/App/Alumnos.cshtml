@@ -1,6 +1,6 @@
 ﻿@model Matriculas.ViewModels.AlumnoApoderadoViewModel
 @{
-    ViewBag.Title = "Alumnos";
+				ViewBag.Title = "Alumnos";
 }
 @section scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -9,7 +9,7 @@
     <script src="~/js/simpleControls.js"></script>
     <script src="~/js/angular/app.js"></script>
     <script src="~/js/angular/alumnosController.js"></script>
-    <script src="~/lib/angular-utils-pagination/dirPagination.js"></script>
+    <script src="~/lib/angular-utils-pagination/dirPagination.js"></script>						
 }
 
 <script>
@@ -113,7 +113,6 @@
                         <label asp-for="Alumno.ApellidoPaterno">Apellido Paterno (*)</label>
                         <span asp-validation-for="Alumno.ApellidoPaterno" class="text-muted text-validation text-validation"></span>
                         <input type="text" asp-for="Alumno.ApellidoPaterno" class="form-control" maxlength="25" ng-model="vm.newAlumno.apellidoPaterno" />
-
                     </div>
                     <div class="form-group">
                         <label asp-for="Alumno.ApellidoMaterno">Apellido Materno (*)</label>
@@ -230,7 +229,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Alumno.Dni">DNI (*)</label>
-                        <span id="messageDni" class="text-muted text-validation"></span>
+																								<span asp-validation-for="Alumno.Dni" class="text-muted text-validation"></span>
                         <input type="text" asp-for="Alumno.Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.currentAlumno.dni" />                    
                     </div>
                     <div class="form-group">

@@ -1,5 +1,6 @@
 ﻿using Matriculas.Models;
 using Matriculas.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -40,13 +41,14 @@ namespace Matriculas.ViewModels
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [StringLength(70, MinimumLength = 2, ErrorMessage = "Este campo debe contener entre 2 y 70 caracteres.")]
+
         public string Direccion { get; set; }
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public DateTime FechaNacimiento { get; set; }
 
-								[Required, ValidateObject]
+        [Required, ValidateObject]
         public virtual ApoderadoViewModel Apoderado { get; set; }
 
         public string Estado { get; set; }
-				}
+    }
 }

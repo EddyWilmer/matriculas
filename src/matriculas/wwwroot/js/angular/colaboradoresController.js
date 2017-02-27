@@ -21,7 +21,7 @@
         vm.newColaborador = {}; // Nuevo colaborador para crear
 
         // Solicita la lista de colaboradores disponibles (Los que están con estado 1)
-        $http.get("/api/colaboradores")
+        $http.get("/api/v2/colaboradores")
             .then(function (response) {
                 // Success   
                 angular.copy(response.data, vm.colaboradores);
@@ -34,7 +34,7 @@
             });
 
         // Solicita la lista de roles
-        $http.get("/api/roles")
+        $http.get("/api/v2/cargos")
             .then(function (response) {
                 // Success
                 angular.copy(response.data, vm.roles);
@@ -43,12 +43,27 @@
                 toastr.error("No se pudo cargar la información de roles.");
             });
 
+        //Recupera los datos del colaborador
+        vm.getColaborador = function (id) {
+            $http.get("/api/v2/colaboradores/" + id)
+                .then(function (response) {
+                    // Success   
+                    angular.copy(response.data, vm.currentColaborador);
+                }, function (error) {
+                    // Failure
+                    vm.errorMessage = "No se pudo cargar la información del colaborador.";
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+
         // Agrega el colaborador
         vm.addColaborador = function () {
             vm.isBusy = true;
             vm.errors = [];
 
-            $http.post("/api/colaboradores/crear", vm.newColaborador)
+            $http.post("/api/v2/colaboradores/", vm.newColaborador)
                 .then(function (response) {
                     // Success                                
                     vm.colaboradores.push(response.data);                  
@@ -73,12 +88,41 @@
                 });
         }
 
-        // Elimina el colaborador
-        vm.deleteColaborador = function (idColaborador) {
+        // Actualiza del colaborador
+        vm.updateColaborador = function () {
             vm.isBusy = true;
-            vm.currentColaborador = { id: idColaborador }
+            vm.errors = [];
 
-            $http.post("/api/colaboradores/eliminar", vm.currentColaborador)
+            $http.put("/api/v2/colaboradores/", vm.currentColaborador)
+                .then(function (response) {
+                    // Success  
+                    var index = vm.colaboradores.findIndex(obj => obj.id === vm.currentColaborador.id);
+                    vm.colaboradores[index] = response.data;
+                    $('#datos-colaborador').modal('hide');
+                    toastr.success("Se actualizó el colaborador correctamente.");
+                },
+                function (error) {
+                    // Failure
+                    angular.copy(error.data, vm.errors);
+
+                    if (typeof vm.errors.emailMessageValidation !== "undefined")
+                        toastr.warning(vm.errors.emailMessageValidation);
+
+                    if (typeof vm.errors.dniMessageValidation !== "undefined")
+                        toastr.warning(vm.errors.dniMessageValidation);
+
+                    toastr.error("No se pudo registrar el colaborador.");
+                })
+                .finally(function (error) {
+                    vm.isBusy = false;
+                });
+        }
+
+        // Elimina el colaborador
+        vm.deleteColaborador = function (id) {
+            vm.isBusy = true;
+
+            $http.delete("/api/v2/colaboradores/" + id)
                 .then(function (response) {
                     // Success            
                     var index = vm.colaboradores.findIndex(obj => obj.id === vm.currentColaborador.id);
@@ -95,54 +139,9 @@
                 });
         }
 
-        //Recupera los datos del colaborador
-        vm.getColaborador = function (id) {         
-            $http.get("/api/colaboradores/" + id)
-                .then(function (response) {
-                    // Success   
-                    angular.copy(response.data, vm.currentColaborador);                
-                }, function (error) {
-                    // Failure
-                    vm.errorMessage = "No se pudo cargar la información del colaborador.";
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
-        // Actualiza del colaborador
-        vm.updateColaborador = function () {
-            vm.isBusy = true;
-            vm.errors = [];
-
-            $http.post("/api/colaboradores/editar", vm.currentColaborador)
-                .then(function (response) {
-                    // Success  
-                    var index = vm.colaboradores.findIndex(obj => obj.id === vm.currentColaborador.id);
-                    vm.colaboradores[index] = response.data;
-                    $('#datos-colaborador').modal('hide');
-                    toastr.success("Se actualizó el colaborador correctamente.");
-                },
-                function (error) {
-                    // Failure
-                    angular.copy(error.data, vm.errors);
- 
-                    if (typeof vm.errors.emailMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.emailMessageValidation);
-
-                    if (typeof vm.errors.dniMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.dniMessageValidation);
-
-                    toastr.error("No se pudo registrar el colaborador.");
-                })
-                .finally(function (error) {
-                    vm.isBusy = false;
-                });
-        }
-
         // Cambia el estado del usuario del colaborador
         vm.changeEstadoColaborador = function (id) {
-            $http.get("/api/colaboradores/cambiar/" + id)
+            $http.post("/api/v2/colaboradores/" + id + "/toggleStatus")
                 .then(function (response) {
                     // Success   
                     var index = vm.colaboradores.findIndex(obj => obj.id === id);
@@ -162,7 +161,7 @@
 
         // Cambia el estado del usuario del colaborador
         vm.restaurarPasswordColaborador = function (id) {
-            $http.get("/api/colaboradores/restaurar/" + id)
+            $http.post("/api/v2/colaboradores/" + id + "/resetPassword")
                 .then(function (response) {
                     // Success   
                     toastr.success("Se restauró la contraseña correctamente.");

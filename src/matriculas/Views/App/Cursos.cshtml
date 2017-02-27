@@ -78,7 +78,7 @@
                                     <a ng-click="vm.deleteCurso(curso.id)" class="btn btn-small red-mint">
                                         <i class="fa fa-trash-o"></i> Eliminar
                                     </a>
-                                    <a ng-click="vm.getCursoProfesor(curso.id)" class="btn btn-small blue" data-toggle="modal" href="#datos-curso-profesor">
+                                    <a ng-click="vm.getProfesor(curso.id)" class="btn btn-small blue" data-toggle="modal" href="#datos-profesor">
                                         Asignar profesor
                                     </a>
                                 </td>
@@ -168,35 +168,17 @@
     </div>
 
     <!-- Formulario de asignación de profesor -->
-    <div id="datos-curso-profesor" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
+    <div id="datos-profesor" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h4 class="modal-title">Datos curso</h4>
+            <h4 class="modal-title">Datos profesor</h4>
         </div>
         <div class="modal-body col-md-12">
-            <form ng-submit="vm.updateProfesor()">
+            <form ng-submit="vm.assignProfesor()">
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-group">
-                    <label asp-for="Curso.Grado">Grado (*)</label>
-                    <span asp-validation-for="Curso.Grado" class="text-muted text-validation"></span>
-                    <select asp-for="Curso.Grado" disabled class="form-control" ng-model="vm.currentCurso.grado" ng-options="(option.nombre + ' de ' + option.nivel.nombre) for option in vm.grados track by option.id">
-                        <option ng-selected="true" value="">Seleccione</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Curso.Nombre">Nombre (*)</label>
-                    <span asp-validation-for="Curso.Nombre" class="text-muted text-validation"></span>
-                    <input type="text" disabled asp-for="Curso.Nombre" class="form-control" maxlength="25" ng-model="vm.currentCurso.nombre" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Curso.HorasAcademicas">Horas Académicas (*)</label>
-                    <span asp-validation-for="Curso.HorasAcademicas" class="text-muted text-validation"></span>
-                    <input type="number" disabled asp-for="Curso.HorasAcademicas" class="form-control" ng-model="vm.currentCurso.horasAcademicas" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Profesor.Id">Profesor</label>
-                    <span asp-validation-for="Profesor.Id" class="text-muted text-validation"></span>
-                    <select asp-for="Profesor.Id" class="form-control" ng-model="vm.currentProfesor" ng-options="(option.apellidoPaterno + ' ' + option.apellidoMaterno + ', ' + option.nombres) for option in vm.profesores track by option.id">
+                    <label>Profesor</label>
+                    <select class="form-control" ng-model="vm.currentProfesor" ng-options="(option.apellidoPaterno + ' ' + option.apellidoMaterno + ', ' + option.nombres) for option in vm.profesores track by option.id">
                         <option ng-selected="true" value="">Seleccione</option>
                     </select>
                 </div>

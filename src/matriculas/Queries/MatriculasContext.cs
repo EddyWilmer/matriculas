@@ -23,7 +23,7 @@ namespace Matriculas.Models
         /// </summary>
         /// <param name="config">Ruta de acceso a la base de datos.</param>
         /// <param name="options">Configuración del contexto.</param>
-        public MatriculasContext(IConfigurationRoot config, DbContextOptions options) 
+        public MatriculasContext(IConfigurationRoot config, DbContextOptions options)
             : base(options)
         {
             _config = config;
@@ -31,7 +31,7 @@ namespace Matriculas.Models
 
         // Entidades en base de datos
         public DbSet<Colaborador> Colaboradores { get; set; }
-        public DbSet<Rol> Cargos { get; set; }
+        public DbSet<Cargo> Cargos { get; set; }
         public DbSet<Nivel> Niveles { get; set; }
         public DbSet<Grado> Grados { get; set; }
         public DbSet<Seccion> Secciones { get; set; }

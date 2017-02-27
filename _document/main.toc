@@ -15,5 +15,10 @@
 \contentsline {subsection}{\numberline {4.1.4}Validaci\IeC {\'o}n de los nested objects}{7}{subsection.4.1.4}
 \contentsline {subsection}{\numberline {4.1.5}Duplicidad en el mapeo}{7}{subsection.4.1.5}
 \contentsline {subsection}{\numberline {4.1.6}Ruta de los controlador API}{9}{subsection.4.1.6}
-\contentsline {chapter}{Appendices}{11}{section*.3}
-\contentsline {chapter}{\numberline {A}Requisitos funcionales}{12}{appendix.Alph1}
+\contentsline {subsection}{\numberline {4.1.7}Sobrecarga de Entity Framework}{10}{subsection.4.1.7}
+\contentsline {subsection}{\numberline {4.1.8}Actualizaci\IeC {\'o}n de campos}{10}{subsection.4.1.8}
+\contentsline {subsection}{\numberline {4.1.9}M\IeC {\'e}todo SearchCursos en controlador de cursos}{11}{subsection.4.1.9}
+\contentsline {subsection}{\numberline {4.1.10}L\IeC {\'o}gica de negocio en el controlador}{13}{subsection.4.1.10}
+\contentsline {subsection}{\numberline {4.1.11}Uso inadecuado de procedimientos almacenados}{14}{subsection.4.1.11}
+\contentsline {chapter}{Appendices}{16}{section*.3}
+\contentsline {chapter}{\numberline {A}Requisitos funcionales}{17}{appendix.Alph1}

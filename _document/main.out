@@ -14,5 +14,10 @@
 \BOOKMARK [2][-]{subsection.4.1.4}{Validaci\363n de los nested objects}{section.4.1}% 14
 \BOOKMARK [2][-]{subsection.4.1.5}{Duplicidad en el mapeo}{section.4.1}% 15
 \BOOKMARK [2][-]{subsection.4.1.6}{Ruta de los controlador API}{section.4.1}% 16
-\BOOKMARK [0][-]{section*.3}{Appendices}{}% 17
-\BOOKMARK [0][-]{appendix.Alph1}{Requisitos funcionales}{}% 18
+\BOOKMARK [2][-]{subsection.4.1.7}{Sobrecarga de Entity Framework}{section.4.1}% 17
+\BOOKMARK [2][-]{subsection.4.1.8}{Actualizaci\363n de campos}{section.4.1}% 18
+\BOOKMARK [2][-]{subsection.4.1.9}{M\351todo SearchCursos en controlador de cursos}{section.4.1}% 19
+\BOOKMARK [2][-]{subsection.4.1.10}{L\363gica de negocio en el controlador}{section.4.1}% 20
+\BOOKMARK [2][-]{subsection.4.1.11}{Uso inadecuado de procedimientos almacenados}{section.4.1}% 21
+\BOOKMARK [0][-]{section*.3}{Appendices}{}% 22
+\BOOKMARK [0][-]{appendix.Alph1}{Requisitos funcionales}{}% 23

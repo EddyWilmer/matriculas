@@ -29,7 +29,7 @@ namespace Matriculas.Models
         [StringLength(8)]
         public string Dni { get; set; }
 
-        public virtual Rol Rol { get; set; }
+        public virtual Cargo Rol { get; set; }
 
         [StringLength(50)]
         public string Email { get; set; }

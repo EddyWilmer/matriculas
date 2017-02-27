@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Matriculas.Models;
+using Matriculas.Queries.Core.Repositories;
 using Matriculas.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,39 +14,25 @@ using System.Web.Http;
 
 namespace Matriculas.Controllers.Api
 {
-    /// <author>Luis Fernando Yana Espinoza</author>
-    /// <summary>
-    /// Clase que permite la interacción de las vistas con la entidad Grados.
-    /// </summary>
+    [Route("api/v2/[controller]")]
     public class GradosController : Controller
     {
         private ILogger<GradosController> _logger;
-        private IMatriculasRepositorys _repository;
+        private IAppRepository _repository;
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Constructor de la clase GradosController.
-        /// </summary>
-        /// <param name="repository">Instancia del repositorio.</param>
-        /// <param name="logger">Administrador de logging.</param>
-        public GradosController(IMatriculasRepositorys repository, ILogger<GradosController> logger)
+        public GradosController(IAppRepository repository, ILogger<GradosController> logger)
         {
             _repository = repository;
             _logger = logger;
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para recuperar la lista de Grados activos.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/grados")]
+        [HttpGet()]
         public IActionResult GetGrados()
         {
             try
             {
                 _logger.LogInformation("Recuperando la lista de grados.");
-                var results = _repository.GetAllGrados();
+                var results = _repository.Grados.GetAll();
                 return Ok(Mapper.Map<IEnumerable<GradoViewModel>>(results));
             }
             catch (Exception ex)
@@ -55,19 +42,13 @@ namespace Matriculas.Controllers.Api
             }
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para recuperar un Grado Específico a través de su Id.
-        /// </summary>
-        /// <param name="idGrado">Id del Grado.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/grados/{idGrado}")]
-        public IActionResult GetGradoEspecifico(int idGrado)
+        [HttpGet("{id}")]
+        public IActionResult GetGrado(int id)
         {
             try
             {
                 _logger.LogInformation("Recuperando la información del grado.");
-                var result = _repository.GetGradoById(idGrado);
+                var result = _repository.Grados.Get(id);
                 return Ok(Mapper.Map<GradoViewModel>(result));
             }
             catch (Exception ex)
@@ -77,19 +58,13 @@ namespace Matriculas.Controllers.Api
             }
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para obtener los cursos que se dicta en un Grado específico.
-        /// </summary>
-        /// <param name="idGrado">Id del Grado.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpGet("api/grados/cursos/{idGrado}")]
-        public IActionResult GetCursosGradoEspecifico(int idGrado)
+        [HttpGet("{id}/cursos")]
+        public IActionResult GetCursos(int id)
         {
             try
             {
                 _logger.LogInformation("Recuperando los cursos del grado.");
-                var result = _repository.GetCursosGradoById(idGrado);
+                var result = _repository.Grados.GetCursos(id);
                 return Ok(Mapper.Map<IEnumerable<CursoViewModel>>(result));
             }
             catch (Exception ex)
@@ -99,28 +74,19 @@ namespace Matriculas.Controllers.Api
             }
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para agregar un Grado en la base de datos.
-        /// </summary>
-        /// <param name="thisGrado">Grado.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpPost("api/grados/crear")]
-        public async Task<IActionResult> PostCrearGrado([FromBody] GradoViewModel thisGrado)
+        [HttpPost()]
+        public async Task<IActionResult> PostGrado([FromBody] GradoViewModel gradoDetails)
         {
             _logger.LogInformation("Agregando el grado.");
 
-            if (!_repository.IsNombreValido(Mapper.Map<Grado>(thisGrado)))
-                ModelState.AddModelError("nombreMessageValidation", "Este nombre ya fue registrado.");
+            var grado = Mapper.Map<Grado>(gradoDetails);
 
             if (ModelState.IsValid)
             {
-                var newGrado = Mapper.Map<Grado>(thisGrado);
-
-                _repository.AddGrado(newGrado);
-                if (await _repository.SaveChangesAsync())
+                _repository.Grados.Add(grado);
+                if (await _repository.Complete())
                 {
-                    return Created($"api/grados/{thisGrado.Id}", Mapper.Map<GradoViewModel>(newGrado));
+                    return Created($"api/grados/{grado.Id}/grados", Mapper.Map<GradoViewModel>(grado));
                 }
             }
 
@@ -128,28 +94,19 @@ namespace Matriculas.Controllers.Api
             return BadRequest(ModelState);
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para actualizar un Grado en la base de datos.
-        /// </summary>
-        /// <param name="thisGrado">Grado con los datos actualizados.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpPost("api/grados/editar")]
-        public async Task<IActionResult> PostEditarGrado([FromBody] GradoViewModel thisGrado)
+        [HttpPut()]
+        public async Task<IActionResult> PutGrado([FromBody] GradoViewModel gradoDetails)
         {
-            _logger.LogInformation("Actualizando los datos del grado.");
+            var grado = Mapper.Map<Grado>(gradoDetails);
 
-            if (!_repository.IsNombreValido(Mapper.Map<Grado>(thisGrado)))
-                ModelState.AddModelError("nombreMessageValidation", "Este nombre ya fue registrado.");
+            _logger.LogInformation("Actualizando los datos del grado.");
 
             if (ModelState.IsValid)
             {
-                var gradoToUpdate = Mapper.Map<Grado>(thisGrado);
-
-                var updatedGrado = _repository.UpdateGrado(gradoToUpdate);
-                if (await _repository.SaveChangesAsync())
+                _repository.Grados.Update(grado);
+                if (await _repository.Complete())
                 {
-                    return Created($"api/grados/{updatedGrado.Id}", Mapper.Map<GradoViewModel>(updatedGrado));
+                    return Created($"api/grados/{grado.Id}", Mapper.Map<GradoViewModel>(grado));
                 }
             }
 
@@ -157,35 +114,23 @@ namespace Matriculas.Controllers.Api
             return BadRequest(ModelState);
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para eliminar lógicamente un Grado en la base de datos.
-        /// </summary>
-        /// <param name="thisGrado">Grado.</param>
-        /// <returns>Acción con la respuesta.</returns>
-        [HttpPost("api/grados/eliminar")]
-        public async Task<IActionResult> PostEliminarGrado([FromBody] GradoViewModel thisGrado)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGrado(int id)
         {
             _logger.LogInformation("Eliminando el grado.");
 
-            ModelState.Clear();
-
-            if (!_repository.IsEliminable(Mapper.Map<Grado>(thisGrado))) 
-                ModelState.AddModelError("eliminacionMessageValidation", "Este grado tiene secciones o cursos asociadas.");
-
             if (ModelState.IsValid)
             {
-                var deletedGrado = Mapper.Map<Grado>(_repository.GetGradoById(thisGrado.Id));
+                _repository.Grados.Delete(id);
 
-                _repository.DeleteGrado(deletedGrado);
-                if (await _repository.SaveChangesAsync())
+                if (await _repository.Complete())
                 {
-                    return Ok("Se eliminó el colaborador correctamente.");
+                    return Created($"api/grados/{id}", Mapper.Map<GradoViewModel>(_repository.Grados.Get(id)));
                 }
             }
 
             _logger.LogError("No se pudo eliminar el grado.");
-            return BadRequest(ModelState);
+            return BadRequest("No se pudo eliminar este grado.");
         }
     }
 }

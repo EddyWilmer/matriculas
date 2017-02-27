@@ -56,7 +56,7 @@ namespace Matriculas.Models
             
             if (!_context.Cargos.Any())
             {    
-                var rolAdministrador = new Rol()
+                var rolAdministrador = new Cargo()
                 {
                     Id = 1,
                     Nombre = "Administrador"
@@ -64,7 +64,7 @@ namespace Matriculas.Models
                 _context.Cargos.Add(rolAdministrador);
                 await _context.SaveChangesAsync();
 
-                var rolDirector = new Rol()
+                var rolDirector = new Cargo()
                 {
                     Id = 2,
                     Nombre = "Director"
@@ -72,7 +72,7 @@ namespace Matriculas.Models
                 _context.Cargos.Add(rolDirector);
                 await _context.SaveChangesAsync();
 
-                var rolSecretaria = new Rol()
+                var rolSecretaria = new Cargo()
                 {
                     Id = 3,
                     Nombre = "Secretaria"

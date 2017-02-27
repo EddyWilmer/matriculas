@@ -74,7 +74,7 @@
 
         //Notas del alumno 
         vm.getMatricula = function (idAlumno) {
-            $http.get("/api/alumnos/matricula/" + idAlumno)
+            $http.get("/api/v2/alumnos/matricula/" + idAlumno)
                 .then(function (response) {
                     // Success   
                     angular.copy(response.data, vm.matricula);
@@ -165,7 +165,7 @@
             vm.alumno = {};
             vm.notas = [];
             vm.deudas = [];
-            $http.get("/api/alumnos/dni/" + vm.search)
+            $http.get("/api/v2/alumnos/dni/" + vm.search)
                 .then(function (response) {
                     // Success   
                     angular.copy(response.data, vm.alumno);
