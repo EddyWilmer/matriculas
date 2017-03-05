@@ -33,6 +33,9 @@ namespace Matriculas.Models
 
         public virtual Alumno Alumno { get; set; }
 
+        [NotMapped]
+        public virtual Grado Grado { get; set; }
+
         public virtual Seccion Seccion { get; set; }
 
         public virtual Colaborador Registrador { get; set; }

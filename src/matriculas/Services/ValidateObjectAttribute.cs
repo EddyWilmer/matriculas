@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 
 namespace Matriculas.Services
 {
-				public class ValidateObjectAttribute : ValidationAttribute
-				{
-								protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-								{
-												var results = new List<ValidationResult>();
-												var context = new ValidationContext(value, null, null);
+	public class ValidateObjectAttribute : ValidationAttribute
+	{
+		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+		{
+			var results = new List<ValidationResult>();
+			var context = new ValidationContext(value, null, null);
 
-												Validator.TryValidateObject(value, context, results, true);
+			Validator.TryValidateObject(value, context, results, true);
 
-												if (results.Count != 0)
-												{
-																var compositeResults = new CompositeValidationResult(String.Format("Validation for {0} failed!", validationContext.DisplayName));
-																results.ForEach(compositeResults.AddResult);
+			if (results.Count != 0)
+			{
+				var compositeResults = new CompositeValidationResult(String.Format("Validation for {0} failed!", validationContext.DisplayName));
+				results.ForEach(compositeResults.AddResult);
 
-																return compositeResults;
-												}
+				return compositeResults;
+			}
 
-												return ValidationResult.Success;
-								}
-				}
+			return ValidationResult.Success;
+		}
+	}
 }

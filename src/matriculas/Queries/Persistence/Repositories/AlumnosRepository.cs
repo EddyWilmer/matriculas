@@ -54,29 +54,26 @@ namespace Matriculas.Queries.Persistence.Repositories
 				.First();
 		}
 
-        public Matricula GetLastMatricula(int id)
+        public Grado GetGrado(int id)
         {
-            return _context.Matriculas
-                .Include(t => t.Alumno)
-                .Include(t => t.Seccion)
-                .ThenInclude(t => t.Grado)
-                .ThenInclude(t => t.Nivel)
-                .Include(t => t.Registrador)
-                .Include(t => t.AnioAcademico)
+            var grado = _context.Matriculas
                 .Where(t => t.AlumnoId == id)
+                .Select(t => t.Seccion.Grado)
                 .Last();
+
+            return new GradosRepository(_context).Get(grado.Id);
         }
 
-        public bool IsRegisteredDni(string dni)
-		{
-			var alumno = _context.Alumnos
-			    .Where(t => t.Dni == dni)
-			    .First();
+        public Grado GetNextGrado(int id)
+        {
+            var gradoRequisito = GetGrado(id);
 
-			return alumno == null ? false : true;
-		}
+            return _context.Grados
+                .Where(t => t.GradoRequisito.Id == gradoRequisito.Id)
+                .FirstOrDefault();
+        }
 
-		public void Update(Alumno entity)
+        public void Update(Alumno entity)
 		{
 			_context.Alumnos.Attach(entity);
 			var entry = _context.Entry(entity).State = EntityState.Modified;

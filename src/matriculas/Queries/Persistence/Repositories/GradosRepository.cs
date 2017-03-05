@@ -33,9 +33,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public Grado Get(int id)
         {
-            return _context.Grados
-                .Include(t => t.GradoRequisito)
-                .Include(t => t.Nivel)
+            return GetAll()
                 .Where(t => t.Id == id)
                 .FirstOrDefault();
         }

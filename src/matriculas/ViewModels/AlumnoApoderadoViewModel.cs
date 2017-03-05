@@ -13,6 +13,7 @@ namespace Matriculas.ViewModels
     public class AlumnoApoderadoViewModel
     {
         public AlumnoViewModel Alumno { get; set; }
+
         public ApoderadoViewModel Apoderado { get; set; }
     }
 }

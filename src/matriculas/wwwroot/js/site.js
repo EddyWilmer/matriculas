@@ -27,6 +27,10 @@ function collapseAccordion() {
     $myGroup.find('.collapse.in').collapse('hide');
 }
 
+function resetFormMatricula() {
+    $("#toggle-button").bootstrapSwitch('state', false);
+}
+
 //Configuración de toastr plugin
 jQuery(document).ready(function ($) {
 	$('.counter').counterUp({
@@ -50,4 +54,16 @@ jQuery(document).ready(function ($) {
 	    "showMethod": "fadeIn",
 	    "hideMethod": "fadeOut"
 	}
+
+	$("#toggle-button").bootstrapSwitch();
+	$("#toggle-button").bootstrapSwitch('onColor', 'retroorange');
+	
+	$('#current-grado').prop('disabled', true);
+	var elementFormMatricula = $("#form-matricula input[type='text']:not('#current-grado'), #form-matricula select, #form-matricula input[type='date']");
+    elementFormMatricula.prop('disabled', true);
+
+	$("#toggle-button").on('switchChange.bootstrapSwitch', function (event, state) {
+	    elementFormMatricula.prop('disabled', !state);
+	});
 });
+

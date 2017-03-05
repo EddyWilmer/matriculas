@@ -8,10 +8,10 @@ namespace Matriculas.Queries.Core.Repositories
 {
     public interface IAlumnosRepository : IRepository<Alumno>
     {
-		bool IsRegisteredDni(string dni);
-
 		Alumno GetByDni(string dni);
 
-        Matricula GetLastMatricula(int id);
+        Grado GetGrado(int id);
+
+        Grado GetNextGrado(int id);
 	}
 }

@@ -28,6 +28,7 @@ namespace Matriculas.Queries.Persistence.Repositories
             Profesores = new ProfesoresRepository(_context);
             AniosAcademicos = new AniosAcademicosRepository(_context);
             Cronogramas = new CronogramasRepository(_context);
+            Matriculas = new MatriculasRepository(_context);
         }
 
         public IAlumnosRepository Alumnos { get; private set; }
@@ -40,6 +41,7 @@ namespace Matriculas.Queries.Persistence.Repositories
         public IProfesoresRepository Profesores { get; private set; }
         public IAniosAcademicosRepository AniosAcademicos { get; private set; }
         public ICronogramasRepository Cronogramas { get; private set; }
+        public IMatriculasRepository Matriculas { get; private set; }
 
         public async Task<bool> Complete()
 		{

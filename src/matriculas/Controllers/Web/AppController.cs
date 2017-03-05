@@ -32,15 +32,6 @@ namespace Matriculas.Controllers
         private ILogger<AppController> _logger;
         private IHostingEnvironment _env;
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Constructor de la calse AppController
-        /// </summary>
-        /// <param name="mailService">Servicio de Email.</param>
-        /// <param name="config">Configuración de la aplicación.</param>
-        /// <param name="repository">Instancia del repositorio.</param>
-        /// <param name="logger">Administrador de logging.</param>
-        /// <param name="env">Hosting.</param>
         public AppController(IMailService mailService,
             IConfigurationRoot config,
 			IAppRepository repository,
@@ -54,99 +45,54 @@ namespace Matriculas.Controllers
             _env = env;
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al Index de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Secretaria, Administrador")]
         public IActionResult Index()
         {
             return View();
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Colaboradores de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Administrador")]
         public IActionResult Colaboradores()
         {
             return View();
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Grados de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
         public IActionResult Grados()
         {
             return View();
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Secciones de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
         public IActionResult Secciones()
         {
             return View();
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Cursos de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
         public IActionResult Cursos()
         {
             return View();
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Profesores de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
         public IActionResult Profesores()
         {
             return View();
         }
 
-        /// <author>Julissa Zaida Huaman Hilari</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Alumnos de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Secretaria, Administrador")]
         public IActionResult Alumnos()
         {
             return View();
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Años Académicos de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
         public IActionResult AniosAcademicos()
         {
             return View();
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Cronogramas de Mátrícula de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Director, Administrador")]
         [Route("App/AniosAcademicos/{id?}/Cronogramas")]
         public IActionResult Cronogramas(int id)
@@ -155,42 +101,27 @@ namespace Matriculas.Controllers
             return View();
         }
 
-        /// <author>Eddy Wilmer Canaza Tito</author>
-        /// <summary>
-        /// Método para redirigir al módulo de Matrículas de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
         [Authorize(Roles = "Secretaria, Administrador")]
         public IActionResult Matriculas()
         {
             return View();
         }
 
-        /// <author>Luis Fernando Yana Espinoza</author>
-        /// <summary>
-        /// Método para generar el reporte de Matrícula de la aplicación.
-        /// </summary>
-        /// <returns>Acción con la respuesta.</returns>
-        //[Authorize(Roles = "Secretaria, Administrador")]
-        //[Route("App/Matriculas/ReporteMatricula/{dni?}")]
-        //public IActionResult ReporteMatricula(string dni)
-        //{
-        //    ReporteConstanciaMatricula newReporte = new ReporteConstanciaMatricula(_repository, _env);
-        //    return newReporte.GenerarReporte(dni);
-        //}
+        [Authorize(Roles = "Secretaria, Administrador")]
+        [Route("App/Matriculas/ReporteMatricula/{dni?}")]
+        public IActionResult ReporteMatricula(string dni)
+        {
+            ReporteConstanciaMatricula newReporte = new ReporteConstanciaMatricula(_repository, _env);
+            return newReporte.GenerarReporte(dni);
+        }
 
-        ///// <author>Luis Fernando Yana Espinoza</author>
-        ///// <summary>
-        ///// Método para generar el reporte de Lista de alumnos de la aplicación.
-        ///// </summary>
-        ///// <returns>Acción con la respuesta.</returns>
-        //[Authorize(Roles = "Secretaria, Administrador")]
-        //[Route("App/Secciones/ReporteLista/{idSeccion?}")]
-        //public IActionResult ReporteLista(int idSeccion)
-        //{
-        //    ReporteLista newReporte = new ReporteLista(_repository, _env);
-        //    return newReporte.GenerarReporte(idSeccion);
-        //}
+        [Authorize(Roles = "Secretaria, Administrador")]
+        [Route("App/Secciones/ReporteLista/{idSeccion?}")]
+        public IActionResult ReporteLista(int idSeccion)
+        {
+            ReporteLista newReporte = new ReporteLista(_repository, _env);
+            return newReporte.GenerarReporte(idSeccion);
+        }
     }
 }
     

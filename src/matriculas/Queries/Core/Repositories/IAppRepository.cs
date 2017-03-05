@@ -27,6 +27,8 @@ namespace Matriculas.Queries.Core.Repositories
 
         ICronogramasRepository Cronogramas { get; }
 
+        IMatriculasRepository Matriculas { get; }
+
         Task<bool> Complete();
 	}
 }
