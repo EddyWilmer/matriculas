@@ -1,6 +1,6 @@
 Para esta etapa del proyecto se detectarán los bad smells del código existente del pro proyecto y se aplicarán técnicas de refactoring e ingeniería para resolverlos.
 
-\section{Revisión de los Shared Layout de las vistas}
+\section{Vistas}
 \subsection{Librerías de terceros innecesarias}
 \begin{itemize}
 	\item \textbf{Síntoma:} Existen librerías de terceros procedentes de la plantilla que no se utilizan en ningún momento.
@@ -49,7 +49,7 @@ Para esta etapa del proyecto se detectarán los bad smells del código existente
 </div>
 \end{lstlisting}
 
-\subsection{Error en la carga de las vistas}
+\subsection{Mala distribución de los archivos Javascript}
 \begin{itemize}
 	\item \textbf{Síntoma:} Los archivos javascript de la aplicación están mezclados con los controladores angular.
 	\item \textbf{Solución:} Colocar todos los controladores dentro de una carpeta.
@@ -69,6 +69,8 @@ Para esta etapa del proyecto se detectarán los bad smells del código existente
 	...
 }
 \end{lstlisting}
+
+\section{Validaciones}
 
 \subsection{Validación de los nested objects}
 \begin{itemize}
@@ -92,6 +94,8 @@ public class AlumnoViewModel
 	...
 }
 \end{lstlisting}
+
+\section{Mejoras de rendimiento}
 
 \subsection{Duplicidad en el mapeo}
 \begin{itemize}
@@ -141,51 +145,6 @@ public async Task<IActionResult> PostAlumno([FromBody] AlumnoViewModel alumnoDet
 }
 \end{lstlisting}
 	
-\subsection{Ruta de los controlador API}
-\begin{itemize}
-	\item \textbf{Síntoma:} Se está repitiendo en cada acción la ruta del controlador.
-	\item \textbf{Bad Smell:} Duplicated code.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-public class AlumnosController : Controller
-{
-	...	
-	
-	[HttpGet("api/alumnos"))]
-	public IActionResult GetAllAlumnos()
-	{ ... }
-	
-	[HttpGet("api/alumnos/{id}")]
-	public IActionResult GetAlumno(int id)
-	{ ... }
-	
-	...
-}
-\end{lstlisting}
-
-\begin{itemize}	
-	\item \textbf{Solución:} Utilizar el decorador Route para indicar la ruta del controlador. También indicar la versión del API y cambiar el nombre de las acciones según convenciones.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-[Route("api/v2/[controller]")]
-public class AlumnosController : Controller
-{
-	...	
-	
-	[HttpGet()]
-	public IActionResult GetAllAlumnos()
-	{ ... }
-	
-	[HttpGet("{id}")]
-	public IActionResult GetAlumno(int id)
-	{ ... }
-	
-	...
-}
-\end{lstlisting}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Sobrecarga de Entity Framework}
@@ -200,9 +159,9 @@ public void ToggleEstado(int id)
 	_context.Colaboradores.Attach(colaborador).State = EntityState.Modified;
 	
 	if (colaborador.Estado == "1")
-		colaborador.Estado = "3";
+	colaborador.Estado = "3";
 	else if (colaborador.Estado == "3")
-		colaborador.Estado = "1";
+	colaborador.Estado = "1";
 	
 	_context.Update(colaborador);
 }
@@ -259,7 +218,140 @@ public Alumno UpdateAlumno(Alumno entity)
 }
 \end{lstlisting}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Uso inadecuado de procedimientos almacenados}
+\begin{itemize}
+	\item \textbf{Síntoma:} El método llama a un procedimiento en la base de datos.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void Update(Profesor entity)
+{
+	...
+	_context.Database.ExecuteSqlCommand(String.Format("EXEC SP_DeleteCursos @idProfesor='{0}'", profesor.Id));
+	foreach (Curso curso in cursos)
+	{
+		_context.Database.ExecuteSqlCommand(
+		String.Format("EXEC SP_AddProfesorCurso @idProfesor='{0}', @idCurso='{1}'", 
+		profesor.Id, curso.Id));
+	}
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Técnica:} Extract Method.
+	\item \textbf{Solución:} Remplazar el procedimiento almacenado con sentencias LINQ, y extraer el segmento de código que elimina los cursos actuales del profesor en un nuevo método.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void EliminarCursos(int id)
+{
+	var cursos = _context.ProfesorCursos
+		.Where(t => t.ProfesorId == id)
+		.ToList();
+	
+	_context.ProfesorCursos.RemoveRange(cursos);
+	_context.SaveChanges();
+}
+\end{lstlisting}
+	
+
+\section{Mejoras en los servicios}
+
+\subsection{Ruta de los controlador API}
+\begin{itemize}
+	\item \textbf{Síntoma:} Se está repitiendo en cada acción la ruta del controlador.
+	\item \textbf{Bad Smell:} Duplicated code.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public class AlumnosController : Controller
+{
+	...	
+	
+	[HttpGet("api/alumnos"))]
+	public IActionResult GetAllAlumnos()
+	{ ... }
+	
+	[HttpGet("api/alumnos/{id}")]
+	public IActionResult GetAlumno(int id)
+	{ ... }
+	
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}	
+	\item \textbf{Solución:} Utilizar el decorador Route para indicar la ruta del controlador. También indicar la versión del API y cambiar el nombre de las acciones según convenciones.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+[Route("api/v2/[controller]")]
+public class AlumnosController : Controller
+{
+	...	
+	
+	[HttpGet()]
+	public IActionResult GetAllAlumnos()
+	{ ... }
+	
+	[HttpGet("{id}")]
+	public IActionResult GetAlumno(int id)
+	{ ... }
+	
+	...
+}
+\end{lstlisting}
+
+\section{Mejoras en la lógica de negocio}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Lógica de negocio en el controlador}
+\begin{itemize}
+	\item \textbf{Síntoma:} El controlador tiene código de la lógica del negocio; las tareas que deberían ejecutarse en el repositorio.
+	\item \textbf{Bad Smell:} Intimidad inadecuada.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public async Task<IActionResult> PostUpdateProfesorCurso([FromBody] CursoProfesorViewModel profesorDetails)
+{
+	...
+	if (ModelState.IsValid)
+	{
+		var profesor = Mapper.Map<Profesor>(profesorDetails.Profesor);
+		var curso = Mapper.Map<Curso>(profesorDetails.Curso);
+		...
+	}
+	...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{Técnica:} Move Method y Extract Method.
+	\item \textbf{Solución:} Trasladar el código al repositorio creando un método que realice las tareas de mapeo.
+\end{itemize}
+
+\begin{lstlisting}[language={[Sharp]C}]
+public void AssignProfesor(int id, int idProfesor)
+{
+	var anioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
+	
+	if (anioAcademico != null)
+	{
+		var cursoAnioAcademico = _context.CursosAnioAcademico
+			.Where(t => t.AnioAcademicoId == anioAcademico.Id)
+			.Where(t => t.CursoId == id)
+			.FirstOrDefault();	
+		...
+	}
+}
+\end{lstlisting}
+
 
 \subsection{Método SearchCursos en controlador de cursos}
 \begin{itemize}
@@ -318,130 +410,8 @@ public class ProfesoresController : Controller
 }
 \end{lstlisting}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Lógica de negocio en el controlador}
-\begin{itemize}
-	\item \textbf{Síntoma:} El controlador tiene código de la lógica del negocio; las tareas que deberían ejecutarse en el repositorio.
-	\item \textbf{Bad Smell:} Intimidad inadecuada.
-\end{itemize}
 
-\begin{lstlisting}[language={[Sharp]C}]
-public async Task<IActionResult> PostUpdateProfesorCurso([FromBody] CursoProfesorViewModel profesorDetails)
-{
-	...
-	if (ModelState.IsValid)
-	{
-		var profesor = Mapper.Map<Profesor>(profesorDetails.Profesor);
-		var curso = Mapper.Map<Curso>(profesorDetails.Curso);
-		...
-	}
-	...
-}
-\end{lstlisting}
-
-\begin{itemize}
-	\item \textbf{Técnica:} Move Method y Extract Method.
-	\item \textbf{Solución:} Trasladar el código al repositorio creando un método que realice las tareas de mapeo.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-public void AssignProfesor(int id, int idProfesor)
-{
-	var anioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
-
-	if (anioAcademico != null)
-	{
-		var cursoAnioAcademico = _context.CursosAnioAcademico
-			.Where(t => t.AnioAcademicoId == anioAcademico.Id)
-			.Where(t => t.CursoId == id)
-			.FirstOrDefault();	
-		...
-	}
-}
-\end{lstlisting}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Uso inadecuado de procedimientos almacenados}
-\begin{itemize}
-	\item \textbf{Síntoma:} El método llama a un procedimiento en la base de datos.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-public void Update(Profesor entity)
-{
-	...
-	_context.Database.ExecuteSqlCommand(String.Format("EXEC SP_DeleteCursos @idProfesor='{0}'", profesor.Id));
-	foreach (Curso curso in cursos)
-	{
-    	_context.Database.ExecuteSqlCommand(
-    		String.Format("EXEC SP_AddProfesorCurso @idProfesor='{0}', @idCurso='{1}'", 
-    			profesor.Id, curso.Id));
-	}
-	...
-}
-\end{lstlisting}
-
-\begin{itemize}
-	\item \textbf{Técnica:} Extract Method.
-	\item \textbf{Solución:} Remplazar el procedimiento almacenado con sentencias LINQ, y extraer el segmento de código que elimina los cursos actuales del profesor en un nuevo método.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-public void EliminarCursos(int id)
-{
-	var cursos = _context.ProfesorCursos
-		.Where(t => t.ProfesorId == id)
-		.ToList();
-	
-	_context.ProfesorCursos.RemoveRange(cursos);
-	_context.SaveChanges();
-}
-\end{lstlisting}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\break
-\subsection{Lógica de negocio en el controlador}
-\begin{itemize}
-	\item \textbf{Síntoma:} El controlador tiene código de la lógica del negocio; las tareas que deberían ejecutarse en el repositorio.
-	\item \textbf{Bad Smell:} Intimidad inadecuada.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-public async Task<IActionResult> PostUpdateProfesorCurso([FromBody] CursoProfesorViewModel profesorDetails)
-{
-	...
-	if (ModelState.IsValid)
-	{
-		var profesor = Mapper.Map<Profesor>(profesorDetails.Profesor);
-		var curso = Mapper.Map<Curso>(profesorDetails.Curso);
-		...
-	}
-	...
-}
-\end{lstlisting}
-
-\begin{itemize}
-	\item \textbf{Técnica:} Move Method y Extract Method.
-	\item \textbf{Solución:} Trasladar el código al repositorio creando un método que realice las tareas de mapeo.
-\end{itemize}
-
-\begin{lstlisting}[language={[Sharp]C}]
-public void AssignProfesor(int id, int idProfesor)
-{
-	var anioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
-
-	if (anioAcademico != null)
-	{
-		var cursoAnioAcademico = _context.CursosAnioAcademico
-		.Where(t => t.AnioAcademicoId == anioAcademico.Id)
-		.Where(t => t.CursoId == id)
-		.FirstOrDefault();	
-		...
-	}
-}
-\end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

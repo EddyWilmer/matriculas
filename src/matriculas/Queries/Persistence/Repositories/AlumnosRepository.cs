@@ -41,9 +41,10 @@ namespace Matriculas.Queries.Persistence.Repositories
 
 		public IEnumerable<Alumno> GetAll()
 		{
-			return _context.Alumnos
-			    .Include(t => t.Apoderado)
-			    .Where(t => t.Estado == "1")
+            return _context.Alumnos
+                .Include(t => t.Apoderado)
+                .Where(t => t.Estado == "1")
+                .AsNoTracking()
 			    .ToList();
 		}
 
@@ -51,7 +52,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 		{
 			return GetAll()
 				.Where(t => t.Dni == dni)
-				.First();
+				.FirstOrDefault();
 		}
 
         public Grado GetGrado(int id)
@@ -73,11 +74,21 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .FirstOrDefault();
         }
 
+        public bool HasDniUnique(Alumno entity)
+        {
+            if (GetByDni(entity.Dni) == null)
+                return true;
+
+            if (Get(entity.Id) != null)
+                return (entity.Dni == Get(entity.Id).Dni) ? true : false;
+
+            return false;
+        }
+
         public void Update(Alumno entity)
 		{
-			_context.Alumnos.Attach(entity);
-			var entry = _context.Entry(entity).State = EntityState.Modified;
-			_context.Entry(entity.Apoderado).State = EntityState.Modified;
+            _context.Entry(entity.Apoderado).State = EntityState.Modified;
+			_context.Entry(entity).State = EntityState.Modified;
 		}
 	}
 }

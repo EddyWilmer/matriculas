@@ -89,7 +89,10 @@ namespace Matriculas.Controllers.Api
 
 			var alumno = Mapper.Map<Alumno>(alumnoDetails);
 
-			if (ModelState.IsValid)
+            if (!_repository.Alumnos.HasDniUnique(alumno))
+                ModelState.AddModelError("Alumno.Dni", "Dni no disponible.");
+            
+            if (ModelState.IsValid)
 			{
 				_repository.Alumnos.Update(alumno);
 				if (await _repository.Complete())

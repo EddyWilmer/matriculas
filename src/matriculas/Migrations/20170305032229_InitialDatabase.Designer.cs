@@ -8,7 +8,7 @@ using Matriculas.Models;
 namespace matriculas.Migrations
 {
     [DbContext(typeof(MatriculasContext))]
-    [Migration("20170227161150_InitialDatabase")]
+    [Migration("20170305032229_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

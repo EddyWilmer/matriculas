@@ -18,11 +18,6 @@ namespace Matriculas.Models
     {
         private IConfigurationRoot _config;
 
-        /// <summary>
-        /// Constructor de la clase MatriculasContext.
-        /// </summary>
-        /// <param name="config">Ruta de acceso a la base de datos.</param>
-        /// <param name="options">Configuración del contexto.</param>
         public MatriculasContext(IConfigurationRoot config, DbContextOptions options)
             : base(options)
         {

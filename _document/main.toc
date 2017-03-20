@@ -1,27 +1,30 @@
 \select@language {spanish}
-\contentsline {chapter}{\numberline {1}Introducci\IeC {\'o}n}{2}{chapter.1}
-\contentsline {section}{\numberline {1.1}Planteamiento del Problema}{2}{section.1.1}
-\contentsline {section}{\numberline {1.2}Objetivos}{2}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}General}{2}{subsection.1.2.1}
-\contentsline {subsection}{\numberline {1.2.2}Espec\IeC {\'\i }ficos}{2}{subsection.1.2.2}
-\contentsline {section}{\numberline {1.3}Justificaci\IeC {\'o}n}{2}{section.1.3}
-\contentsline {chapter}{\numberline {2}Revisi\IeC {\'o}n de la literatura}{3}{chapter.2}
-\contentsline {chapter}{\numberline {3}Marco te\IeC {\'o}rico}{4}{chapter.3}
-\contentsline {chapter}{\numberline {4}Metodolog\IeC {\'\i }a}{5}{chapter.4}
-\contentsline {section}{\numberline {4.1}Revisi\IeC {\'o}n de los Shared Layout de las vistas}{5}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Librer\IeC {\'\i }as de terceros innecesarias}{5}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Error en la carga de las vistas}{6}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Error en la carga de las vistas}{6}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Validaci\IeC {\'o}n de los nested objects}{7}{subsection.4.1.4}
-\contentsline {subsection}{\numberline {4.1.5}Duplicidad en el mapeo}{7}{subsection.4.1.5}
-\contentsline {subsection}{\numberline {4.1.6}Ruta de los controlador API}{9}{subsection.4.1.6}
-\contentsline {subsection}{\numberline {4.1.7}Sobrecarga de Entity Framework}{10}{subsection.4.1.7}
-\contentsline {subsection}{\numberline {4.1.8}Actualizaci\IeC {\'o}n de campos}{10}{subsection.4.1.8}
-\contentsline {subsection}{\numberline {4.1.9}M\IeC {\'e}todo SearchCursos en controlador de cursos}{11}{subsection.4.1.9}
-\contentsline {subsection}{\numberline {4.1.10}L\IeC {\'o}gica de negocio en el controlador}{13}{subsection.4.1.10}
-\contentsline {subsection}{\numberline {4.1.11}Uso inadecuado de procedimientos almacenados}{14}{subsection.4.1.11}
-\contentsline {subsection}{\numberline {4.1.12}L\IeC {\'o}gica de negocio en el controlador}{15}{subsection.4.1.12}
-\contentsline {subsection}{\numberline {4.1.13}Atributos que no se usan}{16}{subsection.4.1.13}
-\contentsline {subsection}{\numberline {4.1.14}Cambiar la definici\IeC {\'o}n de la clase CronogramaMatricula}{16}{subsection.4.1.14}
+\contentsline {chapter}{\numberline {1}Introducci\IeC {\'o}n}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Planteamiento del Problema}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Objetivos}{3}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}General}{3}{subsection.1.2.1}
+\contentsline {subsection}{\numberline {1.2.2}Espec\IeC {\'\i }ficos}{3}{subsection.1.2.2}
+\contentsline {section}{\numberline {1.3}Justificaci\IeC {\'o}n}{3}{section.1.3}
+\contentsline {chapter}{\numberline {2}Revisi\IeC {\'o}n de la literatura}{4}{chapter.2}
+\contentsline {chapter}{\numberline {3}Marco te\IeC {\'o}rico}{5}{chapter.3}
+\contentsline {chapter}{\numberline {4}Metodolog\IeC {\'\i }a}{6}{chapter.4}
+\contentsline {section}{\numberline {4.1}Vistas}{6}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Librer\IeC {\'\i }as de terceros innecesarias}{6}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Error en la carga de las vistas}{7}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Mala distribuci\IeC {\'o}n de los archivos Javascript}{7}{subsection.4.1.3}
+\contentsline {section}{\numberline {4.2}Validaciones}{8}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Validaci\IeC {\'o}n de los nested objects}{8}{subsection.4.2.1}
+\contentsline {section}{\numberline {4.3}Mejoras de rendimiento}{9}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Duplicidad en el mapeo}{9}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Sobrecarga de Entity Framework}{10}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Actualizaci\IeC {\'o}n de campos}{11}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Uso inadecuado de procedimientos almacenados}{11}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}Mejoras en los servicios}{12}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Ruta de los controlador API}{12}{subsection.4.4.1}
+\contentsline {section}{\numberline {4.5}Mejoras en la l\IeC {\'o}gica de negocio}{14}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}L\IeC {\'o}gica de negocio en el controlador}{14}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}M\IeC {\'e}todo SearchCursos en controlador de cursos}{15}{subsection.4.5.2}
+\contentsline {subsection}{\numberline {4.5.3}Atributos que no se usan}{16}{subsection.4.5.3}
+\contentsline {subsection}{\numberline {4.5.4}Cambiar la definici\IeC {\'o}n de la clase CronogramaMatricula}{16}{subsection.4.5.4}
 \contentsline {chapter}{Appendices}{19}{section*.3}
 \contentsline {chapter}{\numberline {A}Requisitos funcionales}{20}{appendix.Alph1}

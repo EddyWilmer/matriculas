@@ -58,7 +58,7 @@ namespace Matriculas.Models
                 document.Add(titulo);
 
                 var alumno = _repository.Alumnos.GetByDni(dniAlumno);
-                var nextGrado = _repository.Alumnos.GetNextGrado(alumno.Id);
+                var nextGrado = _repository.Alumnos.GetGrado(alumno.Id);
                 var nextCursos = _repository.Grados.GetCursos(nextGrado.Id);
                 // Fecha y hora
                 Chunk fechaCab = new Chunk("\nFECHA: ", bold10);

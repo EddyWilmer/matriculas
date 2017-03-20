@@ -212,6 +212,7 @@
             <form ng-submit="vm.updateAlumno()">
                 <div class="col-md-6">
                     <div class="form-group"><h4 class="modal-title">Datos alumno</h4></div>
+                    <input type="hidden" asp-for="Alumno.Id" value="{{vm.currentAlumno.id}}"/>
                     <div class="form-group">
                         <label asp-for="Alumno.ApellidoPaterno">Apellido Paterno (*)</label>
                         <span asp-validation-for="Alumno.ApellidoPaterno" class="text-muted text-validation"></span>

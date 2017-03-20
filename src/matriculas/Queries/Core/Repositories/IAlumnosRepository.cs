@@ -13,5 +13,7 @@ namespace Matriculas.Queries.Core.Repositories
         Grado GetGrado(int id);
 
         Grado GetNextGrado(int id);
+
+        bool HasDniUnique(Alumno entity);
 	}
 }
