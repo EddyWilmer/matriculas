@@ -31,7 +31,7 @@ namespace Matriculas.ViewModels
         [StringLength(50)]
         public string Nombres { get; set; }
 
-        [Remote("IsDniAlumnoUnique", "Validator", AdditionalFields = "Id", HttpMethod = "Post")]
+        [Remote("IsDniAlumnoUnique", "Validator", AdditionalFields = "Id")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("([0-9]{8})", ErrorMessage = "Este campo debe contener 8 números.")]
         public string Dni { get; set; }

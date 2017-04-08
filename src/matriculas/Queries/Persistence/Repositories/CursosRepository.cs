@@ -44,6 +44,21 @@ namespace Matriculas.Queries.Persistence.Repositories
             }
         }
 
+        public bool FitSchedule(Curso entity)
+        {
+            var difHoras = entity.HorasAcademicas;
+
+            var aux = new CursosRepository(_context).Get(entity.Id);
+            if (aux != null)
+                difHoras -= aux.HorasAcademicas;
+
+            var nroHorasGrado = new GradosRepository(_context).GetNroHoras(entity.Grado) + difHoras;
+                
+            var totalHorasSemana = entity.Grado.Nivel.NroHoras;
+
+            return (totalHorasSemana >= nroHorasGrado) ? true : false;
+        }
+
         public void Delete(int id)
         {
             var curso = Get(id);
@@ -67,7 +82,16 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .ThenBy(t => t.Grado.Nombre)
                 .ThenBy(t => t.Nombre)
                 .Where(t => t.Estado == "1")
+                .AsNoTracking()
                 .ToList();
+        }
+
+        public Curso GetByName(string name, int idGrado)
+        {
+            return GetAll()
+                .Where(t => t.Nombre == name)
+                .Where(t => t.Grado.Id == idGrado)
+                .FirstOrDefault();
         }
 
         public Profesor GetProfesor(int id)
@@ -86,6 +110,18 @@ namespace Matriculas.Queries.Persistence.Repositories
                     .FirstOrDefault();
             }
             return null;
+        }
+
+        public bool HasNombreUnique(Curso entity)
+        {
+            if (GetByName(entity.Nombre, entity.Grado.Id) == null)
+                return true;
+
+            var aux = Get(entity.Id);
+            if (Get(entity.Id) != null)
+                return (entity.Nombre == aux.Nombre && entity.Grado.Id == aux.Grado.Id) ? true : false;
+
+            return false;
         }
 
         public IEnumerable<Profesor> SearchProfesores(int id)

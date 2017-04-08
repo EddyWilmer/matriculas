@@ -33,9 +33,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public Seccion Get(int id)
         {
-            return _context.Secciones
-                .Include(t => t.Grado)
-                .ThenInclude(t => t.Nivel)
+            return GetAll()
                 .Where(t => t.Id == id)
                 .FirstOrDefault();
         }
@@ -49,7 +47,16 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .ThenBy(t => t.Grado.Nombre)
                 .ThenBy(t => t.Nombre)
                 .Where(t => t.Estado == "1")
+                .AsNoTracking()
                 .ToList();
+        }
+
+        public Seccion GetByName(string name, int idGrado)
+        {
+            return GetAll()
+                .Where(t => t.Nombre == name)
+                .Where(t => t.Grado.Id == idGrado)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Alumno> GetLista(int id)
@@ -65,6 +72,18 @@ namespace Matriculas.Queries.Persistence.Repositories
             var lista = _context.Alumnos.FromSql(String.Format("EXEC SP_ListaAlumnosPorSeccion @idAnioAcademico={0}, @idSeccion={1}", anioAcademico.Id, id)).ToList();
 
             return lista;
+        }
+
+        public bool HasNombreUnique(Seccion entity)
+        {
+            if (GetByName(entity.Nombre, entity.Grado.Id) == null)
+                return true;
+
+            var aux = Get(entity.Id);
+            if (Get(entity.Id) != null)
+                return (entity.Nombre == aux.Nombre && entity.Grado.Id == aux.Grado.Id) ? true : false;
+
+            return false;
         }
 
         public void Update(Seccion entity)

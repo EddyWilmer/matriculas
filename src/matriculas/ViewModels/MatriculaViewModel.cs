@@ -21,9 +21,11 @@ namespace Matriculas.ViewModels
 
         public DateTime? Fecha { get; set; }
 
+
         [Required, ValidateObject]
         public virtual AlumnoViewModel Alumno { get; set; }
 
+        [Required]
         public virtual Grado Grado { get; set; }
 
         public virtual Seccion Seccion { get; set; }

@@ -12,12 +12,14 @@
         vm.matriculas = [];
         vm.grados = [];
         vm.isBusy = true;
+        vm.enablePdf = false;
 
         // Pagination
         vm.pageSize = 10;
         vm.actualCount; // Cantidad actual de alumnos
 
         vm.newMatricula = { alumno: { apoderado: {} }, grado: {} };
+        vm.currentAlumnoDni;
         vm.currentDni;
         vm.currentGrado;
 
@@ -47,17 +49,27 @@
         // Recupera los datos del alumno
         vm.addMatricula = function () {
             vm.isBusy = true;
-            
+            vm.errors = [];
+
             $http.post("/api/v2/matriculas", vm.newMatricula)
                 .then(function (response) {
                     // Success   
                     vm.matriculas.push(response.data);
-                    
-                    $('#nueva-matricula').modal('hide');
+                    vm.currentAlumnoDni = response.data.alumno.dni;
+
                     toastr.success("Se matriculó al alumno correctamente.");
-                    window.open('Matriculas/ReporteMatricula/' + vm.newMatricula.alumno.dni, '_blank');
+
+                    vm.enablePdf = true;
                 }, function (error) {
                     // Failure
+                    angular.copy(error.data, vm.errors);
+
+                    if (typeof vm.errors.noDisponible !== "undefined")
+                        toastr.warning(vm.errors.noDisponible);
+
+                    if (typeof vm.errors.yaMatriculado !== "undefined")
+                        toastr.warning(vm.errors.yaMatriculado);
+
                     toastr.error("No se pudo registrar la matricula.");
                 })
                 .finally(function () {
@@ -76,7 +88,6 @@
                     vm.getNextGrado(vm.newMatricula.alumno.id);
                 }, function (error) {
                     // Failure
-                    toastr.error("No se pudo cargar el grado.");
                 })
                 .finally(function () {
                     vm.isBusy = false;
@@ -93,7 +104,6 @@
                     angular.copy(response.data, vm.newMatricula.grado);
                 }, function (error) {
                     // Failure
-                    toastr.error("No se pudo cargar el grado.");
                 })
                 .finally(function () {
                     vm.isBusy = false;
@@ -122,7 +132,7 @@
 
         vm.reset = function () {
             vm.newMatricula = { alumno: { apoderado: {} }, grado: {} };
-            vm.currentGrado = null;
+            vm.currentGrado = null;         
         }
     }
 })();

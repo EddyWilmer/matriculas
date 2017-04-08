@@ -139,7 +139,8 @@ namespace Matriculas.Models
                 var primariaNivel = new Nivel()
                 {
                     Id = 1,
-                    Nombre = "Primaria"
+                    Nombre = "Primaria",
+                    NroHoras = 27
                 };
                 _context.Niveles.Add(primariaNivel);
                 await _context.SaveChangesAsync();
@@ -147,7 +148,8 @@ namespace Matriculas.Models
                 var secundariaNivel = new Nivel()
                 {
                     Id = 2,
-                    Nombre = "Secundaria"
+                    Nombre = "Secundaria",
+                    NroHoras = 34
                 };
 
                 _context.Niveles.Add(secundariaNivel);

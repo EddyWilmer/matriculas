@@ -20,5 +20,7 @@ namespace Matriculas.Models
 
         [StringLength(25)]
         public string Nombre { get; set; }
+
+        public int NroHoras { get; set; }
     }
 }

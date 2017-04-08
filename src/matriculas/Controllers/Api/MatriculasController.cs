@@ -58,6 +58,12 @@ namespace Matriculas.Controllers.Api
             var matricula = Mapper.Map<Matricula>(matriculaDetails);
             matricula.RegistradorId = _userManager.FindByNameAsync(User.Identity.Name).Result.ColaboradorId;
 
+            if (_repository.AniosAcademicos.GetAnioAcademico(DateTime.Now.Year) == null)
+                ModelState.AddModelError("noDisponible", "No están disponibles las matrículas.");
+
+            if (_repository.Alumnos.IsMatriculado(_repository.Alumnos.Get(matricula.AlumnoId)))
+                ModelState.AddModelError("yaMatriculado", "Ya está matriculado en el periodo.");
+
             if (ModelState.IsValid)
             {
                 _repository.Matriculas.Add(matricula);

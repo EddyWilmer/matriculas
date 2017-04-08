@@ -9,5 +9,13 @@ namespace Matriculas.Queries.Core.Repositories
     public interface IGradosRepository : IRepository<Grado>
     {
         IEnumerable<Curso> GetCursos(int id);
+
+        Grado GetByName(string name, int idNivel);
+
+        bool HasNombreUnique(Grado entity);
+
+        bool HasSecciones(Grado entity);
+
+        int GetNroHoras(Grado entity);
 	}
 }

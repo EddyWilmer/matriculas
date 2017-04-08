@@ -109,7 +109,7 @@
     <!-- Formulario de inserción -->
     <div id="nuevo-colaborador" data-backdrop="static" class="modal fade" tabindex="-1" data-width="600">
         <div class="modal-header">
-            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close reset" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Nuevo colaborador</h4>
         </div>
         <div class="modal-body col-md-12">
@@ -153,7 +153,7 @@
                     <input type="text" asp-for="Celular" class="form-control" maxlength="9" placeholder="Ej. 992559629" ng-model="vm.newColaborador.celular" />                  
                 </div>               
                 <div class="form-group form-buttons">
-                    <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark reset">Cancelar</button>
                     <input type="submit" value="Crear colaborador" class="btn btn-success" />
                 </div>
             </form>
@@ -163,13 +163,13 @@
     <!-- Formulario de edición -->
     <div id="datos-colaborador" data-backdrop="static" class="modal fade" tabindex="-1" data-width="600">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Datos colaborador</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.updateColaborador()">
                 <div asp-validation-summary="ModelOnly"></div>
-
+                <input type="hidden" asp-for="Id" value="{{vm.currentColaborador.id}}" />
                 <div class="form-group">
                     <label asp-for="ApellidoPaterno">Apellido Paterno (*)</label>
                     <span asp-validation-for="ApellidoPaterno" class="text-muted text-validation"></span>
@@ -209,7 +209,7 @@
                     <input type="text" asp-for="Celular" class="form-control" maxlength="9" placeholder="Ej. 992559629" ng-model="vm.currentColaborador.celular" />
                 </div>
                 <div class="form-group form-buttons">
-                    <button type="reset" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <button type="reset" data-dismiss="modal" class="btn btn-outline dark cancel">Cancelar</button>
                     <input type="submit" value="Actualizar colaborador" class="btn btn-success" />
                 </div>
             </form>

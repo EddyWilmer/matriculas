@@ -121,7 +121,7 @@
             $http.delete("/api/v2/grados/" + id)
                 .then(function (response) {
                     // Success    
-                    var index = vm.grados.findIndex(obj => obj.id === vm.currentGrado.id);
+                    var index = vm.grados.findIndex(obj => obj.id === id);
                     vm.grados.splice(index, 1);
 
                     toastr.success("Se eliminó el grado correctamente.");
@@ -130,8 +130,8 @@
                     // Failure
                     angular.copy(error.data, vm.errors);
 
-                    if (typeof vm.errors.eliminacionMessageValidation !== "undefined")
-                        toastr.warning(vm.errors.eliminacionMessageValidation);
+                    if (typeof vm.errors.noEliminable !== "undefined")
+                        toastr.warning(vm.errors.noEliminable);
 
                     toastr.error("No se pudo eliminar el grado.");
                 })

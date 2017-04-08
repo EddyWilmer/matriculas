@@ -13,5 +13,11 @@ namespace Matriculas.Queries.Core.Repositories
         void DeleteCursos(int id);
 
         void AddCursos(int id, IEnumerable<Curso> cursos);
-	}
+
+        bool HasDniUnique(Profesor entity);
+
+        Profesor GetByDni(string dni);
+
+        bool HasCursos(Profesor entity);
+    }
 }

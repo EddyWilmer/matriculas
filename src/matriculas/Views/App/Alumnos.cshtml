@@ -102,7 +102,7 @@
     <!-- Formulario de inserción -->
     <div id="nuevo-alumno" data-backdrop="static" class="modal fade" tabindex="-1" data-width="1000">
         <div class="modal-header">
-            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close reset" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Nuevo alumno</h4>
         </div>
         <div class="modal-body col-md-12">
@@ -194,7 +194,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group form-buttons">
-                        <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-outline dark reset">Cancelar</button>
                         <input type="submit" value="Crear alumno" class="btn btn-success" />
                     </div>
                 </div>
@@ -205,7 +205,7 @@
     <!-- Formulario de edición -->
     <div id="datos-alumno" data-backdrop="static" class="modal fade" tabindex="-1" data-width="1000">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Datos alumno</h4>
         </div>
         <div class="modal-body col-md-12">
@@ -298,7 +298,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group form-buttons">
-                        <button type="reset" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                        <button type="reset" data-dismiss="modal" class="btn btn-outline dark cancel">Cancelar</button>
                         <input type="submit" value="Actualizar alumno" class="btn btn-success" />
                     </div>
                 </div>

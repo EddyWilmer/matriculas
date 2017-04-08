@@ -64,9 +64,14 @@ namespace Matriculas.Controllers.Api
         {
             _logger.LogInformation("Agregando el profesor.");
 
+            var profesor = Mapper.Map<Profesor>(profesorDetails);
+
+            if (!_repository.Profesores.HasDniUnique(profesor))
+                ModelState.AddModelError("Dni", "Dni no disponible.");
+
             if (ModelState.IsValid)
             {
-                _repository.Profesores.Add(Mapper.Map<Profesor>(profesorDetails));
+                _repository.Profesores.Add(profesor);
                 if (await _repository.Complete())
                 {
                     return Created($"api/profesores/{profesorDetails.Id}", Mapper.Map<ProfesorViewModel>(profesorDetails));
@@ -83,6 +88,9 @@ namespace Matriculas.Controllers.Api
             _logger.LogInformation("Actualizando los datos del profesor.");
 
             var profesor = Mapper.Map<Profesor>(profesorDetails);
+
+            if (!_repository.Profesores.HasDniUnique(profesor))
+                ModelState.AddModelError("Dni", "Dni no disponible.");
 
             if (ModelState.IsValid)
             {
@@ -102,15 +110,21 @@ namespace Matriculas.Controllers.Api
         {
             _logger.LogInformation("Eliminando el profesor.");
 
-            _repository.Profesores.Delete(id);
+            if (_repository.Profesores.HasCursos(_repository.Profesores.Get(id)))
+                ModelState.AddModelError("noEliminable", "Tiene cursos asociados.");
 
-            if (await _repository.Complete())
+            if (ModelState.IsValid)
             {
-                return Created($"api/profesores/{id}", Mapper.Map<ProfesorViewModel>(_repository.Profesores.Get(id)));
+                _repository.Profesores.Delete(id);
+
+                if (await _repository.Complete())
+                {
+                    return Created($"api/profesores/{id}", Mapper.Map<ProfesorViewModel>(_repository.Profesores.Get(id)));
+                }
             }
 
             _logger.LogError("No se pudo eliminar el profesor.");
-            return BadRequest("No se pudo eliminar este profesor.");
+            return BadRequest(ModelState);
         }
 
 

@@ -8,5 +8,8 @@ namespace Matriculas.Queries.Core.Repositories
 {
     public interface ICronogramasRepository : IRepository<Cronograma>
     {
-	}
+        Cronograma GetByName(string name);
+
+        bool HasNombreUnique(Cronograma entity);
+    }
 }

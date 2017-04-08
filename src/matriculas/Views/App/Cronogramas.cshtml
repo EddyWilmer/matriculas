@@ -102,12 +102,13 @@
     <!-- Formulario de inserción -->
     <div id="nuevo-cronograma" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
         <div class="modal-header">
-            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close reset" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Nuevo Cronograma</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.addCronograma()">
                 <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="Id" value="{{vm.newCronograma.id}}" />
                 <div class="form-group">
                     <label asp-for="Nombre">Nombre (*)</label>
                     <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
@@ -124,7 +125,7 @@
                     <input type="date" asp-for="FechaFin" class="form-control" ng-model="vm.newCronograma.fechaFin" />
                 </div>
                 <div class="form-group form-buttons">
-                    <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark reset">Cancelar</button>
                     <input type="submit" value="Crear Cronograma de Matrícula" class="btn btn-success" />
                 </div>
             </form>
@@ -134,12 +135,13 @@
     <!-- Formulario de edición -->
     <div id="datos-cronograma" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Datos Cronograma</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.updateCronograma()">
                 <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="Id" value="{{vm.currentCronograma.id}}" />
                 <div class="form-group">
                     <label asp-for="Nombre">Nombre (*)</label>
                     <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
@@ -156,7 +158,7 @@
                     <input input="date" asp-for="FechaFin" class="form-control" ng-model="vm.currentCronograma.fechaFin" />
                 </div>
                 <div class="form-group form-buttons">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark cancel">Cancelar</button>
                     <input type="submit" value="Actualizar Año Académico" class="btn btn-success" />
                 </div>
             </form>

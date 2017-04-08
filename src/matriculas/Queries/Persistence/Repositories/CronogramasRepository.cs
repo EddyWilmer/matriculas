@@ -33,7 +33,7 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public Cronograma Get(int id)
         {
-            return _context.Cronogramas
+            return GetAll()
                 .Where(t => t.Id == id)
                 .FirstOrDefault();
         }
@@ -41,7 +41,27 @@ namespace Matriculas.Queries.Persistence.Repositories
         public IEnumerable<Cronograma> GetAll()
         {
             return _context.Cronogramas
+                .AsNoTracking()
                 .ToList();
+        }
+
+        public Cronograma GetByName(string name)
+        {
+            return GetAll()
+                .Where(t => t.Nombre == name)
+                .FirstOrDefault();
+        }
+
+        public bool HasNombreUnique(Cronograma entity)
+        {
+            if (GetByName(entity.Nombre) == null)
+                return true;
+
+            var aux = Get(entity.Id);
+            if (Get(entity.Id) != null)
+                return (entity.Nombre == aux.Nombre) ? true : false;
+
+            return false;
         }
 
         public void Update(Cronograma entity)

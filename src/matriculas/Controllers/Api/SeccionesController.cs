@@ -65,6 +65,9 @@ namespace Matriculas.Controllers.Api
 
             var seccion = Mapper.Map<Seccion>(seccionDetails);
 
+            if (!_repository.Secciones.HasNombreUnique(seccion))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
             if (ModelState.IsValid)
             {
                 _repository.Secciones.Add(seccion);
@@ -85,6 +88,9 @@ namespace Matriculas.Controllers.Api
             _logger.LogInformation("Actualizando los datos de la sección.");
 
             var seccion = Mapper.Map<Seccion>(seccionDetails);
+
+            if (!_repository.Secciones.HasNombreUnique(seccion))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
 
             if (ModelState.IsValid)
             {

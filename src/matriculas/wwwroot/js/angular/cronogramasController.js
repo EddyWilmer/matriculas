@@ -123,7 +123,7 @@
             $http.delete("/api/v2/cronogramas/" + id)
                 .then(function (response) {
                     // Success    
-                    var index = vm.cronogramas.findIndex(obj => obj.id === vm.idAnioAcademico);
+                    var index = vm.cronogramas.findIndex(obj => obj.id === id);
                     vm.cronogramas.splice(index, 1);
 
                     toastr.success("Se eliminó el cronograma.");

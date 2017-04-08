@@ -1,4 +1,6 @@
 ﻿using Matriculas.Models;
+using Matriculas.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,6 +19,7 @@ namespace Matriculas.ViewModels
     {
         public int Id { get; set; }
 
+        [Remote("IsNombreGradoUnique", "Validator", AdditionalFields = "Id, Nivel")]
         [Required (ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]{2,25}", ErrorMessage = "Este campo debe contener entre 2 y 25 letras.")]
         public string Nombre { get; set; }

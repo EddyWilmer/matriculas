@@ -124,7 +124,7 @@
             $http.delete("/api/v2/aniosAcademicos/" + id)
                 .then(function (response) {
                     // Success    
-                    var index = vm.aniosAcademicos.findIndex(obj => obj.id === vm.currentAnioAcademico.id);
+                    var index = vm.aniosAcademicos.findIndex(obj => obj.id === id);
                     vm.aniosAcademicos.splice(index, 1);
 
                     toastr.success("Se eliminó el año académico correctamente.");

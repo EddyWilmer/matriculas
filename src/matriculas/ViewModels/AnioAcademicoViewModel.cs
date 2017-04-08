@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,9 +16,10 @@ namespace Matriculas.ViewModels
     {
         public int Id { get; set; }
 
+        [Remote("IsNombreAnioAcademicoUnique", "Validator", AdditionalFields = "Id")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
-        [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]{2,50}", ErrorMessage = "Este campo debe contener entre 2 y 20 letras.")]
-        public string Nombre { get; set; }
+        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Año no válido.")]
+        public int Nombre { get; set; }
 
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Este campo es obligatorio.")]

@@ -33,6 +33,7 @@ namespace Matriculas.Queries.Persistence.Repositories
         {
             return _context.Niveles
                 .Where(t => t.Id == id)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 

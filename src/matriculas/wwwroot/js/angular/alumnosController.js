@@ -79,14 +79,15 @@
         vm.updateAlumno = function () {
             vm.isBusy = true;
             vm.errors = [];
-
+            
             $http.put("/api/v2/alumnos", vm.currentAlumno)
                 .then(function (response) {
-                    // Success  
+                    // Success 
+
                     var index = vm.alumnos.findIndex(obj => obj.id === vm.currentAlumno.id);
                     vm.alumnos[index] = response.data;
                     $('#datos-alumno').modal('hide');
-
+                    
                     toastr.success("Se actualizó el alumno correctamente.");
                 },
                 function (error) {
@@ -110,7 +111,7 @@
             $http.delete("/api/v2/alumnos/" + id)
                 .then(function (response) {
                     // Success            
-                    var index = vm.alumnos.findIndex(obj => obj.id === vm.currentAlumno.id);
+                    var index = vm.alumnos.findIndex(obj => obj.id === id);
                     vm.alumnos.splice(index, 1);
 
                     toastr.success("Se eliminó el alumno correctamente.");

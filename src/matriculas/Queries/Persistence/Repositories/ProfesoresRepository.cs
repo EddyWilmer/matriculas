@@ -50,6 +50,7 @@ namespace Matriculas.Queries.Persistence.Repositories
         {
             var cursos = _context.ProfesoresCursos
                 .Where(t => t.ProfesorId == id)
+                .AsNoTracking()
                 .ToList();
 
             _context.ProfesoresCursos.RemoveRange(cursos);
@@ -62,6 +63,7 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .Where(t => t.Id == id)
                 .Include(t => t.ProfesorCurso)
                 .ThenInclude(t => t.Curso)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 
@@ -69,7 +71,15 @@ namespace Matriculas.Queries.Persistence.Repositories
         {
             return _context.Profesores
                 .Where(t => t.Estado == "1")
+                .AsNoTracking()
                 .ToList();
+        }
+
+        public Profesor GetByDni(string dni)
+        {
+            return GetAll()
+                .Where(t => t.Dni == dni)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Curso> GetCursos(int id)
@@ -86,6 +96,27 @@ namespace Matriculas.Queries.Persistence.Repositories
             }
 
             return cursos.AsEnumerable();
+        }
+
+        public bool HasCursos(Profesor entity)
+        {
+            var aux = _context.CursosAniosAcademicos
+                .Where(t => t.ProfesorId == entity.Id)
+                .AsNoTracking()
+                .ToList();
+
+            return (aux.Count > 0) ? true : false;
+        }
+
+        public bool HasDniUnique(Profesor entity)
+        {
+            if (GetByDni(entity.Dni) == null)
+                return true;
+
+            if (Get(entity.Id) != null)
+                return (entity.Dni == Get(entity.Id).Dni) ? true : false;
+
+            return false;
         }
 
         public void Update(Profesor entity)

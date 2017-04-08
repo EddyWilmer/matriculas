@@ -49,6 +49,9 @@ namespace Matriculas.Controllers.Api
 
             var cronograma = Mapper.Map<Cronograma>(cronogramaDetails);
 
+            if (!_repository.Cronogramas.HasNombreUnique(cronograma))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
             if (ModelState.IsValid)
             {
                 _repository.Cronogramas.Add(cronograma);
@@ -68,6 +71,9 @@ namespace Matriculas.Controllers.Api
             _logger.LogInformation("Actualizando la información del cronograma de matrícula.");
 
             var cronograma = Mapper.Map<Cronograma>(cronogramaDetails);
+
+            if (!_repository.Cronogramas.HasNombreUnique(cronograma))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
 
             if (ModelState.IsValid)
             {

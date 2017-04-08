@@ -125,7 +125,7 @@
             $http.delete("/api/v2/colaboradores/" + id)
                 .then(function (response) {
                     // Success            
-                    var index = vm.colaboradores.findIndex(obj => obj.id === vm.currentColaborador.id);
+                    var index = vm.colaboradores.findIndex(obj => obj.id === id);
                     vm.colaboradores.splice(index, 1);
 
                     toastr.success("Se eliminó el colaborador correctamente.");

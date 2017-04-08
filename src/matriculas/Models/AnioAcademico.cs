@@ -17,8 +17,7 @@ namespace Matriculas.Models
         [Key]
         public int Id { get; set; }
 
-        [StringLength(20)]
-        public string Nombre { get; set; }
+        public int Nombre { get; set; }
 
         [DataType(DataType.Date)]
         [Column(TypeName = "DATE")]

@@ -33,9 +33,8 @@ namespace Matriculas.Queries.Persistence.Repositories
 
 		public Alumno Get(int id)
 		{
-			return _context.Alumnos
-			    .Include(t => t.Apoderado)
-			    .Where(t => t.Id == id)
+			return GetAll()
+			    .Where(t => t.Id == id)           
 			    .FirstOrDefault();
 		}
 
@@ -50,9 +49,9 @@ namespace Matriculas.Queries.Persistence.Repositories
 
 		public Alumno GetByDni(string dni)
 		{
-			return GetAll()
+			return GetAll()             
 				.Where(t => t.Dni == dni)
-				.FirstOrDefault();
+                .FirstOrDefault();
 		}
 
         public Grado GetGrado(int id)
@@ -83,6 +82,19 @@ namespace Matriculas.Queries.Persistence.Repositories
                 return (entity.Dni == Get(entity.Id).Dni) ? true : false;
 
             return false;
+        }
+
+        public bool IsMatriculado(Alumno entity)
+        {
+            var matriculaAnioAcademico = _context.Matriculas
+                .Where(t => t.AlumnoId == entity.Id)
+                .Where(t => t.AnioAcademicoId == new AniosAcademicosRepository(_context).GetByName(DateTime.Now.Year).Id)
+                .FirstOrDefault();
+
+            if (matriculaAnioAcademico != null)
+                return true;
+            else
+                return false;
         }
 
         public void Update(Alumno entity)

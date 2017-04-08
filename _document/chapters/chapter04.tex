@@ -1,4 +1,17 @@
-Para esta etapa del proyecto se detectarán los bad smells del código existente del pro proyecto y se aplicarán técnicas de refactoring e ingeniería para resolverlos.
+Para esta etapa del proyecto se detectarán los bad smells del código existente del proyecto y se aplicarán técnicas de refactoring e ingeniería para resolverlos.
+
+\section{Arquitectura}
+\subsection{Patrón repository mal implementado}
+\begin{itemize}
+	\item \textbf{Síntoma:} La arquitectura de la aplicación no cumple con los fundamentos el patrón repository.
+	\item \textbf{Solución:} Restructurar el código fuente para que se adapte al patrón mencionado.
+	\item \textbf{Procedimiento:} Se investigó como trabaja el patrón repository y se traslado cada método a la clase que corresponde.
+\end{itemize}
+
+\begin{figure}[h]
+	\includegraphics[width=0.7\textwidth]{3.jpg}
+	\centering
+\end{figure}
 
 \section{Vistas}
 \subsection{Librerías de terceros innecesarias}
@@ -49,6 +62,37 @@ Para esta etapa del proyecto se detectarán los bad smells del código existente
 </div>
 \end{lstlisting}
 
+\subsection{Mensajes de validación permanentes}
+\begin{itemize}
+	\item \textbf{Síntoma:} Los mensajes de validación no desaparecen cuando se cancela la operación o se cierra el formulario.
+	\item \textbf{Solución:} Implementar un evento que reinicie los atributos de validación.
+	\item \textbf{Procedimiento:} Se agregó un método en javascript para que realice la tarea.
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+$('.cancel').on('click', function(){
+	var $form = $("form");
+	var $validator = $form.validate();
+	var $errors = $form.find(".field-validation-error span");
+	$errors.each(function () { $validator.settings.success($(this)); })
+	$validator.resetForm();
+});
+\end{lstlisting}
+
+\subsection{Agregar eventos tecla escape}
+\begin{itemize}
+	\item \textbf{Síntoma:} El usuario no puede utilizar la tecla escape para cerrar el formulario emergente.
+	\item \textbf{Solución:} Crear un método que cierre el formulario y reinicie los atributos de validación.
+	\item \textbf{Procedimiento:} Se agregó un método en javascript para que realice la tarea.
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+$(document).keyup(function (e) {
+	if (e.keyCode === 27)
+	$('.cancel').click();
+});
+\end{lstlisting}
+
 \subsection{Mala distribución de los archivos Javascript}
 \begin{itemize}
 	\item \textbf{Síntoma:} Los archivos javascript de la aplicación están mezclados con los controladores angular.
@@ -70,7 +114,7 @@ Para esta etapa del proyecto se detectarán los bad smells del código existente
 }
 \end{lstlisting}
 
-\section{Validaciones}
+\section{Consistencia de información}
 
 \subsection{Validación de los nested objects}
 \begin{itemize}
@@ -94,6 +138,42 @@ public class AlumnoViewModel
 	...
 }
 \end{lstlisting}
+
+\subsection{Validaciones asíncronas}
+\begin{itemize}
+	\item \textbf{Síntoma:} Las validaciones que se hacen el la vista modelo no consultan con el servidor para revisar información duplicada y otros.
+	\item \textbf{Solución:} Crear un controlador que realice la validación a través de los repositorios.
+	\item \textbf{Procedimiento:} Se creó un controlador para validar todas las transacciones y se agregó el decorador remote en la vista-modelo.
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+public class ValidatorController : Controller
+{
+	private IAppRepository _repository;
+
+	public ValidatorController(IAppRepository repository)
+	{
+		_repository = repository;
+	}
+
+	[AcceptVerbs("Get", "Post")]
+	public IActionResult IsDniColaboradorUnique([Bind(Prefix = "Id")] int id, string dni)
+	{
+		if (_repository.Colaboradores.HasDniUnique(new Colaborador { Id = id, Dni = dni}))
+			return Json(data: " ");
+		return Json(data: "Dni no válido");
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=html]
+[Remote("IsDniColaboradorUnique","Validator",AdditionalFields="Id")]
+[Required(ErrorMessage = "Este campo es obligatorio.")]
+[RegularExpression("([0-9]{8})", ErrorMessage = "Este campo ...")]
+public string Dni { get; set; }
+\end{lstlisting}
+
+
 
 \section{Mejoras de rendimiento}
 
@@ -437,7 +517,7 @@ public class Curso
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Cambiar la definición de la clase CronogramaMatricula}
+\subsection{Cambiar la definición de CronogramaMatricula}
 \begin{itemize}
 	\item \textbf{Síntoma:} La clase CronogramaMatricula que era el modelo de los cronogramas de matrículas; ahora, se utilizará para cualquier tipo de cronograma dentro de un año académico. Además se usando un atributo "Nombre" como Primary Key.
 \end{itemize}

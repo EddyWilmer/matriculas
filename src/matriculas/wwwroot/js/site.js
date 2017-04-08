@@ -8,20 +8,6 @@ function lpad(n, width, z) {
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
-function cleanForm() {
-    var $form = $("form");
-    var $validator = $form.validate();
-    var $errors = $form.find(".field-validation-error span");
-    $errors.each(function () { $validator.settings.success($(this)); })
-    $validator.resetForm();
-
-    $("form").find("select, input[type='text'], input[type='number'], input[type='date']").val("");
-    $("form").find("input:checkbox").removeAttr("checked");
-
-    var $myGroup = $('.custom-accordion');
-    $myGroup.find('.collapse.in').collapse('hide');
-}
-
 function collapseAccordion() {
     var $myGroup = $('.custom-accordion');
     $myGroup.find('.collapse.in').collapse('hide');
@@ -33,6 +19,34 @@ function resetFormMatricula() {
 
 //Configuración de toastr plugin
 jQuery(document).ready(function ($) {
+    $('.cancel').on('click', function(){
+        var $form = $("form");
+        var $validator = $form.validate();
+        var $errors = $form.find(".field-validation-error span");
+        $errors.each(function () { $validator.settings.success($(this)); })
+        $validator.resetForm();
+    });
+
+    $('.reset').on('click', function () {
+        var $form = $("form");
+        var $validator = $form.validate();
+        var $errors = $form.find(".field-validation-error span");
+        $errors.each(function () { $validator.settings.success($(this)); })
+        $validator.resetForm();
+
+        $("form").find("select, input[type='text'], input[type='number'], input[type='date']").val("");
+        $("form").find("input:checkbox").removeAttr("checked");
+
+        var $myGroup = $('.custom-accordion');
+        $myGroup.find('.collapse.in').collapse('hide');
+    });
+
+    $(document).keyup(function (e) {
+        if (e.keyCode === 27) {
+            $('.cancel').click();
+        }
+    });
+
 	$('.counter').counterUp({
 		delay: 10,
 		time: 1000

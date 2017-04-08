@@ -12,5 +12,9 @@ namespace Matriculas.Queries.Core.Repositories
         void ToggleEstado(int id);
 
         void ResetPassword(int id, UserManager<ApplicationUser> userManager);
+
+        bool HasDniUnique(Colaborador entity);
+
+        Colaborador GetByDni(string dni);
     }
 }

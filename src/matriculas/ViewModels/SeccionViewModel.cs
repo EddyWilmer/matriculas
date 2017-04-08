@@ -1,4 +1,5 @@
 ﻿using Matriculas.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,7 @@ namespace Matriculas.ViewModels
     {
         public int Id { get; set; }
 
+        [Remote("IsNombreSeccionUnique", "Validator", AdditionalFields = "Id, Grado")]
         [Required (ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("[A-Z]{1}", ErrorMessage = "Este campo debe contener una letra mayúscula.")]
         public string Nombre { get; set; }

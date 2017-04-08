@@ -1,4 +1,5 @@
 ﻿using Matriculas.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,6 +31,7 @@ namespace Matriculas.ViewModels
         [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ ]{2,50}", ErrorMessage = "Este campo debe contener entre 2 y 50 letras.")]
         public string Nombres { get; set; }
 
+        [Remote("IsDniProfesorUnique", "Validator", AdditionalFields = "Id")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("([0-9]{8})", ErrorMessage = "Este campo debe contener 8 números.")]
         public string Dni { get; set; }

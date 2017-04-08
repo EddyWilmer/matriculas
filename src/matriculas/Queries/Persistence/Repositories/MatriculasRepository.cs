@@ -22,19 +22,23 @@ namespace Matriculas.Queries.Persistence.Repositories
 
         public void Add(Matricula entity)
         {
-            entity.Seccion = ChooseSeccion(entity.Grado);
-            entity.AnioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
-            entity.Fecha = DateTime.Now;
-
-            if (entity.Alumno.Id == 0)
-                _context.Alumnos.Add(entity.Alumno);
-            else
+            var auxAnioAcademico = new AniosAcademicosRepository(_context).GetAnioAcademico(DateTime.Now.Year);
+            if (auxAnioAcademico != null)
             {
-                _context.Entry(entity.Alumno).State = EntityState.Modified;
-                _context.Entry(entity.Alumno.Apoderado).State = EntityState.Modified;
-            }
+                entity.Seccion = ChooseSeccion(entity.Grado);
+                entity.AnioAcademico = auxAnioAcademico;
+                entity.Fecha = DateTime.Now;
 
-            _context.Entry(entity).State = EntityState.Added;
+                if (entity.Alumno.Id == 0)
+                    _context.Alumnos.Add(entity.Alumno);
+                else
+                {
+                    _context.Entry(entity.Alumno).State = EntityState.Modified;
+                    _context.Entry(entity.Alumno.Apoderado).State = EntityState.Modified;
+                }
+
+                _context.Entry(entity).State = EntityState.Added;
+            }
         }
 
         public Seccion ChooseSeccion(Grado grado)

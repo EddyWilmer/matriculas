@@ -81,6 +81,9 @@ namespace Matriculas.Controllers.Api
 
             var grado = Mapper.Map<Grado>(gradoDetails);
 
+            if (!_repository.Grados.HasNombreUnique(grado))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
             if (ModelState.IsValid)
             {
                 _repository.Grados.Add(grado);
@@ -101,6 +104,9 @@ namespace Matriculas.Controllers.Api
 
             _logger.LogInformation("Actualizando los datos del grado.");
 
+            if (!_repository.Grados.HasNombreUnique(grado))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
             if (ModelState.IsValid)
             {
                 _repository.Grados.Update(grado);
@@ -119,6 +125,9 @@ namespace Matriculas.Controllers.Api
         {
             _logger.LogInformation("Eliminando el grado.");
 
+            if (_repository.Grados.HasSecciones(_repository.Grados.Get(id)))
+                ModelState.AddModelError("noEliminable", "Tiene secciones asociadas.");
+
             if (ModelState.IsValid)
             {
                 _repository.Grados.Delete(id);
@@ -130,7 +139,7 @@ namespace Matriculas.Controllers.Api
             }
 
             _logger.LogError("No se pudo eliminar el grado.");
-            return BadRequest("No se pudo eliminar este grado.");
+            return BadRequest(ModelState);
         }
     }
 }

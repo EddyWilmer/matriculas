@@ -121,7 +121,7 @@
             $http.delete("/api/v2/secciones/" + id)
                 .then(function (response) {
                     // Success                                
-                    var index = vm.secciones.findIndex(obj => obj.id === vm.currentSeccion.id);
+                    var index = vm.secciones.findIndex(obj => obj.id === id);
                     vm.secciones.splice(index, 1);
 
                     toastr.success("Se eliminó la sección correctamente.");

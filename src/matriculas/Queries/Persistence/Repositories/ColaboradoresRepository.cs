@@ -36,6 +36,7 @@ namespace Matriculas.Queries.Persistence.Repositories
             return _context.Colaboradores
                 .Where(t => t.Id == id)
                 .Include(t => t.Rol)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 
@@ -47,7 +48,32 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .ThenBy(t => t.ApellidoMaterno)
                 .ThenBy(t => t.Nombres)
                 .Where(t => t.Estado != "2")
+                .AsNoTracking()
                 .ToList();
+        }
+
+        public Colaborador GetByDni(string dni)
+        {
+            return _context.Colaboradores
+                .Include(t => t.Rol)
+                .OrderBy(t => t.ApellidoPaterno)
+                .ThenBy(t => t.ApellidoMaterno)
+                .ThenBy(t => t.Nombres)
+                .Where(t => t.Estado != "2")
+                .Where(t => t.Dni == dni)
+                .AsNoTracking()
+                .FirstOrDefault();
+        }
+
+        public bool HasDniUnique(Colaborador entity)
+        {
+            if (GetByDni(entity.Dni) == null)
+                return true;
+
+            if (Get(entity.Id) != null)
+                return (entity.Dni == Get(entity.Id).Dni) ? true : false;
+
+            return false;
         }
 
         public void ResetPassword(int id, UserManager<ApplicationUser> userManager)

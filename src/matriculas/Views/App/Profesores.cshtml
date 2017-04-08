@@ -106,13 +106,14 @@
     <!-- Formulario de inserción -->
     <div id="nuevo-profesor" data-backdrop="static" class="modal fade" tabindex="-1" data-width="1250">
         <div class="modal-header">  
-            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close reset" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Nuevo profesor</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.addProfesor()">
                 <div class="row equalheights">
                     <div class="col-md-5">
+                        <input type="hidden" asp-for="Id" value="{{vm.newProfesor.id}}" />
                         <div class="form-group">
                             <label asp-for="ApellidoPaterno">Apellido Paterno (*)</label>
                             <span asp-validation-for="ApellidoPaterno" class="text-muted text-validation"></span>
@@ -202,7 +203,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group form-buttons">
-                        <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-outline dark reset">Cancelar</button>
                         <input type="submit" value="Crear profesor" class="btn btn-success" />
                     </div>
                 </div>
@@ -213,13 +214,14 @@
      <!-- Formulario de edición --> 
     <div id="datos-profesor" data-backdrop="static" class="modal fade" tabindex="-1" data-width="1250">
         <div class="modal-header">
-            <button type="button" class="close" onclick="collapseAccordion();" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close cancel" onclick="collapseAccordion();" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Datos profesor</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.updateProfesor()">
                 <div class="row equalheights">
                     <div class="col-md-5">
+                        <input type="hidden" asp-for="Id" value="{{vm.currentProfesor.id}}" />
                         <div class="form-group">
                             <label asp-for="ApellidoPaterno">Apellido Paterno (*)</label>
                             <span asp-validation-for="ApellidoPaterno" class="text-muted text-validation"></span>
@@ -237,7 +239,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Dni">DNI (*)</label>
-                            <span id="messageDni" class="text-muted text-validation"></span>
+                            <span asp-validation-for="Dni" class="text-muted text-validation"></span>
                             <input type="text" asp-for="Dni" class="form-control" maxlength="8" placeholder="Ej. 71079379" ng-model="vm.currentProfesor.dni" />
                         </div>
                         <div class="form-group">
@@ -309,7 +311,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group form-buttons">
-                        <button type="reset" onclick="collapseAccordion();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                        <button type="reset" onclick="collapseAccordion();" data-dismiss="modal" class="btn btn-outline dark cancel">Cancelar</button>
                         <input type="submit" value="Actualizar profesor" class="btn btn-success" />
                     </div>
                 </div>

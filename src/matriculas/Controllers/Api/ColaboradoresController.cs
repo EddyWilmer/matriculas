@@ -68,6 +68,9 @@ namespace Matriculas.Controllers.Api
 
             var colaborador = Mapper.Map<Colaborador>(colaboradorDetails);
 
+            if (!_repository.Colaboradores.HasDniUnique(colaborador))
+                ModelState.AddModelError("Dni", "Dni no disponible.");
+
             if (ModelState.IsValid)
             {
                 _repository.Colaboradores.Add(colaborador);
@@ -97,6 +100,9 @@ namespace Matriculas.Controllers.Api
             _logger.LogInformation("Actualizando los datos del colaborador.");
 
             var colaborador = Mapper.Map<Colaborador>(colaboradorDetails);
+
+            if (!_repository.Colaboradores.HasDniUnique(colaborador))
+                ModelState.AddModelError("Dni", "Dni no disponible.");
 
             if (ModelState.IsValid)
             {

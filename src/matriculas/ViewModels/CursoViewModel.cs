@@ -1,4 +1,5 @@
 ﻿using Matriculas.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,7 @@ namespace Matriculas.ViewModels
         //[Required(ErrorMessage = "El campo Id es obligatorio.")]
         public int Id { get; set; }
 
+        [Remote("IsNombreCursoUnique", "Validator", AdditionalFields = "Id, Grado")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9, ]{2,25}", ErrorMessage = "Este campo debe contener entre 2 y 25 letras.")]
         public string Nombre { get; set; }
@@ -25,6 +27,7 @@ namespace Matriculas.ViewModels
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public virtual Grado Grado { get; set; }
 
+        [Remote("FitScheduleCurso", "Validator", AdditionalFields = "Id, Grado")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("([1-8])", ErrorMessage = "Este campo debe estar en el rango del 1 al 8.")]
         public int HorasAcademicas { get; set; }

@@ -97,12 +97,13 @@
     <!-- Formulario de inserción -->
     <div id="nuevo-grado" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
         <div class="modal-header">
-            <button type="button" class="close" onclick="cleanForm();" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close reset" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Nuevo grado</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.addGrado()">
                 <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="Id" value="{{vm.newGrado.id}}" />
                 <div class="form-group">
                     <label asp-for="Nombre">Nombre (*)</label>
                     <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
@@ -128,7 +129,7 @@
                     <input type="number" asp-for="Capacidad" class="form-control" ng-model="vm.newGrado.capacidad" />                
                 </div>
                 <div class="form-group form-buttons">
-                    <button type="button" onclick="cleanForm();" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark reset">Cancelar</button>
                     <input type="submit" value="Crear grado" class="btn btn-success" />
                 </div>
             </form>     
@@ -138,12 +139,13 @@
     <!-- Formulario de edición -->
     <div id="datos-grado" data-backdrop="static" class="modal fade" tabindex="-1" data-width="480">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true"></button>
             <h4 class="modal-title">Datos grado</h4>
         </div>
         <div class="modal-body col-md-12">
             <form ng-submit="vm.updateGrado()">
                 <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="Id" value="{{vm.currentGrado.id}}" />
                 <div class="form-group">
                     <label asp-for="Nombre">Nombre (*)</label>
                     <span asp-validation-for="Nombre" class="text-muted text-validation"></span>
@@ -169,7 +171,7 @@
                     <input type="number" asp-for="Capacidad" class="form-control" ng-model="vm.currentGrado.capacidad" />                  
                 </div>
                 <div class="form-group form-buttons">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Cancelar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark cancel">Cancelar</button>
                     <input type="submit" value="Actualizar grado" class="btn btn-success" />
                 </div>
             </form>   

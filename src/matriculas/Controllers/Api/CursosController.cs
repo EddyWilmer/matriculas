@@ -63,6 +63,12 @@ namespace Matriculas.Controllers.Api
 
             var curso = Mapper.Map<Curso>(cursoDetails);
 
+            if (!_repository.Cursos.HasNombreUnique(curso))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
+            if (!_repository.Cursos.FitSchedule(curso))
+                ModelState.AddModelError("HorasAcademicas", "Sin espacio.");
+
             if (ModelState.IsValid)
             {
                 _repository.Cursos.Add(curso);
@@ -82,6 +88,12 @@ namespace Matriculas.Controllers.Api
             _logger.LogInformation("Actualizando los datos del curso.");
 
             var curso = Mapper.Map<Curso>(cursoDetails);
+
+            if (!_repository.Cursos.HasNombreUnique(curso))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
+            if (!_repository.Cursos.FitSchedule(curso))
+                ModelState.AddModelError("HorasAcademicas", "Sin espacio.");
 
             if (ModelState.IsValid)
             {

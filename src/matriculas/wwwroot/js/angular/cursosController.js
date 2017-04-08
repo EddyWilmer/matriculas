@@ -130,7 +130,7 @@
             $http.delete("/api/v2/cursos/" + id)
                 .then(function (response) {
                     // Success    
-                    var index = vm.cursos.findIndex(obj => obj.id === vm.currentCurso.id);
+                    var index = vm.cursos.findIndex(obj => obj.id === id);
                     vm.cursos.splice(index, 1);
 
                     toastr.success("Se eliminó el curso correctamente.");

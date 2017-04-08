@@ -1,4 +1,5 @@
 ﻿using Matriculas.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,6 +30,7 @@ namespace Matriculas.ViewModels
         [StringLength(50)]
         public string Nombres { get; set; }
 
+        [Remote("IsDniColaboradorUnique", "Validator", AdditionalFields = "Id")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("([0-9]{8})", ErrorMessage = "Este campo debe contener 8 números.")]
         public string Dni { get; set; }

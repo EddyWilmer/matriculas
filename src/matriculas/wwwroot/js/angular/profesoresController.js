@@ -145,17 +145,23 @@
         // Elimina el colaborador
         vm.deleteProfesor = function (id) {
             vm.isBusy = true;
+            vm.errors = [];
 
             $http.delete("/api/v2/profesores/" + id)
                 .then(function (response) {
                     // Success            
-                    var index = vm.profesores.findIndex(obj => obj.id === vm.currentProfesor.id);
+                    var index = vm.profesores.findIndex(obj => obj.id === id);
                     vm.profesores.splice(index, 1);
 
                     toastr.success("Se eliminó el profesor correctamente.");
                 },
                 function (error) {
                     // Failure
+                    angular.copy(error.data, vm.errors);
+
+                    if (typeof vm.errors.noEliminable !== "undefined")
+                        toastr.warning(vm.errors.noEliminable);
+
                     toastr.error("No se pudo eliminar el profesor.");
                 })
                 .finally(function (error) {

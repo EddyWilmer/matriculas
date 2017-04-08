@@ -72,8 +72,7 @@ namespace matriculas.Migrations
                     b.Property<DateTime?>("FechaInicio")
                         .HasColumnType("DATE");
 
-                    b.Property<string>("Nombre")
-                        .HasAnnotation("MaxLength", 20);
+                    b.Property<int>("Nombre");
 
                     b.HasKey("Id");
 
@@ -419,6 +418,8 @@ namespace matriculas.Migrations
 
                     b.Property<string>("Nombre")
                         .HasAnnotation("MaxLength", 25);
+
+                    b.Property<int>("NroHoras");
 
                     b.HasKey("Id");
 

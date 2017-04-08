@@ -1,4 +1,5 @@
 ﻿using Matriculas.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,7 @@ namespace Matriculas.ViewModels
 
         public int Id { get; set; }
 
+        [Remote("IsNombreCronogramaUnique", "Validator", AdditionalFields = "Id")]
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         [RegularExpression("[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9 ]{2,30}", ErrorMessage = "Este campo debe contener entre 2 y 30 letras.")]
         public string Nombre { get; set; }

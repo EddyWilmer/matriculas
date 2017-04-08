@@ -66,6 +66,9 @@ namespace Matriculas.Controllers.Api
 
             var anioAcademico = Mapper.Map<AnioAcademico>(anioAcademicoDetails);
 
+            if (!_repository.AniosAcademicos.HasNombreUnique(anioAcademico))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
+
             if (ModelState.IsValid)
             {
                 _repository.AniosAcademicos.Add(anioAcademico);
@@ -84,6 +87,9 @@ namespace Matriculas.Controllers.Api
             _logger.LogInformation("Actualizando el año académico.");
 
             var anioAcademico = Mapper.Map<AnioAcademico>(anioAcademicoDetails);
+
+            if (!_repository.AniosAcademicos.HasNombreUnique(anioAcademico))
+                ModelState.AddModelError("Nombre", "Nombre no disponible.");
 
             if (ModelState.IsValid)
             {

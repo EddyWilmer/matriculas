@@ -9,5 +9,9 @@ namespace Matriculas.Queries.Core.Repositories
     public interface ISeccionesRepository : IRepository<Seccion>
     {
         IEnumerable<Alumno> GetLista(int id);
-	}
+
+        Seccion GetByName(string name, int idGrado);
+
+        bool HasNombreUnique(Seccion entity);
+    }
 }

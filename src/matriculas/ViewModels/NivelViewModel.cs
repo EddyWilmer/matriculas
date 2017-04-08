@@ -18,5 +18,7 @@ namespace Matriculas.ViewModels
         [Required]
         [StringLength(25, ErrorMessage = "El campo Nombre debe contener como máximo 25 caracteres.")]
         public string Nombre { get; set; }
+
+        public int NroHoras { get; set; }
     }
 }

@@ -13,5 +13,11 @@ namespace Matriculas.Queries.Core.Repositories
         void AssignProfesor(int id, int idProfesor);
 
         Profesor GetProfesor(int id);
-	}
+
+        Curso GetByName(string name, int idGrado);
+
+        bool HasNombreUnique(Curso entity);
+
+        bool FitSchedule(Curso entity);
+    }
 }

@@ -46,7 +46,16 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .OrderBy(t => t.Nivel.Nombre)
                 .ThenBy(t => t.Nombre)
                 .Where(t => t.Estado == "1")
+                .AsNoTracking()
                 .ToList();
+        }
+
+        public Grado GetByName(string name, int idNivel)
+        {
+            return GetAll()
+                .Where(t => t.Nombre == name)
+                .Where(t => t.Nivel.Id == idNivel)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Curso> GetCursos(int id)
@@ -56,6 +65,34 @@ namespace Matriculas.Queries.Persistence.Repositories
                 .Where(t => t.Estado == "1")
                 .Where(t => t.Grado.Id == id)
                 .ToList();
+        }
+
+        public int GetNroHoras(Grado entity)
+        {
+            return _context.Cursos
+                .Where(t => t.Grado.Id == entity.Id)
+                .Sum(t => t.HorasAcademicas);
+        }
+
+        public bool HasNombreUnique(Grado entity)
+        {
+            if (GetByName(entity.Nombre, entity.Nivel.Id) == null)
+                return true;
+
+            var aux = Get(entity.Id);
+            if (Get(entity.Id) != null)
+                return (entity.Nombre == aux.Nombre && entity.Nivel.Id == aux.Nivel.Id) ? true : false;
+
+            return false;
+        }
+
+        public bool HasSecciones(Grado entity)
+        {
+            var aux = new SeccionesRepository(_context).GetAll()
+                .Where(t => t.Grado.Id == entity.Id)
+                .ToList();
+
+            return (aux.Count > 0) ? true : false;
         }
 
         public void Update(Grado entity)
