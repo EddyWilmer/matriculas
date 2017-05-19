@@ -8,8 +8,8 @@ using Matriculas.Models;
 namespace matriculas.Migrations
 {
     [DbContext(typeof(MatriculasContext))]
-    [Migration("20170322044938_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20170519161448_Matriculas")]
+    partial class Matriculas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -22,7 +22,7 @@
     "bootstrap-switch": "~3.3.4"
   },
   "resolutions": {
-    "ng-table": "0.8.3",
+    
     "angular": "~1.5.8",
     "jquery": ">= 1.7.2"
   }

@@ -27,18 +27,15 @@ namespace Matriculas.Controllers
     public class AppController : Controller
     {
         private IConfigurationRoot _config;
-        private IMailService _mailService;
         private IAppRepository _repository;
         private ILogger<AppController> _logger;
         private IHostingEnvironment _env;
 
-        public AppController(IMailService mailService,
-            IConfigurationRoot config,
+        public AppController(IConfigurationRoot config,
 			IAppRepository repository,
             ILogger<AppController> logger,
             IHostingEnvironment env )
         {
-            _mailService = mailService;
             _config = config;
             _repository = repository;
             _logger = logger;

@@ -3,6 +3,7 @@
     "ToAddress": "e.canaza@hotmail.com"
   },
   "ConnectionStrings": {
-    "MatriculasContextConnection": "Server=(localdb)\\MSSQLLocalDb;Database=MatriculasDb;Trusted_Connection=true;MultipleActiveResultSets=true;"
+    //"MatriculasContextConnection": "Server=(localdb)\\MSSQLLocalDb;Database=MatriculasDb;Trusted_Connection=true;MultipleActiveResultSets=true;"
+    "MatriculasContextConnection": "Server=tcp:ecanaza-matriculas.database.windows.net,1433;Initial Catalog=MatriculasDb;Persist Security Info=False;User ID=ecanaza;Password=marycielo12301.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   }
 }

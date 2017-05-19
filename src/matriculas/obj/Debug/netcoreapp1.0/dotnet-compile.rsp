@@ -233,8 +233,8 @@ D:\Proyectos\CSharp\Matriculas\src\matriculas\Controllers\Api\ProfesoresControll
 D:\Proyectos\CSharp\Matriculas\src\matriculas\Controllers\Api\SeccionesController.cs
 D:\Proyectos\CSharp\Matriculas\src\matriculas\Controllers\Validator\ValidatorController.cs
 D:\Proyectos\CSharp\Matriculas\src\matriculas\Controllers\Web\AppController.cs
-D:\Proyectos\CSharp\Matriculas\src\matriculas\Migrations\20170322044938_InitialDatabase.cs
-D:\Proyectos\CSharp\Matriculas\src\matriculas\Migrations\20170322044938_InitialDatabase.Designer.cs
+D:\Proyectos\CSharp\Matriculas\src\matriculas\Migrations\20170519161448_Matriculas.cs
+D:\Proyectos\CSharp\Matriculas\src\matriculas\Migrations\20170519161448_Matriculas.Designer.cs
 D:\Proyectos\CSharp\Matriculas\src\matriculas\Migrations\MatriculasContextModelSnapshot.cs
 D:\Proyectos\CSharp\Matriculas\src\matriculas\Models\Alumno.cs
 D:\Proyectos\CSharp\Matriculas\src\matriculas\Models\AnioAcademico.cs

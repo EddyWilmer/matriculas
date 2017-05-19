@@ -41,15 +41,7 @@ namespace Matriculas
         public void ConfigureServices(IServiceCollection services)
         {
 		    services.AddSingleton(_config);
-		    if (_env.IsEnvironment("Development") || _env.IsEnvironment("Testing"))
-		    {
-				services.AddScoped<IMailService, DebugMailService>();//Para habilitar el servicio de correo
-		    }
-		else
-		{
-			//Para implementar el servicio real
-		}
-		services.AddDbContext<MatriculasContext>();//Registra el contexto de las entidades
+            services.AddDbContext<MatriculasContext>();//Registra el contexto de las entidades
 		services.AddIdentity<ApplicationUser, IdentityRole>(config =>
 		{
 			config.User.RequireUniqueEmail = true;
@@ -82,12 +74,13 @@ namespace Matriculas
 		services.AddScoped <IAppRepository, AppRepository>();
 		services.AddTransient<MatriculasContextSeedData>();
         services.AddLogging();
-        services.AddMvc(config =>
+        services.AddMvc
+        (config =>
         {
             if (_env.IsProduction())
             {
                 config.Filters.Add(new RequireHttpsAttribute());
-            } 
+            }
         })
         .AddJsonOptions(config => 
         {

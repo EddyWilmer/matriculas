@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace matriculas.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class Matriculas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
